@@ -1,0 +1,18 @@
+name: Notify Discord on Push
+
+on:
+  push:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord message
+        uses: Ilshidur/action-discord@v3
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          message: |
+            🚀 **New push to `${{ github.repository }}`**
+            • **Author:** ${{ github.actor }}
+            • **Branch:** ${{ github.ref_name }}
+            • **Commit message:** ${{ github.event.head_commit.message }}
