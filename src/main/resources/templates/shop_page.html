@@ -1,14 +1,9 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Opret Konto</title>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
-            rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8">
+    <title>Online butik</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <header>
@@ -19,7 +14,9 @@
                       fill="#5B405F"/>
             </svg>
         </a>
-        <img src="/public/images/cupcakes-logo.png" alt="Cupcake" class="cupcake-logo"/>
+        <a href="shop_page.html">
+            <img src="/images/cupcakes-logo.png" alt="Cupcake" class="cupcake-logo" >
+        </a>
 
         <nav>
             <ul>
@@ -34,33 +31,14 @@
             </svg>
         </a>
     </div>
+
 </header>
-<main>
-    <section class="register-section">
-        <h1 id="title">Opret Konto</h1>
-        <div class="input-container">
-            <form class="register-form" action="/submit-create" method="POST">
-                <label for="username"> Vælg Brugernavn:</label>
-                <input type="text" id="username" name="username" required />
 
-                <label for="password">Vælg Adgangskode:</label>
-                <input type="password" id="password" name="password" required />
+<div>
+    <br>
+    <h1> online butik !</h1>
+</div>
 
-                <label for="confirm_password">Bekræft Adgangskode:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required />
 
-                <button type="submit">Opret</button>
-            </form>
-            <p>Har du allerede en konto? <a href="login.html">Log ind</a></p>
-        </div>
-</main>
-
-<footer>
-    <p>
-        &copy; 2025 Icy Cupcakes <br />
-        Bornholm Pederskervejen 17 ???? Nexø <br />
-        Telefon: +45 18131123
-    </p>
-</footer>
 </body>
 </html>
