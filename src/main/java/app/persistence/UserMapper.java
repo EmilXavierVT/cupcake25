@@ -16,7 +16,8 @@ public class UserMapper
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             ps.setInt(3, zipCode);
@@ -28,26 +29,32 @@ public class UserMapper
             ps.setFloat(9, 0.0f);
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
+            if ( rs.next() )
+            {
                 return getUser(rs.getInt(1));
-            } else {
+            } else
+            {
                 throw new DatabaseException("Failed to create new user");
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DatabaseException("Error creating user", e.getMessage());
         }
     }
 
-    public static User getUser(int id) throws DatabaseException {
+    public static User getUser(int id) throws DatabaseException
+    {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         String sql = "SELECT * FROM users WHERE id = ?";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            if ( rs.next() )
+            {
                 return new User(
                         rs.getInt("id"),
                         rs.getString("first_name"),
@@ -60,23 +67,27 @@ public class UserMapper
                         rs.getString("password"),
                         rs.getFloat("wallet")
                 );
-            } else {
+            } else
+            {
                 throw new DatabaseException("No user found with ID: " + id);
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DatabaseException("Error retrieving user", e.getMessage());
         }
     }
 
     public static void updateUser(int id, String firstName, String lastName, int zipCode,
                                   String streetName, Integer houseNumber, String floor,
-                                  String email, String password, float wallet) throws DatabaseException {
+                                  String email, String password, float wallet) throws DatabaseException
+    {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         String sql = "UPDATE users SET first_name=?, last_name=?, zip_code=?, street_name=?, " +
                 "house_number=?, floor=?, email=?, password=?, wallet=? WHERE id=?";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             ps.setInt(3, zipCode);
@@ -89,15 +100,18 @@ public class UserMapper
             ps.setInt(10, id);
 
             int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
+            if ( rowsAffected != 1 )
+            {
                 throw new DatabaseException("Failed to update user with ID: " + id);
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DatabaseException("Error updating user", e.getMessage());
         }
     }
 
-    public static void deleteUser(int id) throws DatabaseException {
+    public static void deleteUser(int id) throws DatabaseException
+    {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         String sql = "DELETE FROM users WHERE id=?";
 
@@ -129,7 +143,7 @@ public class UserMapper
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
+            if ( rs.next() )
             {
                 int id = rs.getInt("user_id");
                 return getUser(id);
