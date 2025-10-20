@@ -32,7 +32,7 @@ public class UserController
         {
             try
             {
-                UserMapper.createuser(username, password1);
+                UserMapper.createUser(username, password1);
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + username +
                         ". Nu skal du logge på.");
                 ctx.render("index.html");
