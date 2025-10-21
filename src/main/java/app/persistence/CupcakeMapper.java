@@ -40,10 +40,10 @@ public class CupcakeMapper {
         return bottomList;
     }
 
-    public List<Icing> getAllIcings() throws SQLException {
+    public List<Icing> getAllIcings(ConnectionPool connectionPool) throws DatabaseException {
         List<Icing> icingList = new ArrayList<>();
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement ps = connection.prepareStatement(GET_ALL_ICINGS)) {
+        try (Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(GET_ALL_ICINGS)) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     int icingId = rs.getInt("icing_id");
@@ -51,10 +51,12 @@ public class CupcakeMapper {
                     float icingPrice = rs.getFloat("icing_price");
                     icingList.add(new Icing(icingId, icingName, icingPrice));
                 }
-            }
-        }
+            } catch (SQLException e) {
+            throw new DatabaseException("something database", e.getMessage());
+    }
         return icingList;
     }
+
     public Bottom getBottomById(int id) throws SQLException {
         Bottom bottom = null;
         try (Connection connection = connectionPool.getConnection()) {

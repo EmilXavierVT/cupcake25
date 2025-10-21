@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.entities.Bottom;
+import app.entities.Icing;
 import app.entities.UserDefinedCupcake;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
@@ -17,12 +18,13 @@ public class CupcakeController {
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
+//
+//        app.post("/create", ctx -> createCupcake(ctx));
+//        app.get("/all", ctx -> getAllCupcakes(ctx));
+//        app.get("/{id}", ctx -> getUDCById(ctx));
+        app.get("/product-page", ctx -> {getAllBottoms(ctx, connectionPool);
+            getAllIcings(ctx, connectionPool);});
 
-        //app.post("/cupcake/create", ctx -> createCupcake(ctx));
-        //app.get("/cupcake/all", ctx -> getAllCupcakes(ctx));
-        //app.get("/cupcake/{id}", ctx -> getUDCById(ctx));
-        //app.get("/cupcake/getallbottoms",ctx -> getAllBottoms(ctx));
-        app.get("/product-page", ctx -> getAllBottoms(ctx, connectionPool));
     }
 
     private static void createCupcake(Context ctx) throws SQLException
@@ -59,18 +61,33 @@ public class CupcakeController {
 
     private static void getAllBottoms(Context ctx, ConnectionPool connectionPool) {
         List<Bottom> allBottoms = null;
-
         try
         {
             CupcakeMapper cupcakeMapper = new CupcakeMapper();
             allBottoms = cupcakeMapper.getAllBottoms(connectionPool);
             ctx.sessionAttribute("bottom_options", allBottoms);
+            ctx.attribute("bottom_options", allBottoms);
             ctx.render("product-page.html");
         }catch(DatabaseException e)
         {
             System.out.println(e.getMessage());
             ctx.redirect("/");
         }
-
     }
+    private static void getAllIcings(Context ctx, ConnectionPool connectionPool) {
+        List<Icing> allIcings = null;
+        try
+        {
+            CupcakeMapper cupcakeMapper = new CupcakeMapper();
+            allIcings = cupcakeMapper.getAllIcings(connectionPool);
+            ctx.sessionAttribute("icing_options", allIcings);
+            ctx.attribute("icing_options", allIcings);
+            ctx.render("product-page.html");
+        }catch(DatabaseException e)
+        {
+            System.out.println(e.getMessage());
+            ctx.redirect("/");
+        }
+    }
+
 }
