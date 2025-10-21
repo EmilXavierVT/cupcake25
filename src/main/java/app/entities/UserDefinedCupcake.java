@@ -5,9 +5,10 @@ public class UserDefinedCupcake {
     private Icing icing;
     private int id;
 
-    public UserDefinedCupcake(Bottom bottom, Icing icing) {
+    public UserDefinedCupcake(int id, Bottom bottom, Icing icing) {
         this.bottom = bottom;
         this.icing = icing;
+        this.id =id;
     }
 
     public Bottom getBottom() {

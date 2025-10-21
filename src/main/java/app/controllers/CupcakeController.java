@@ -9,6 +9,7 @@ import app.persistence.CupcakeMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +25,26 @@ public class CupcakeController {
 //        app.get("/{id}", ctx -> getUDCById(ctx));
         app.get("/product-page", ctx -> {getAllBottoms(ctx, connectionPool);
             getAllIcings(ctx, connectionPool);});
+        app.post("/product-page", ctx -> putCupcakeInAnOrder(ctx, connectionPool));
 
     }
 
-    private static void createCupcake(Context ctx) throws SQLException
-    {
+    private static void createCupcake(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+
         int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
         int icingId = Integer.parseInt(ctx.formParam("icing_id"));
-        CupcakeMapper cupcakeMapper = new CupcakeMapper();
 
-        try{
-            UserDefinedCupcake cupcake = cupcakeMapper.createUserDefinedCupcake(bottomId,icingId);
-            ctx.attribute("udc", + cupcake.getId());
+        CupcakeMapper cupcakeMapper = new CupcakeMapper();
+        try(Connection connection = connectionPool.getConnection()) {
+            UserDefinedCupcake cupcake = cupcakeMapper.createUserDefinedCupcake(bottomId, icingId, connectionPool);
+            ctx.attribute("udc", cupcake.getId());
+            // Add implementation for creating cupcake
+            ctx.redirect("/product-page");
+        } catch (DatabaseException e) {
+            System.out.println("!>" + e.getMessage() + "<!");
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
-        catch ( SQLException e) {
-            throw new RuntimeException(e);
-        }
-        // Add implementation for creating cupcake
-        ctx.render("cupcake/shop_page.html");
     }
 
     private static void getAllCupcakes(Context ctx)
@@ -88,6 +91,12 @@ public class CupcakeController {
             System.out.println(e.getMessage());
             ctx.redirect("/");
         }
+    }
+
+    private static void putCupcakeInAnOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+//        vi skal lave en cp som skal til knyttes et antal fra js og som skal tilføjes med user_id og order id
+        createCupcake(ctx, connectionPool);
+
     }
 
 }

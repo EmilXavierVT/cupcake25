@@ -57,11 +57,12 @@ public class CupcakeMapper {
         return icingList;
     }
 
-    public Bottom getBottomById(int id) throws SQLException {
+    public Bottom getBottomById(int id, ConnectionPool connectionPool) throws SQLException {
         Bottom bottom = null;
-        try (Connection connection = connectionPool.getConnection()) {
-            String sql = "SELECT * FROM the_bottoms WHERE bottom_id = ?";
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "SELECT * FROM the_bottoms WHERE bottom_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -70,15 +71,15 @@ public class CupcakeMapper {
                     bottom = new Bottom(id, bottomName, bottomPrice);
                 }
             }
-        }
         return bottom;
     }
 
-    public Icing getIcingById(int id) throws SQLException {
+    public Icing getIcingById(int id, ConnectionPool connectionPool) throws SQLException {
         Icing icing = null;
-        try (Connection connection = connectionPool.getConnection()) {
-            String sql = "SELECT * FROM icing WHERE icing_id = ?";
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "SELECT * FROM icing WHERE icing_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -87,22 +88,28 @@ public class CupcakeMapper {
                     icing = new Icing(id, icingName, icingPrice);
                 }
             }
-        }
         return icing;
     }
-    public UserDefinedCupcake createUserDefinedCupcake(int bottom, int icing) throws SQLException {
+    public UserDefinedCupcake createUserDefinedCupcake(int bottom, int icing, ConnectionPool connectionPool) throws DatabaseException {
+
         UserDefinedCupcake userDefinedCupcake = null;
-        try (Connection connection = connectionPool.getConnection()) {
-            String sql = "INSERT INTO user_defined_cupcake (bottom_id, icing_id) VALUES (?, ?) RETURNING id";
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "INSERT INTO user_defined_cupcakes (udc_bottom, udc_icing) VALUES (?, ?) RETURNING udc_id";
+
+        try (Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
                 ps.setInt(1, bottom);
                 ps.setInt(2, icing);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    int id = rs.getInt("id");
-                    userDefinedCupcake = new UserDefinedCupcake(getBottomById(bottom), getIcingById(icing));
+                    int id = rs.getInt("udc_id");
+                    Bottom bottomId = getBottomById(bottom, connectionPool);
+                    Icing icingId = getIcingById(icing, connectionPool);
+
+                    userDefinedCupcake = new UserDefinedCupcake(id, bottomId, icingId);
                 }
-            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Something something database",e.getMessage());
         }
         return userDefinedCupcake;
     }
