@@ -1,6 +1,7 @@
 package app.entities;
 
-public class User {
+public class User
+{
     private int id;
     private String firstName;
     private String lastName;
@@ -13,7 +14,8 @@ public class User {
     private float wallet;
 
     public User(int id, String firstName, String lastName, int zipCode, String streetName,
-                Integer houseNumber, String floor, String email, String password, float wallet) {
+                Integer houseNumber, String floor, String email, String password, float wallet)
+    {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,54 +28,66 @@ public class User {
         this.wallet = wallet;
     }
 
-    public User(int id, String email, String password) {
+    public User(int id, String email, String password)
+    {
         this.id = id;
         this.email = email;
         this.password = password;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public String getFirstName() {
+    public String getFirstName()
+    {
         return firstName;
     }
 
-    public String getLastName() {
+    public String getLastName()
+    {
         return lastName;
     }
 
-    public int getZipCode() {
+    public int getZipCode()
+    {
         return zipCode;
     }
 
-    public String getStreetName() {
+    public String getStreetName()
+    {
         return streetName;
     }
 
-    public Integer getHouseNumber() {
+    public Integer getHouseNumber()
+    {
         return houseNumber;
     }
 
-    public String getFloor() {
+    public String getFloor()
+    {
         return floor;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public float getWallet() {
+    public float getWallet()
+    {
         return wallet;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +

@@ -1,14 +1,14 @@
 package app.entities;
 
-public class Bottoms {
+public class Bottom {
     private int bottomId;
     private String bottomName;
     private float bottomPrice;
 
-    public Bottoms() {
+    public Bottom() {
     }
 
-    public Bottoms(int bottomId, String bottomName, float bottomPrice) {
+    public Bottom(int bottomId, String bottomName, float bottomPrice) {
         this.bottomId = bottomId;
         this.bottomName = bottomName;
         this.bottomPrice = bottomPrice;
