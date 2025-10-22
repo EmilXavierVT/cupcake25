@@ -2,6 +2,7 @@
 
 import app.config.ThymeleafConfig;
 import app.controllers.CupcakeController;
+import app.controllers.OrderController;
 import app.controllers.UserController;
 import app.entities.User;
 import app.persistence.ConnectionPool;
@@ -39,6 +40,7 @@ import io.javalin.rendering.template.JavalinThymeleaf;
             });
             UserController.addRoutes(app);
             CupcakeController.addRoutes(app);
+            OrderController.addRoutes(app);
 
         }
     }

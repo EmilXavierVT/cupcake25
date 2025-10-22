@@ -152,7 +152,7 @@ public class UserMapper
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-        String sql = "select id from users where username=? and password=?";
+        String sql = "select id from users where email=? and password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -165,7 +165,7 @@ public class UserMapper
             ResultSet rs = ps.executeQuery();
             if ( rs.next() )
             {
-                int id = rs.getInt("user_id");
+                int id = rs.getInt("id");
                 return getUser(id);
             } else
             {

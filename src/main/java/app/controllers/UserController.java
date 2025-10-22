@@ -15,8 +15,8 @@ public class UserController
 
         app.post("login", ctx -> login(ctx));
         app.get("logout", ctx -> logout(ctx));
-        app.get("createuser", ctx -> ctx.render("createuser.html"));
-        app.post("createuser", ctx -> createUser(ctx));
+        app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
+        app.post("/registerPassword", ctx -> createUser(ctx));
 
     }
 //    lets go
@@ -24,16 +24,16 @@ public class UserController
     private static void createUser(Context ctx)
     {
         // Hent form parametre
-        String username = ctx.formParam("username");
-        String password1 = ctx.formParam("password1");
-        String password2 = ctx.formParam("password2");
+        String email = ctx.formParam("email");
+        String password = ctx.formParam("password");
+        String confirmPassword = ctx.formParam("confirm_password");
 
-        if ( password1.equals( password2 ))
+        if (password.equals(confirmPassword))
         {
             try
             {
-                UserMapper.createUser(username, password1);
-                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + username +
+                UserMapper.createUser(email, password);
+                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
                         ". Nu skal du logge på.");
                 ctx.render("index.html");
             }
@@ -41,12 +41,12 @@ public class UserController
             catch (DatabaseException e)
             {
                 ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
-                ctx.render("createuser.html");
+                ctx.render("registerPassword.html");
             }
         } else
         {
             ctx.attribute("message", "Dine to passwords matcher ikke! Prøv igen");
-            ctx.render("createuser.html");
+            ctx.render("registerPassword.html");
         }
 
     }
@@ -64,13 +64,13 @@ public class UserController
 
 
         // Hent form parametre
-        String username = ctx.formParam("username");
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
         // Check om bruger findes i DB med de angivne username + password
         try
         {
-            User user = UserMapper.login(username, password);
+            User user = UserMapper.login(email, password);
             ctx.sessionAttribute("currentUser", user);
             // Hvis ja, send videre til forsiden med login besked
             ctx.attribute("message", "Du er nu logget ind");

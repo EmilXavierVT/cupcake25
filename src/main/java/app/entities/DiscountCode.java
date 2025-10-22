@@ -7,10 +7,15 @@ public class DiscountCode
     private int discount;
 
 
-    public DiscountCode(String discountCode, int discount)
+    public DiscountCode(int discountId, String discountCode, int discount)
     {
+        this.discountId = discountId;
         this.discountCode = discountCode;
         this.discount = discount;
+    }
+
+    public DiscountCode()
+    {
     }
 
     public int getDiscountId()

@@ -3,18 +3,14 @@ package app.entities;
 public class CupcakeInOrder
 {
     private int orderId;
-    private int udcId;
+    private UserDefinedCupcake udc;
     private int amount;
 
-    public CupcakeInOrder()
-    {
-        this.amount = 1;
-    }
 
-    public CupcakeInOrder(int orderId, int udcId, int amount)
+    public CupcakeInOrder(int orderId, UserDefinedCupcake udc, int amount)
     {
         this.orderId = orderId;
-        this.udcId = udcId;
+        this.udc = udc;
         this.amount = amount;
     }
 
@@ -28,14 +24,14 @@ public class CupcakeInOrder
         this.orderId = orderId;
     }
 
-    public int getUdcId()
+    public UserDefinedCupcake getUdc()
     {
-        return udcId;
+        return udc;
     }
 
-    public void setUdcId(int udcId)
+    public void setUdc(UserDefinedCupcake udc)
     {
-        this.udcId = udcId;
+        this.udc = udc;
     }
 
     public int getAmount()
@@ -48,3 +44,5 @@ public class CupcakeInOrder
         this.amount = amount;
     }
 }
+
+

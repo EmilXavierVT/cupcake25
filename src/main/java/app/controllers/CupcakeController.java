@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.entities.Bottom;
+import app.entities.CupcakeInOrder;
 import app.entities.Icing;
 import app.entities.UserDefinedCupcake;
 import app.exceptions.DatabaseException;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CupcakeController {
+
+    static ArrayList<UserDefinedCupcake> userDefinedCupcakesList = new ArrayList<>();
 
     public static void addRoutes(Javalin app)
     {
@@ -33,7 +36,8 @@ public class CupcakeController {
 
         int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
         int icingId = Integer.parseInt(ctx.formParam("icing_id"));
-
+        int amount = Integer.parseInt(ctx.formParam("amount"));
+        System.out.println(amount);
         CupcakeMapper cupcakeMapper = new CupcakeMapper();
         try(Connection connection = connectionPool.getConnection()) {
             UserDefinedCupcake cupcake = cupcakeMapper.createUserDefinedCupcake(bottomId, icingId, connectionPool);
@@ -46,6 +50,29 @@ public class CupcakeController {
             throw new DatabaseException(e.getMessage());
         }
     }
+
+    private static void createCupcakeArrayList(Context ctx, ConnectionPool connectionPool) throws DatabaseException, SQLException {
+
+        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
+        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
+        int amount = Integer.parseInt(ctx.formParam("amount"));
+        int orderId = Integer.parseInt(ctx.formParam("order_id"));
+        CupcakeMapper cupcakeMapper = new CupcakeMapper();
+        UserDefinedCupcake cupcake = new UserDefinedCupcake(cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
+
+        // chokolade + vanilje, 11
+//         banana + is, 1
+//
+        CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
+
+
+            try (Connection connection = connectionPool.getConnection()) {
+                userDefinedCupcakesList.add(cupcake);
+                ctx.redirect("/product-page");
+            } catch (SQLException e) {
+                throw new DatabaseException(e.getMessage());
+            }
+        }
 
     private static void getAllCupcakes(Context ctx)
     {
