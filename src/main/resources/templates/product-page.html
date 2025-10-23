@@ -46,7 +46,11 @@
         <div class="green_box"></div>
         <select class="dropdown_menu" name="bottom_id" required>
             <option disabled selected value>Vælg Bund</option>
-            <option th:each="bottom : ${bottom_options}" th:value="${bottom.bottomId}" th:text="${bottom.bottomName}"></option>
+            <option th:each="bottom : ${bottom_options}"
+                    th:value="${bottom.bottomId}"
+                    th:text="${bottom.bottomName}">
+
+            </option>
         </select>
     </section>
 

@@ -1,7 +1,7 @@
  package app;
 
 import app.config.ThymeleafConfig;
-import app.controllers.CartControler;
+import app.controllers.CartController;
 import app.controllers.CupcakeController;
 import app.controllers.OrderController;
 import app.controllers.UserController;
@@ -42,7 +42,7 @@ import io.javalin.rendering.template.JavalinThymeleaf;
             UserController.addRoutes(app);
             CupcakeController.addRoutes(app);
             OrderController.addRoutes(app);
-            CartControler.addRoutes(app);
+            CartController.addRoutes(app);
 
         }
     }

@@ -32,6 +32,7 @@ public class CupcakeController {
         getOrderID(ctx, connectionPool);});
         app.post("/product-page", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/add-to-order", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
+
 //        app.post("/order-confirmation", ctx -> paymentConfirmed(ctx,connectionPool));
 
     }
@@ -84,7 +85,7 @@ public class CupcakeController {
         try {
 
             cupcake = new UserDefinedCupcake(cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
-            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
+//            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
 
         } catch (SQLException e) {
@@ -138,6 +139,9 @@ public class CupcakeController {
     }
 
     public static ArrayList<CupcakeInOrder> getCupcakesInOrder() {
+        if(cupcakesInOrder.isEmpty()) {
+            System.out.println("Er vi her?");
+        }
         return cupcakesInOrder;
     }
 
@@ -150,4 +154,6 @@ public class CupcakeController {
 //            cupcakeMapper.saveCupcakeInOrder(cupcakeInOrder.getOrderId(),cupcakeInOrder.getUdc().getId(),cupcakeInOrder.getAmount(),connectionPool);
 //        }
 //    }
+
+
 }

@@ -25,6 +25,7 @@
             <ul>
                 <li><a th:href="@{/}">Hjem</a></li>
                 <li><a th:href="@{/about}">Om os</a></li>
+                <li><a th:href="@{/login}" th:if="currentUser == null">Login</a></li>
             </ul>
         </nav>
 
@@ -67,7 +68,7 @@
 
                 <button type="submit">Velkommen</button>
             </form>
-            <p>Har du allerede en konto? <a th:href="@{/login}" >Log ind</a></p>
+            <p>Har du allerede en konto? <a th:href="@{/login}" th:if="${currentUser == null}" >Log ind</a></p>
         </div>
 </main>
 

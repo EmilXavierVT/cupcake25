@@ -1,5 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="da" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,28 +42,57 @@
         <h1 id="cart_title">Din Kurv
             <a th:href="@{/edit-info}" class="update_info_button">Opdater Info</a>
         </h1>
+
+        <div class="cart_container">
+            <div th:each="cupcakeInOrder : ${cupcakeInOrders}" class="cart_item">
+                <span class="cart_item_name" th:text="${cupcakeInOrder.udc.bottom.bottomName}">Bund</span>
+                <span class="cart_item_price" th:text="${cupcakeInOrder.udc.bottom.bottomPrice}">Bund Pris</span>
+                <h1> juhuuu </h1>
+                <span class="cart_item_name" th:text="${cupcakeInOrder.udc.icing.icingName}">Icing</span>
+                <span class="cart_item_price" th:text="${cupcakeInOrder.udc.icing.icingPrice}">Icing Pris</span>
+                <span class="cart_amount_quantity" th:text="${cupcakeInOrder.amount}">Antal</span>
+            </div>
+        </div>
             <p>Leveringsdato: 20/11/2025</p>
             <p>Leveringsadresse: Pederskervejen 17, 3730 Nexø</p>
             <p>Leveringstidspunkt: 14:00 - 16:00</p>
+</div>
+<!--        <table>-->
+<!--                <tr th:each="cupcakeInOrder : ${cupcakeInOrders}">-->
+<!--                    <td class="cart_item_name" th:text="${cupcakeInOrder.getUdc().getBottom().bottomName}"></td>-->
+<!--                    <td class="cart_item_price" th:text="${cupcakeInOrder.getUdc().getBottom().bottomPrice}"></td>-->
+<!--                </tr>-->
+<!--                    <tr th:each="cupcakeInOrder : ${cupcakeInOrders}">-->
+<!--                    <td class="cart_item_name" th:text="${cupcakeInOrder.getUdc().getIcing().icingName}"></td>-->
+<!--                    <td class="cart_item_price" th:text="${cupcakeInOrder.getUdc().getIcing().icingPrice}"></td>-->
+<!--                    </tr>-->
+<!--                <tr>-->
+<!--                    <td class="cart_amount_quantity" th:value="${cupcakeInOrder.getAmount}"></td>-->
+<!--                </tr>-->
+<!--        </table>-->
 
-        <div class="cart_items">
-            <div class="cart_item">
-                <div class="cart_item_details">
-                    <h2 class="cart_item_name">Chokolade Cupcake</h2>
-                    <p class="cart_item_quantity">Antal: 2</p>
-                    <p class="cart_item_price">Pris: 50 DKK</p>
-                </div>
-            </div>
 
-            <div class="cart_item">
-                <div class="cart_item_details">
-                    <h2 class="cart_item_name">Vanilje Cupcake</h2>
-                    <p class="cart_item_quantity">Antal: 1</p>
-                    <p class="cart_item_price">Pris: 30 DKK</p>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+
+    <!--        <div class="cart_items">-->
+<!--            <div class="cart_item">-->
+<!--                <div class="cart_item_details">-->
+<!--                    <h2 class="cart_item_name">Chokolade Cupcake</h2>-->
+<!--                    <p class="cart_item_quantity">Antal: 2</p>-->
+<!--                    <p class="cart_item_price">Pris: 50 DKK</p>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            -->
+<!--            <div class="cart_item">-->
+<!--                <div class="cart_item_details">-->
+<!--                    <h2 class="cart_item_name">Vanilje Cupcake</h2>-->
+<!--                    <p class="cart_item_quantity">Antal: 1</p>-->
+<!--                    <p class="cart_item_price">Pris: 30 DKK</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
     <div class="cart_container_right">
         <h2>Ordre Oversigt</h2>
@@ -70,6 +101,14 @@
         <h3>Total: 150 DKK</h3>
 
         <a th:href="@{/pay-page}" class="checkout_button">Gå til Betaling</a>
+    </div>
+    <div>
+        <form th:action="@{/apply_discount}" method="post">
+            <label for="discount">Discount:</label>
+            <input type="text" id="discount" name="discountCode" placeholder="Discount Code">
+            <button type="submit">Apply</button>
+        </form>
+
     </div>
 </main>
 

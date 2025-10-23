@@ -14,16 +14,25 @@ public class DiscountCode
         this.discount = discount;
     }
 
-    public DiscountCode()
+    public DiscountCode(String discountCode)
     {
+        this.discountCode = discountCode;
     }
+
+    public int convertToId(){
+    return discountId;
+    }
+
+    public int getDiscountPercentage()
+    {
+        return discount;
+    }
+
 
     public int getDiscountId()
     {
         return discountId;
     }
-
-
 
     public String getDiscountCode()
     {

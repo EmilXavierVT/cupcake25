@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Odre Konfirmation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+
+
 </head>
 <body>
 <header>
@@ -42,7 +44,7 @@
 <main>
     <div class="order_confirmation">
         <p>Tak for at bestille hos os. Vi håber at høre fra dig igen.</p>
-        <button onclick="window.location.href='index.html'">Forside</button>
+        <button th:href="@{/}">Forside</button>
     </div>
 </main>
 

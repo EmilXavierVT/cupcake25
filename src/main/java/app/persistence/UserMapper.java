@@ -166,6 +166,7 @@ public class UserMapper
             if ( rs.next() )
             {
                 int id = rs.getInt("id");
+
                 return getUser(id);
             } else
             {

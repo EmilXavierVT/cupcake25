@@ -106,12 +106,14 @@ public class ConnectionPool
         config.setJdbcUrl(String.format(url, db));
         config.setUsername(user);
         config.setPassword(password);
-        config.setMaximumPoolSize(3);
+        config.setMaximumPoolSize(10);
         config.setPoolName("Postgresql Pool");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         return new HikariDataSource(config);
+
+
     }
 
 }

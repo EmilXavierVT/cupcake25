@@ -136,7 +136,7 @@ public class CupcakeMapper {
     }
 
 
-    public CupcakeInOrder saveCupcakeInOrder(int order, int udcId,int amount, ConnectionPool connectionPool) throws DatabaseException {
+    public void saveCupcakeInOrder(int order, int udcId, int amount, ConnectionPool connectionPool) throws DatabaseException {
 
         CupcakeInOrder cupcakeInOrder = null;
         String sql = "INSERT INTO cupcakes_in_a_order(order_id, udc_id, amount) VALUES (?, ?, ?) RETURNING order_id";
@@ -159,7 +159,6 @@ public class CupcakeMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Something something database",e.getMessage());
         }
-        return cupcakeInOrder;
     }
 
 

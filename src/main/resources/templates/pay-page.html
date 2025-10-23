@@ -43,13 +43,13 @@
             <form class="pay_form" th:action="@{/order-confirmation}" method="POST">
 
                 <label for="card_number">Kortnummer:</label>
-                <input type="text" id="card_number" name="card_number" required />
+                <input type="text" id="card_number" name="card_number"  />
 
                 <label for="card_date">Dato:</label>
-                <input type="month" id="card_date" name="card_date" placeholder="MM/ÅÅ" required />
+                <input type="month" id="card_date" name="card_date" placeholder="MM/ÅÅ"  />
 
                 <label for="card_cvc">CVC:</label>
-                <input type="text" id="card_cvc" name="card_cvc" required />
+                <input type="text" id="card_cvc" name="card_cvc"  />
 
                 <button type="submit">Bekræft</button>
             </form>
