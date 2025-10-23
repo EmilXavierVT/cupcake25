@@ -27,7 +27,7 @@ public class CartControler {
         try (Connection connection = connectionPool.getConnection()) {
             LocalDate date = LocalDate.now();
 
-            User  user = ctx.sessionAttribute("currentUser");
+            User  user = ctx.attribute("currentUser");
             int userId = user.getId();
             int orderId = ctx.sessionAttribute("order_id");
             ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
