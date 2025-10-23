@@ -23,3 +23,19 @@ function resetAmountOfCupcakes() {
 
 }
 
+function addToOrder() {
+    fetch("/add-to-order", {
+        method: "POST"
+
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("Session attribute set or activated!");
+            } else {
+                alert("Failed to activate session attribute.");
+            }
+        });
+}
+
+// this makes us call the function at the event click
+document.getElementById("activate-session-btn").addEventListener("click", addToOrder);

@@ -21,13 +21,10 @@ public class OrderController {
 
         try(Connection connection = connectionPool.getConnection()){
             System.out.println("you are now in the session");
-            Integer orderId = 0;
-            //int orderId = Integer.parseInt(ctx.queryParam("order_id"));
-            orderId = ctx.sessionAttribute("order_id");
-            int newOrderId = new OrderMapper().getAvailableOrderid(connectionPool);
+            Integer orderId = ctx.sessionAttribute("order_id");
 
-            if(orderId == 0){
-                orderId = newOrderId;
+            if(orderId == null || orderId == 0){
+                int newOrderId = new OrderMapper().getAvailableOrderid(connectionPool);
                 ctx.sessionAttribute("order_id", orderId);
                 System.out.println(newOrderId);
             }
@@ -37,5 +34,10 @@ public class OrderController {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private static void setOrderIdToZero(Context ctx)
+    {
+        ctx.sessionAttribute("order_id", 0);
     }
 }

@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.Bottom;
+import app.entities.CupcakeInOrder;
 import app.entities.Icing;
 import app.entities.UserDefinedCupcake;
 import app.exceptions.DatabaseException;
@@ -90,7 +91,7 @@ public class CupcakeMapper {
             }
         return icing;
     }
-    public UserDefinedCupcake createUserDefinedCupcake(int bottom, int icing, ConnectionPool connectionPool) throws DatabaseException {
+    public UserDefinedCupcake saveUserDefinedCupcake(int bottom, int icing, ConnectionPool connectionPool) throws DatabaseException {
 
         UserDefinedCupcake userDefinedCupcake = null;
         String sql = "INSERT INTO user_defined_cupcakes (udc_bottom, udc_icing) VALUES (?, ?) RETURNING udc_id";
@@ -112,6 +113,53 @@ public class CupcakeMapper {
             throw new DatabaseException("Something something database",e.getMessage());
         }
         return userDefinedCupcake;
+    }
+    public UserDefinedCupcake getUserDefinedCupcakeById(int id, ConnectionPool connectionPool) throws DatabaseException, SQLException {
+        UserDefinedCupcake userDefinedCupcake = null;
+        String sql = "SELECT * FROM user_defined_cupcakes WHERE udc_id = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+        PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int bottomId = rs.getInt("udc_bottom");
+                int icingId = rs.getInt("udc_icing");
+                Bottom bottom = getBottomById(bottomId, connectionPool);
+                Icing icing = getIcingById(icingId, connectionPool);
+                userDefinedCupcake = new UserDefinedCupcake(id, bottom, icing);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Something something database",e.getMessage());
+        }
+        return userDefinedCupcake;
+    }
+
+
+    public CupcakeInOrder saveCupcakeInOrder(int order, int udcId,int amount, ConnectionPool connectionPool) throws DatabaseException {
+
+        CupcakeInOrder cupcakeInOrder = null;
+        String sql = "INSERT INTO cupcakes_in_a_order(order_id, udc_id, amount) VALUES (?, ?, ?) RETURNING order_id";
+
+        try (Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+
+                ps.setInt(1, order);
+                ps.setInt(2, udcId);
+                ps.setInt(3, amount);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    int id = rs.getInt("order_id");
+                    Bottom bottomId = getUserDefinedCupcakeById(udcId,connectionPool).getBottom();
+                    Icing icingId = getUserDefinedCupcakeById(udcId,connectionPool).getIcing();
+
+                    cupcakeInOrder = new CupcakeInOrder(order, new UserDefinedCupcake(id, bottomId, icingId), amount);
+                    System.out.println(cupcakeInOrder);
+                }
+        } catch (SQLException e) {
+            throw new DatabaseException("Something something database",e.getMessage());
+        }
+        return cupcakeInOrder;
     }
 
 

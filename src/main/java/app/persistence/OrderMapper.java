@@ -1,11 +1,13 @@
 package app.persistence;
 
 import app.entities.Bottom;
+import app.entities.Order;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class OrderMapper {
     public void createOrder(int userId, int orderId, int discountId) {
@@ -26,6 +28,21 @@ public class OrderMapper {
             }
             }
         return orderId;
+    }
+    public Order saveOrder(int userId, LocalDate date, int orderId, int discountId) throws SQLException {
+        String sql = "INSERT INTO orders (user_id, order_id, date, discount_id) VALUES (?, ?, ?) RETURNING order_id";
+        Order order = null;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, orderId);
+            ps.setInt(3, discountId);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                order =new Order(userId,orderId,date,discountId);
+            }
+        }
+        return order;
     }
 }
 
