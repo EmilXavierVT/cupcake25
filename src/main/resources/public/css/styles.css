@@ -237,7 +237,7 @@ footer {
     left: 50%;
     transform: translateX(-50%);
     background: #F7B9B9;
-    padding: 0px 8px;
+    padding: 0 8px;
     font-weight: bold;
     font-size: 14px;
     border-radius: 7px 7px 0 0;
@@ -344,6 +344,10 @@ button:hover {
     margin-top: 20px;
 }
 
+.cart_container span {
+
+}
+
 .cart_item_name {
     font-size: 18px;
     font-weight: 600;
@@ -413,6 +417,20 @@ button:hover {
     transform: scale(1.05);
 }
 
+.registerInfo_form {
+    display: flex;
+    width:40%;
+    min-width:300px;
+    max-width: 600px;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background-color: #F7B9B9;
+    border-radius: 10px;
+}
+
 .checkout_button {
     text-decoration: none;
     align-content: center;
@@ -432,6 +450,278 @@ button:hover {
 
 .checkout_button:hover {
     background-color: #4a324a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+/*ADMIN PAGE*/
+.admin_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 32px 16px;
+    gap: 16px;
+}
+
+/* admin_section: padding: 7px 7px; Til media Query*/
+
+.admin_container h1 {
+    margin-top: 10%;
+}
+
+.admin_container h2 {
+    margin-bottom: 10%;
+}
+
+.admin_container {
+    width: 401px;
+    height: 211px;
+    background: #F7B9B9;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0 , 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+/*DASHBOARD GRID*/
+.dashboard_grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 32px;
+    gap: 0;
+    width: 100%;
+}
+
+.dashboard_row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.dashboard_row1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+}
+
+/*CARD STYLES*/
+
+.sales_today {
+    background: #C6E3BE;
+    border: 3px solid #5B405F;
+    border-radius: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    height: 28vh;
+    width: 30%;
+}
+
+.upcoming_orders{
+    background: #C6E3BE;
+    border: 3px solid #5B405F;
+    border-radius: 0 10px 0 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    height: 28vh;
+    width: 100%;
+}
+
+.top_customers {
+    background: #C6E3BE;
+    border: 3px solid #5B405F;
+    border-radius: 0 0 0 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    height: 28vh;
+    width: 100%;
+}
+
+.sales_period {
+    background: #C6E3BE;
+    border: 3px solid #5B405F;
+    border-radius: 0 0 10px 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+    height: 28vh;
+    width: 30%;
+}
+
+.dashboard_card p {
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+}
+
+.card_header {
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.card_list {
+    list-style: none;
+    width: 100%;
+    padding-left: 0;
+}
+
+.card_list li {
+    background: #F7B9B9;
+    margin: 4px 0;
+    padding: 1px 8px;
+    border-radius: 8px;
+}
+
+.dashboard_buttons {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    justify-content: center;
+}
+
+.dashboard_buttons button {
+    background: #F7B9B9;
+    color: #5B405F;
+    font-weight: 600;
+    width: 8rem;
+}
+
+.gift_card {
+    background: #C6E3BE;
+    border: 3px solid #5B405F;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 32px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.gift_card p {
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+}
+
+.gift_inputs {
+    display: flex;
+    gap: 12px;
+}
+
+.gift_inputs input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: #F7B9B9;
+    font-size: 14px;
+}
+
+.send_gift {
+    background: #F7B9B9;
+    color: #5B405F;
+    font-weight: 600;
+    width: 150px;
+}
+
+.send_gift:hover {
+    background-color: #F7B9B9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+/*CUSTOMER PAGE*/
+
+#title_admin_page {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.view_list {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    width: 100%;
+    max-width: 600px;
+    height: 538px;
+    background-color: #C6E3BE;
+    border-radius: 10px;
+}
+
+.page_body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+    padding: 20px;
+}
+
+.header_box {
+    width: 100%;
+    max-width: 600px;
+    background-color: #F7B9B9;
+    border-radius: 10px;
+}
+
+.card_list, .list_rows li {
+    padding: 2%;
+    max-height: 3rem;
+    justify-content: center;
+}
+
+.search_input, .customer_search input {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: #F7B9B9;
+    font-size: 14px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.see_order_button {
+    width: 30%;
+    max-width: 200px;
+    margin-bottom: 4%;
+    background-color: #F7B9B9;
+    color: #5B405F;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.see_order_button:hover {
+    background-color: #F7B9B9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }

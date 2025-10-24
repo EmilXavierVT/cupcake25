@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Opret Konto - Info</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin - Kunder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{css/styles.css}">
 </head>
 <body>
 <header>
@@ -18,14 +18,14 @@
         </a>
 
         <a th:href="@{/product-page}">
-        <img th:src="@{/images/cupcakes-logo.png}" alt="Cupcake" class="cupcake_logo"/>
+            <img th:src="@{/images/cupcakes-logo.png}" alt="Cupcake" class="cupcake_logo"/>
         </a>
 
         <nav>
             <ul>
                 <li><a th:href="@{/}">Hjem</a></li>
                 <li><a th:href="@{/about}">Om os</a></li>
-                <li><a th:href="@{/login}" th:if="currentUser == null">Login</a></li>
+                <li th:if="${admin == true }"><a th:href="@{/adminIndex}">Admin</a></li>
             </ul>
         </nav>
 
@@ -39,40 +39,31 @@
 </header>
 
 <main>
-    <section class="registerInfo_section">
-        <h1 id="title">Opret Konto</h1>
-
-        <div class="edit_container">
-            <form class="registerInfo_form" th:action="@{/registerInfo}" method="POST">
-
-                <label for="first_name">Indtast Fornavn:</label>
-                <input type="text" id="first_name" name="first_name" required />
-
-                <label for="last_name">Indtast Efternavn:</label>
-                <input type="text" id="last_name" name="last_name" required />
-
-                <label for="postcode">Indtast Postnummer:</label>
-                <input type="text" id="postcode" name="postcode" required />
-
-                <label for="street_name">Vejnavn:</label>
-                <input type="text" id="street_name" name="street_name" required />
-
-                <label for="street_number">Vejnummer:</label>
-                <input type="text" id="street_number" name="street_number" required />
-
-                <label for="floor">Etage:</label>
-                <input type="text" id="floor" name="floor" required />
-
-                <button type="submit">Velkommen</button>
-            </form>
-            <p>Har du allerede en konto? <a th:href="@{/login}" th:if="${session.currentUser == null}" >Log ind</a></p>
+    <div class="page_body">
+        <div class="header_box">
+            <h1 id="title_admin_page">VIS KUNDER</h1>
         </div>
+        <input class="search_input customer_search" type="text" placeholder="Søg Kunde"/>
+
+        <div class="view_list">
+            <ul class="card_list list_rows">
+                <li>VIS KUNDER</li>
+                <li>VIS KUNDER</li>
+                <li>VIS KUNDER</li>
+            </ul>
+        </div>
+
+        <a th:href="@{/admin-order-page}">
+        <button class="see_order_button">Vis Ordrer</button>
+        </a>
+
+    </div>
 </main>
 
 <footer>
     <p>
-        &copy; 2025 Icy Cupcakes <br />
-        Bornholm Pederskervejen 17 ???? Nexø <br />
+        &copy; 2025 Icy Cupcakes <br/>
+        Bornholm Pederskervejen 17 ???? Nexø <br/>
         Telefon: +45 18131123
     </p>
 </footer>

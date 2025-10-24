@@ -7,6 +7,7 @@ import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -18,7 +19,7 @@ public class OrderController {
         //app.get("/product-page",ctx -> getOrderID(ctx,connectionPool));
 
     }
-    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException, SQLException {
+    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         try(Connection connection = connectionPool.getConnection()){
             System.out.println("you are now in the session");
@@ -32,7 +33,7 @@ public class OrderController {
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Something in OrderController", e.getMessage());
         }
 
     }
