@@ -93,22 +93,19 @@
         <div class="gift_card">
             <p><strong>Giv et Gavekort!</strong></p>
             <div class="gift_inputs">
-                <input type="text" placeholder="Kunde"/>
-                <input type="number" placeholder="Beløb"/>
 
-            <form class="gift_card" th:action="@{/insertMoney}" method="POST">
+            <form class="gift_inputs" th:action="@{/insertMoney}" method="POST">
                 <label for="amount">amount:</label>
-                <input type="amount" id="amount" name="amount" value="200" required/>
+                <input type="amount" id="amount" name="amount"  required/>
 
                 <label for="email">email:</label>
-                <input type="email" id="email" name="email" value="ex@tv.dk" required/>
+                <input type="email" id="email" name="email" required/>
 
-                <button type="submit">Log ind</button>
+                <button type="submit">indsæt beløb</button>
             </form>
 
 
             </div>
-            <button class="send_gift">Send Gavekort</button>
         </div>
     </section>
 </main>

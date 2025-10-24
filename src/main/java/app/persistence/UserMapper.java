@@ -173,8 +173,8 @@ public class UserMapper
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql))
         {
-            ps.setString(1, email);
-            ps.setFloat(2, amount);
+            ps.setFloat(1, amount);
+            ps.setString(2, email);
 
             int rowsAffected = ps.executeUpdate();
             if ( rowsAffected != 1 )

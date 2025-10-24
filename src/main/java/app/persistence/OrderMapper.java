@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class OrderMapper {
     public void createOrder(int userId, int orderId, int discountId) {
@@ -61,6 +62,23 @@ public class OrderMapper {
             }
         }
         return returnDiscountCode;
+    }
+
+    public static ArrayList<Order> getOrders(ConnectionPool connectionPool) throws SQLException {
+        ArrayList<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderId = rs.getInt("id");
+                int userId = rs.getInt("user_id");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                int discountId = rs.getInt("applied_discount");
+                orders.add(new Order(userId,orderId,date,discountId));
+            }
+            return orders;
+             }
     }
 }
 

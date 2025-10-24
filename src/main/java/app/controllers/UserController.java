@@ -26,7 +26,7 @@ public class UserController
         app.get("/adminIndex", ctx -> ctx.render("adminPages/adminIndex.html"));
         app.get("/admin-customer-page", ctx -> ctx.render("adminPages/admin-customer-page"));
         app.get("/admin-order-page", ctx -> ctx.render("adminPages/admin-order-page.html"));
-        app.post("/adminIndex", ctx -> insertMoney(ctx, connectionPool));
+        app.post("/insertMoney", ctx -> insertMoney(ctx, connectionPool));
     }
 //    lets go
 
@@ -36,12 +36,13 @@ public class UserController
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
         String confirmPassword = ctx.formParam("confirm_password");
+        ctx.sessionAttribute("userID");
 
         if (password.equals(confirmPassword))
         {
             try
-            {
-                UserMapper.createUser(email, password);
+            {   User user = UserMapper.login(email, password);
+                ctx.sessionAttribute("userID", user.getId());
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
                         ". Nu skal du logge på.");
                 ctx.render("registerInfo.html");
@@ -81,6 +82,7 @@ public class UserController
         {
             User user = UserMapper.login(email, password);
             ctx.sessionAttribute("currentUser", user);
+            ctx.sessionAttribute("userID", user.getId());
             ctx.attribute("currentUser", user);
            if(UserMapper.checkIfAdmin(user) == 1)
             {
@@ -120,7 +122,7 @@ public class UserController
         String streetName = ctx.formParam("street_name");
         int streetNumber = Integer.parseInt(ctx.formParam("street_number"));
         String floor = ctx.formParam("floor");
-        int userId = ctx.sessionAttribute("user");
+        int userId = Integer.parseInt(ctx.sessionAttribute("userID"));
         try(Connection connection = connectionPool.getConnection()) {
             UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor);
             ctx.sessionAttribute("message","Du har opdateret din profil !");
@@ -136,12 +138,13 @@ public class UserController
     public static void insertMoney(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
         String email = ctx.formParam("email");
-        float amount = Float.parseFloat("amount");
+        float amount = Float.parseFloat(ctx.formParam("amount"));
         try(Connection connection = connectionPool.getConnection()) {
             UserMapper.insertMoney(email,amount);
             ctx.sessionAttribute("message","Du har nu indsat penge på brugers konto !");
+            ctx.render("adminPages/adminIndex.html");
         } catch (SQLException e) {
-            throw new DatabaseException("RegisterInfo error", e.getMessage());
+            throw new DatabaseException("Insert amount info", e.getMessage());
         }
     }
 
