@@ -142,6 +142,7 @@ public class CupcakeController {
         if(cupcakesInOrder.isEmpty()) {
             System.out.println("Er vi her?");
         }
+        System.out.println("4269");
         return cupcakesInOrder;
     }
 

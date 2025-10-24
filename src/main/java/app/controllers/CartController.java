@@ -24,7 +24,7 @@ public class CartController {
 
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         app.get("/cart",ctx -> {
-            ctx.sessionAttribute("cupcakeInOrders",CupcakeController.getCupcakesInOrder());
+            ctx.sessionAttribute("cupcakeInOrder",CupcakeController.getCupcakesInOrder());
             System.out.println(CupcakeController.getCupcakesInOrder());
 //            setDisplayOfOrders(ctx);
             ctx.render("cart.html");
