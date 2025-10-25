@@ -1,10 +1,12 @@
 package app.persistence;
 
 import app.entities.CupCakePriceCallculator;
+import app.entities.User;
+import app.exceptions.DatabaseException;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class AdminMapper {
@@ -47,6 +49,38 @@ public class AdminMapper {
             totalDailySales += c.getAmount() * (c.getBottomPrice() + c.getIcingPrice());
         }
         return totalDailySales;
+        }
+
+        public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws SQLException {
+        int count = 3;
+        HashMap<Integer, User> mostActiveUsers = new HashMap<>();
+        String sql = "SELECT COUNT(users.id) AS Total_orders_by_user, users.id " +
+            "FROM public.orders " +
+            "JOIN users ON  users.id = user_id "+
+            "GROUP BY users.id " +
+            "ORDER BY Total_orders_by_user";
+
+            try (Connection connection = connectionPool.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ResultSet rs = ps.executeQuery();
+                while(rs.next() && count > 0) {
+                    int numberOfOrdersByUser = rs.getInt("Total_orders_by_user");
+                    int userId = rs.getInt("id");
+                    count--;
+                    mostActiveUsers.put(numberOfOrdersByUser,UserMapper.getUser(userId));
+                }
+            } catch (DatabaseException e) {
+                throw new RuntimeException(e);
+            }
+
+            mostActiveUsers.entrySet().stream()
+                    .sorted(Map.Entry.<Integer, User>comparingByKey().reversed());
+
+
+
+
+            return mostActiveUsers;
         }
     }
 

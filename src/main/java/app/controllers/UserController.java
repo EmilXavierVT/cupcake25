@@ -1,6 +1,5 @@
 package app.controllers;
 
-import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
@@ -23,7 +22,6 @@ public class UserController
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
-
         app.get("/login",ctx -> ctx.render("login.html"));
         app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
         app.get("logout", ctx -> logout(ctx));
@@ -44,7 +42,6 @@ public class UserController
 
     }
 //    lets go
-
 
 
     private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
