@@ -533,12 +533,13 @@ button:hover {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     font-family: 'Inter', sans-serif;
     height: 28vh;
-    width: 100%;
+    width:100%;
+
 }
 
 .top_customers {
@@ -548,7 +549,7 @@ button:hover {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     font-family: 'Inter', sans-serif;
@@ -575,6 +576,7 @@ button:hover {
     font-weight: 700;
     font-size: 12px;
     text-align: center;
+
 }
 
 .card_header {
@@ -698,6 +700,7 @@ button:hover {
     padding: 2%;
     max-height: 3rem;
     justify-content: center;
+    max-width: 500px;
 }
 
 .search_input, .customer_search input {

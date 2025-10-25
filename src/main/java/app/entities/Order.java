@@ -1,5 +1,8 @@
 package app.entities;
 
+import app.exceptions.DatabaseException;
+import app.persistence.UserMapper;
+
 import java.time.LocalDate;
 
 public class Order
@@ -8,6 +11,7 @@ public class Order
     private int userId;
     private LocalDate date;
     private Integer appliedDiscount;
+    User user;
 
     public Order(int id, int userId, LocalDate date, Integer appliedDiscount)
     {
@@ -15,6 +19,8 @@ public class Order
         this.userId = userId;
         this.date = date;
         this.appliedDiscount = appliedDiscount;
+        setUser(userId);
+
     }
 
     public Order(int userId, LocalDate date, Integer appliedDiscount)
@@ -22,6 +28,14 @@ public class Order
         this.userId = userId;
         this.date = date;
         this.appliedDiscount = appliedDiscount;
+        setUser(userId);
+    }
+    private void setUser(int userId){
+        try {
+            this.user = UserMapper.getUser(userId);
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getId()

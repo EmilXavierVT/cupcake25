@@ -52,14 +52,32 @@
                     <p>Dagens salgstal !  <span th:text="${today_sales}">0</span></p>
                 </div>
 
+
                 <div class="dashboard_card upcoming_orders">
                     <div class="card_header">Kommende Ordrer</div>
                     <ul class="card_list">
-                        <li>Ordre #1234 - 15/10/2025</li>
-                        <li>Ordre #1235 - 16/10/2025</li>
-                        <li>Ordre #1236 - 17/10/2025</li>
+                        <li th:each="order, iterStat : ${session.orders_of_seven_days}"
+                            th:if="${iterStat.index} < 10">
+                            Ordre #<span th:text="${order.id}"></span> -
+                            <span th:text="${order.date}"></span>
+                            <span th:text="${order.userID}"></span>
+                            <span th:text="${order.appliedDiscount}"></span>
+                        </li>
                     </ul>
                 </div>
+
+
+
+<!--                                <div class="dashboard_card upcoming_orders">-->
+<!--                    <div class="card_header">Kommende Ordrer</div>-->
+<!--                    <ul class="card_list">-->
+<!--                        <li>Ordre #1234 - 15/10/2025</li>-->
+<!--                        <li>Ordre #1235 - 16/10/2025</li>-->
+<!--                        <li>Ordre #1236 - 17/10/2025</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
+
             </div>
 
             <div class="dashboard_row1">

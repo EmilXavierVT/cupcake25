@@ -1,15 +1,19 @@
 package app.controllers;
 
+import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.GZIPOutputStream;
@@ -19,20 +23,28 @@ public class UserController
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
+
         app.get("/login",ctx -> ctx.render("login.html"));
-        app.post("/login", ctx -> login(ctx));
+        app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
         app.get("logout", ctx -> logout(ctx));
         app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
-        app.post("/registerPassword", ctx -> createUser(ctx));
-        app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
-        app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
-        app.get("/adminIndex", ctx -> {ctx.render("adminPages/adminIndex.html");getTodaySalesNumber(ctx,connectionPool);});
+        app.get("/adminIndex", ctx ->
+        {
+            ctx.render("adminPages/adminIndex.html");
+            getTodaySalesNumber(ctx,connectionPool);
+            getLastSevenDaysOrders(ctx,connectionPool);
+        });
         app.get("/admin-customer-page", ctx -> ctx.render("adminPages/admin-customer-page"));
         app.get("/admin-order-page", ctx -> ctx.render("adminPages/admin-order-page.html"));
+
+        app.post("/registerPassword", ctx -> createUser(ctx));
+        app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/adminIndex", ctx -> {insertMoney(ctx, connectionPool); });
+        app.post("/login", ctx -> login(ctx));
 
     }
 //    lets go
+
 
 
     private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
@@ -42,6 +54,20 @@ public class UserController
             ctx.sessionAttribute("today_sales",dailysale);
             ctx.render("adminPages/adminIndex.html", Map.of(
                             "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
+                    ));
+
+        } catch (SQLException e) {
+            throw new DatabaseException("something when getting today sales number" ,e.getMessage());
+        }
+    }
+
+    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
+
+        try(Connection connection =connectionPool.getConnection()){
+            List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
+            ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
+            ctx.render("adminPages/adminIndex.html", Map.of(
+                            "orders_of_seven_days", last7DaysOrder
                     ));
 
         } catch (SQLException e) {
