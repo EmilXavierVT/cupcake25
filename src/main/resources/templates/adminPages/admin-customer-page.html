@@ -47,9 +47,12 @@
 
         <div class="view_list">
             <ul class="card_list list_rows">
-                <li>VIS KUNDER</li>
-                <li>VIS KUNDER</li>
-                <li>VIS KUNDER</li>
+                <li th:each="user : ${session.all_users}">
+                name : <span th:text="${user.firstName}"></span>
+                    lastname : <span th:text="${user.lastName}"></span>
+                    email : <span th:text="${user.email}"></span>
+                    wallet : <span th:text="${user.wallet}"></span>
+                </li>
             </ul>
         </div>
 

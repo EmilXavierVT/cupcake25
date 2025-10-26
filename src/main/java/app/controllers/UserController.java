@@ -33,13 +33,18 @@ public class UserController
             getTodaySalesNumber(ctx,connectionPool);
             getLastSevenDaysOrders(ctx,connectionPool);
         });
-        app.get("/admin-customer-page", ctx -> ctx.render("adminPages/admin-customer-page"));
+        app.get("/admin-customer-page", ctx ->
+        {
+            ctx.render("adminPages/admin-customer-page.html");
+            getAllUsers(ctx, connectionPool);
+        });
         app.get("/admin-order-page", ctx -> ctx.render("adminPages/admin-order-page.html"));
 
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/adminIndex", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
+
 
     }
 //    lets go
@@ -189,4 +194,15 @@ public class UserController
         }
     }
 
+    private static void getAllUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        try (Connection connection = connectionPool.getConnection()) {
+            List<User> users = UserMapper.getAllUsers(connectionPool);
+            ctx.sessionAttribute("all_users",users);
+            ctx.render("adminPages/admin-customer-page.html", Map.of(
+                    "all_users", users
+            ));
+        } catch (SQLException e) {
+            throw new DatabaseException("Error getting all users", e.getMessage());
+        }
+    }
 }

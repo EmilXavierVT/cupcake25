@@ -4,6 +4,8 @@ import app.entities.User;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UserMapper
 {
@@ -187,4 +189,30 @@ public class UserMapper
         }
     }
 
+    public static List<User> getAllUsers(ConnectionPool connectionPool) throws DatabaseException {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT * FROM users";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                userList.add(new User(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getInt("zip_code"),
+                        rs.getString("street_name"),
+                        (Integer) rs.getObject("house_number"),
+                        rs.getString("floor"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getFloat("wallet")
+                ));
+            }
+            return userList;
+        } catch (SQLException e) {
+            throw new DatabaseException("Error retrieving all users", e.getMessage());
+        }
+    }
 }

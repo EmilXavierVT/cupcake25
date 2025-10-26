@@ -44,7 +44,7 @@ public class OrderMapper {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 rs.getInt("id");
-                order =new Order(userId,orderId,date,discountId);
+                order =new Order(orderId,userId,date,discountId);
             }
         }
     }

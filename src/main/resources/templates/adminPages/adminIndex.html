@@ -56,19 +56,21 @@
                 <div class="dashboard_card upcoming_orders">
                     <div class="card_header">Kommende Ordrer</div>
                     <ul class="card_list">
-                        <li th:each="order, iterStat : ${session.orders_of_seven_days}"
-                            th:if="${iterStat.index} < 10">
-                            Ordre #<span th:text="${order.orderId}"></span> -
+                        <li th:each="order: ${session.orders_of_seven_days}">
+<!--                            th:if="${iterStat.index} < 10">-->
+                            #<span th:text="${order.orderId}"></span> -
                             <span th:text="${order.date}"></span>
                             <span th:text="${order.appliedDiscount}"></span>
+                            <span> :    </span>
                             <span th:text="${order.user.email }"></span>
-                            <span th:text="${order.user.wallet }"></span>
-
-<!--                            <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">-->
-<!--                                <span th:text="${cupcakeInOrder.userDefinedCupcake.bottom.bottomName}"></span>-->
-<!--                                <span> med </span>-->
-<!--                                <span th:text="${cupcakeInOrder.userDefinedCupcake.icing.icingName}"></span>-->
-<!--                            </span>-->
+                            <span>  -  </span>
+                            <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
+                                <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
+                                <span>  +  </span>
+                                <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
+                                     <span>  Antal:   </span>
+                                <span th:text="${cupcakeInOrder.amount}"></span>
+                            </span>
 
                         </li>
                     </ul>
