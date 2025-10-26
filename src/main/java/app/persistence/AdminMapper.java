@@ -51,6 +51,8 @@ public class AdminMapper {
         return totalDailySales;
         }
 
+
+
         public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws SQLException {
         int count = 3;
         HashMap<Integer, User> mostActiveUsers = new HashMap<>();
