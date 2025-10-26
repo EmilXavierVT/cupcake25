@@ -84,10 +84,10 @@ public class OrderMapper {
         }
     }
 
-    public List<Order> getAllOrders() throws DatabaseException {
+    public List<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders";
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

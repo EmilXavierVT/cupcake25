@@ -94,15 +94,20 @@
                 <div class="dashboard_card top_customers">
                     <div class="card_header">Kunder med flest ordrer</div>
                     <ul class="card_list">
-                        <li>
-
+                        <li th:each="user, iterStat : ${session.top_users}">
+                            <!-- Display user info here -->
+                            Navn:  <span th:text="    ${user.firstName}"></span> <span th:text="    ${user.lastName}"></span>
+                            <br/>
+                            <!-- Get the amount from top_users_amount at the same index -->
+                            Antal: <span th:text="    ${session.top_user_amount[iterStat.index]}"></span>
                         </li>
-                        </ul>
+
+                    </ul>
                 </div>
 
 
                 <div class="dashboard_card sales_period">
-                    <p><strong>Periodens</strong><br/>Salgstal</p>
+                    <p><strong>Periodens</strong><br/>Salgstal <span th:text="${total_sales}"></span></p>
                 </div>
             </div>
         </div>

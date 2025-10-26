@@ -47,9 +47,24 @@
 
         <div class="view_list">
             <ul class="card_list list_rows">
-                <li>VIS ORDRE</li>
-                <li>VIS ORDRE</li>
-                <li>VIS ORDRE</li>
+                <li th:each="order : ${all_orders}">
+
+                    #<span th:text="${order.orderId}"></span> -
+                    <span th:text=" ${order.date}"></span>
+                    <span th:text="${order.appliedDiscount}"></span>
+                    <span> email: </span>
+                    <span th:text=" ${order.user.email } "></span>
+                    <br/>
+                    <span>  -  </span>
+                    <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
+                                <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
+                                <span>  +  </span>
+                                <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
+                                     <span>  Antal:   </span>
+                                <span th:text="${cupcakeInOrder.amount}"></span>
+                        <br/>
+                        </span>
+                </li>
             </ul>
         </div>
 

@@ -66,10 +66,9 @@ public class UserMapper
     }
 
     public static void updateUser(int id, String firstName, String lastName, int zipCode,
-                                  String streetName, Integer houseNumber, String floor
-                                  ) throws DatabaseException
+                                  String streetName, Integer houseNumber, String floor,
+                                  ConnectionPool connectionPool) throws DatabaseException
     {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
         String sql = "UPDATE users SET first_name=?, last_name=?, zip_code=?, street_name=?, " +
                 "house_number=?, floor=? WHERE id=?";
 

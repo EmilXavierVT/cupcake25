@@ -54,7 +54,7 @@ public class AdminMapper {
 
 
         public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws SQLException {
-        int count = 3;
+        int count = 6;
         HashMap<Integer, User> mostActiveUsers = new HashMap<>();
         String sql = "SELECT COUNT(users.id) AS Total_orders_by_user, users.id " +
             "FROM public.orders " +
@@ -75,14 +75,12 @@ public class AdminMapper {
             } catch (DatabaseException e) {
                 throw new RuntimeException(e);
             }
-
-            mostActiveUsers.entrySet().stream()
-                    .sorted(Map.Entry.<Integer, User>comparingByKey().reversed());
-
-
+            System.out.println(mostActiveUsers.toString());
 
 
             return mostActiveUsers;
         }
+
+
     }
 

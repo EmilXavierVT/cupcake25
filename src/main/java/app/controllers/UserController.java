@@ -1,8 +1,6 @@
 package app.controllers;
 
-import app.entities.Bottom;
-import app.entities.Order;
-import app.entities.User;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.AdminMapper;
 import app.persistence.ConnectionPool;
@@ -13,10 +11,8 @@ import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 public class UserController
@@ -33,14 +29,18 @@ public class UserController
             ctx.render("adminPages/adminIndex.html");
             getTodaySalesNumber(ctx,connectionPool);
             getLastSevenDaysOrders(ctx,connectionPool);
+            getTopUsers(ctx,connectionPool);
+            getTotalSales(ctx,connectionPool);
         });
         app.get("/admin-customer-page", ctx ->
         {
             ctx.render("adminPages/admin-customer-page.html");
             getAllUsers(ctx, connectionPool);
         });
-        app.get("/admin-order-page", ctx -> ctx.render("adminPages/admin-order-page.html"));
-
+        app.get("/admin-order-page", ctx -> {
+            ctx.render("adminPages/admin-order-page.html");
+            getAllOrders(ctx,connectionPool);
+        });
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
@@ -51,9 +51,51 @@ public class UserController
 //    lets go
 
 
+    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
+
+        try {
+            HashMap<Integer,User> topUsers = AdminMapper.findMostActiveUsers(connectionPool);
+
+            List<Integer> topUserPurchaseAmounts = new ArrayList<>();
+            List<User> topUserObjects = new ArrayList<>();
+
+            int i = 0;
+            for (Map.Entry<Integer, User> entry : topUsers.entrySet()) {
+                if (i >= 6) break;
+                topUserPurchaseAmounts.add(entry.getKey());
+                topUserObjects.add(entry.getValue());
+
+                i++;
+            }
+            topUserPurchaseAmounts = topUserPurchaseAmounts.stream()
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                        Collections.reverse(list);
+                        return list;
+                    }));
+
+// Reverse topUserObjects
+            topUserObjects = topUserObjects.stream()
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                        Collections.reverse(list);
+                        return list;
+                    }));
+
+
+            // Example: pass lists to session attributes or use as needed
+            ctx.sessionAttribute("top_user_amount", topUserPurchaseAmounts);
+            ctx.sessionAttribute("top_users", topUserObjects);
+            ctx.render("adminPages/adminIndex.html", Map.of("top_user_amount",topUserPurchaseAmounts));
+            ctx.render("adminPages/adminIndex.html", Map.of("top_users",topUserObjects));
+
+        } catch (SQLException e) {
+            throw new DatabaseException("something when getting top users" ,e.getMessage());
+        }
+    }
+
+
     private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
-        try(Connection connection =connectionPool.getConnection()){
+        try{
             int dailysale = AdminMapper.calulateDailySales(AdminMapper.findDailySales(connectionPool));
             ctx.sessionAttribute("today_sales",dailysale);
             ctx.render("adminPages/adminIndex.html", Map.of(
@@ -67,15 +109,11 @@ public class UserController
 
     private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
-        try(Connection connection =connectionPool.getConnection()){
-            List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
-            ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
-            ctx.render("adminPages/adminIndex.html", Map.of(
-                            "orders_of_seven_days", last7DaysOrder
-                    ));
-        } catch (SQLException e) {
-            throw new DatabaseException("something when getting today sales number" ,e.getMessage());
-        }
+        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
+        ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
+        ctx.render("adminPages/adminIndex.html", Map.of(
+                        "orders_of_seven_days", last7DaysOrder
+                ));
     }
 
 
@@ -170,13 +208,9 @@ public class UserController
         int streetNumber = Integer.parseInt(ctx.formParam("street_number"));
         String floor = ctx.formParam("floor");
         int userId = ctx.sessionAttribute("user");
-        try(Connection connection = connectionPool.getConnection()) {
-            UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor);
-            ctx.sessionAttribute("message","Du har opdateret din profil !");
-            ctx.render("index.html");
-        } catch (SQLException e) {
-            throw new DatabaseException("RegisterInfo error", e.getMessage());
-        }
+        UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor,connectionPool);
+        ctx.sessionAttribute("message","Du har opdateret din profil !");
+        ctx.render("index.html");
     }
 
 
@@ -206,4 +240,44 @@ public class UserController
             throw new DatabaseException("Error getting all users", e.getMessage());
         }
     }
+
+    private static void getAllOrders(Context ctx, ConnectionPool connectionPool){
+        try{
+            List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
+            allOrders = allOrders.stream()
+                    .collect(Collectors
+                            .collectingAndThen(Collectors.toList(),list ->{
+                                Collections.reverse(list);
+                                return list;
+                            }));
+            ctx.sessionAttribute("all_orders",allOrders);
+            ctx.render("adminPages/admin-order-page.html", Map.of(
+                    "all_orders", allOrders
+            ));
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void getTotalSales(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        float totalSales = 0;
+        try {
+            List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
+        for(Order order : allOrders) {
+            for(CupcakeInOrder cupcake :order.getCupcakesInOrder()){
+                totalSales +=(cupcake.getUdc().getBottom().getBottomPrice() +
+                        cupcake.getUdc().getIcing().getIcingPrice()*cupcake.getAmount());
+            }
+        }
+        ctx.sessionAttribute("total_sales",totalSales);
+        ctx.render("adminPages/adminIndex.html", Map.of(
+                "total_sales", Objects.requireNonNull(ctx.sessionAttribute("total_sales"))
+        ));
+
+        } catch (DatabaseException e) {
+            throw new DatabaseException("something in all orders"+ e.getMessage());
+        }
+
+    }
+
 }
