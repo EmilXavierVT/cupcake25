@@ -53,7 +53,6 @@ public class AdminMapper {
 
 
 
-
         public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws SQLException {
         int count = 3;
         HashMap<Integer, User> mostActiveUsers = new HashMap<>();
