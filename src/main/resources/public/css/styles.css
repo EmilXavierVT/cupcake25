@@ -494,7 +494,7 @@ button:hover {
     justify-content: flex-start;
     padding: 32px;
     gap: 0;
-    width: 100%;
+    width: 60%;
 }
 
 .dashboard_row {
@@ -700,7 +700,7 @@ button:hover {
     padding: 2%;
     max-height: 3rem;
     justify-content: center;
-    max-width: 500px;
+    max-width: 90%;
 }
 
 .search_input, .customer_search input {

@@ -5,6 +5,7 @@ import app.entities.CupcakeInOrder;
 import app.entities.Icing;
 import app.entities.UserDefinedCupcake;
 import app.exceptions.DatabaseException;
+import net.bytebuddy.matcher.LatentMatcher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CupcakeMapper {
-    private ConnectionPool connectionPool;
+    public ConnectionPool connectionPool;
 
     private final String GET_ALL_BOTTOMS = "SELECT * FROM the_bottoms";
     private final String GET_ALL_ICINGS = "SELECT * FROM icing";
@@ -161,5 +162,26 @@ public class CupcakeMapper {
         }
     }
 
+    public ArrayList<CupcakeInOrder> getCupcakesInOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<CupcakeInOrder> cupcakeInOrderList = new ArrayList<>();
+        String sql = "SELECT * FROM cupcakes_in_a_order WHERE order_id = ?";
+        try(Connection connection =connectionPool.getConnection()) {
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("order_id");
+                int udcId = rs.getInt("udc_id");
+                int amount = rs.getInt("amount");
+                UserDefinedCupcake userDefinedCupcake = getUserDefinedCupcakeById(udcId,connectionPool);
+                cupcakeInOrderList.add(new CupcakeInOrder(id, userDefinedCupcake, amount));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cupcakeInOrderList;
+    }
 
 }

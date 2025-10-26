@@ -58,10 +58,18 @@
                     <ul class="card_list">
                         <li th:each="order, iterStat : ${session.orders_of_seven_days}"
                             th:if="${iterStat.index} < 10">
-                            Ordre #<span th:text="${order.id}"></span> -
+                            Ordre #<span th:text="${order.orderId}"></span> -
                             <span th:text="${order.date}"></span>
-                            <span th:text="${order.userID}"></span>
                             <span th:text="${order.appliedDiscount}"></span>
+                            <span th:text="${order.user.email }"></span>
+                            <span th:text="${order.user.wallet }"></span>
+
+<!--                            <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">-->
+<!--                                <span th:text="${cupcakeInOrder.userDefinedCupcake.bottom.bottomName}"></span>-->
+<!--                                <span> med </span>-->
+<!--                                <span th:text="${cupcakeInOrder.userDefinedCupcake.icing.icingName}"></span>-->
+<!--                            </span>-->
+
                         </li>
                     </ul>
                 </div>

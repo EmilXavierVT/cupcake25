@@ -1,25 +1,31 @@
 package app.entities;
 
 import app.exceptions.DatabaseException;
+import app.persistence.ConnectionPool;
+import app.persistence.CupcakeMapper;
 import app.persistence.UserMapper;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 
 public class Order
 {
-    private int id;
+    private int orderId;
     private int userId;
     private LocalDate date;
     private Integer appliedDiscount;
     User user;
+    ArrayList<CupcakeInOrder> cupcakesInOrder = new ArrayList<CupcakeInOrder>();
 
-    public Order(int id, int userId, LocalDate date, Integer appliedDiscount)
+    public Order(int orderId, int userId, LocalDate date, Integer appliedDiscount)
     {
-        this.id = id;
+        this.orderId = orderId;
         this.userId = userId;
         this.date = date;
         this.appliedDiscount = appliedDiscount;
         setUser(userId);
+        setCupcakesInOrder();
 
     }
 
@@ -29,6 +35,7 @@ public class Order
         this.date = date;
         this.appliedDiscount = appliedDiscount;
         setUser(userId);
+        setCupcakesInOrder();
     }
     private void setUser(int userId){
         try {
@@ -37,15 +44,24 @@ public class Order
             throw new RuntimeException(e);
         }
     }
-
-    public int getId()
-    {
-        return id;
+    private void setCupcakesInOrder(){
+        CupcakeMapper cupcakeMapper = new CupcakeMapper();
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+            this.cupcakesInOrder = cupcakeMapper.getCupcakesInOrder(this.orderId, connectionPool);
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void setId(int id)
+    public int getOrderId()
     {
-        this.id = id;
+        return orderId;
+    }
+
+    public void setOrderId(int orderId)
+    {
+        this.orderId = orderId;
     }
 
     public int getUserId()
@@ -77,4 +93,13 @@ public class Order
     {
         this.appliedDiscount = appliedDiscount;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public ArrayList<CupcakeInOrder> getCupcakesInOrder() {
+        return cupcakesInOrder;
+    }
 }
+
