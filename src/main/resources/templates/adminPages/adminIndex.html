@@ -94,10 +94,10 @@
                 <div class="dashboard_card top_customers">
                     <div class="card_header">Kunder med flest ordrer</div>
                     <ul class="card_list">
-                        <li>Anna Hansen - 12 ordrer</li>
-                        <li>Peter Jensen - 10 ordrer</li>
-                        <li>Lise Sørensen - 9 ordrer</li>
-                    </ul>
+                        <li>
+
+                        </li>
+                        </ul>
                 </div>
 
 
@@ -120,9 +120,7 @@
 
         <div class="gift_card">
             <p><strong>Giv et Gavekort!</strong></p>
-            <div class="gift_inputs">
-                <input type="text" placeholder="Kunde"/>
-                <input type="number" placeholder="Beløb"/>
+
 
             <form class="gift_card" th:action="@{/insertMoney}" method="POST">
                 <label for="amount">amount:</label>
@@ -130,13 +128,8 @@
 
                 <label for="email">email:</label>
                 <input type="email" id="email" name="email" value="ex@tv.dk" required/>
-
-                <button type="submit">Log ind</button>
+                <button class="send_gift">Send Gavekort</button>
             </form>
-
-
-            </div>
-            <button class="send_gift">Send Gavekort</button>
         </div>
     </section>
 </main>

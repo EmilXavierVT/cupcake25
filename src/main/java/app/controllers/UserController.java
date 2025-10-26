@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.entities.Bottom;
 import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
@@ -42,7 +43,7 @@ public class UserController
 
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
-        app.post("/adminIndex", ctx -> {insertMoney(ctx, connectionPool); });
+        app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
 
 
@@ -72,7 +73,6 @@ public class UserController
             ctx.render("adminPages/adminIndex.html", Map.of(
                             "orders_of_seven_days", last7DaysOrder
                     ));
-
         } catch (SQLException e) {
             throw new DatabaseException("something when getting today sales number" ,e.getMessage());
         }
@@ -185,10 +185,11 @@ public class UserController
     public static void insertMoney(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
         String email = ctx.formParam("email");
-        float amount = Float.parseFloat("amount");
+        float amount = Float.parseFloat(ctx.formParam("amount"));
         try(Connection connection = connectionPool.getConnection()) {
             UserMapper.insertMoney(email,amount);
             ctx.sessionAttribute("message","Du har nu indsat penge på brugers konto !");
+            ctx.render("adminPages/adminIndex.html");
         } catch (SQLException e) {
             throw new DatabaseException("RegisterInfo error", e.getMessage());
         }
