@@ -229,7 +229,7 @@ public class UserMapper
 
             while(rs.next()) {
                 int wallet = rs.getInt("wallet");
-                if (wallet > priceToPay) {
+                if (wallet >= priceToPay) {
                     validFunds = true;
                 } else validFunds = false;
             }
