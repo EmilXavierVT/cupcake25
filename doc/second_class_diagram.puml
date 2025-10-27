@@ -1,0 +1,265 @@
+@startuml
+!pragma layout smetana
+'https://plantuml.com/class-diagram
+
+title Cupcake System Class Diagram
+
+package "controllers" {
+
+    class AdminController{
+    - Connectionpool connectionpool
+    + AdminController(connectionPool)
+    + addRoutes(javalin)
+   }
+
+
+    class CartController{
+    - float price
+    + addRoutes(app)
+    - paymentConformed(ctx, connectionPool)
+    -findDoscountCode(ctx, connectionPool)
+    }
+
+    class CupcakeController{
+    - ArrayList<CupcakeInOrder> cupcakesInOrder
+    + addRoutes(app)
+    - getOrderID(ctx, connectionPool)
+    - addToCupcakeOrderArrayList(ctx, connectionPool)
+    - createCupcake(ctx, connectionPool)
+    - getAllCupcakes(ctx)
+    - getUDCById(ctx)
+    - getAllBottoms(ctx, connectionPool)
+    - getAllIcings(ctx, connectionPool)
+    - putCupcakeInOrder(ctx, connectionPool)
+    }
+
+
+
+    class OrderController{
+    addRoutes(javalin)
+    getOrderID(Context, ConnectionPool)
+    setOrderIdToZero(Context)
+    }
+
+
+    class UserController{
+    + addRoutes(app)
+    - getTopUsers(ctx, connectionPool)
+    - getTodaySalesNumber(ctx, connectionPool)
+    - getLastSevenDaysOrders (ctx, connectionPool)
+    - createUser(ctx)
+    - getAlleOrders(ctx, connectionPool)
+    + registerInfo(ctx, connectionPool)
+    + insertMoney(ctx, connectionPool)
+    - getAllUsers(ctx, connectionPool)
+    - getTotalSales(ctx, connectionPool)
+    - logout(ctx)
+    + login(ctx)
+    }
+}
+
+package "entities" {
+
+    class Bottom
+    {
+    - int bottomId
+    - int bottomName
+    - int bottomPrice
+
+    + Bottom()
+    + Bottom( bottomId, bottomName, bottomPrice)
+
+    }
+
+
+    class CupcakeInOrder
+    {
+    - int orderID
+    - int udcID
+    - int amount
+
+    + CupcakeInOrder(orderID, udcID, amount)
+    }
+    class CupCakePriceCallculator{
+    - int amount
+    - int bottomPrice
+    - int icingPrice
+    + CupCakePriceCallculator(amount, bottomPrice, icingPrice)
+    + toString()
+
+    }
+
+    class DiscountCode
+    {
+    - int discountId
+    - String discountCode
+    - int discount
+
+    + DiscountCode(discountId, discountCode, discount)
+    + DiscountCode(dicountCode)
+    }
+
+    class Icing
+    {
+    - int icingId
+    - String icingName
+    - float icingPrice
+
+    + Icing(icingId, icingName, icingPrice)
+    + Icing()
+    }
+
+    class Order
+    {
+    - orderId
+    - int userId
+    - LocalDate date
+    - Integer appliedDiscount
+    - User user
+    - ArrayList <CupcakeInOrder> cupcakesInOrder
+
+    + Order(id, userId, date, appliedDiscount)
+    + Order(userId, date, appliedDiscount)
+    }
+
+    class User
+    {
+    - int id
+    - String firstName
+    - String lastName
+    - int zipCode
+    - String streetName
+    - Integer houseNumber
+    - String floor
+    - String email
+    - String password
+    - float wallet
+
+    + User(id, firstName, lastName, zipCode, streetName, houseNumber,           floor, email, password, wallet)
+    + User(id, email, password)
+    }
+
+    class UserDefinedCupcake
+    {
+    - Bottom bottom
+    - Icing icing
+    - int id
+
+    + UserDefinedCupcake(int id, Bottom bottom, Icing icing)
+    + UserDefinedCupcake( bottom, icing)
+    }
+}
+
+package "exceptions"
+{
+    class DatabaseException
+    {
+    + DatabaseException(userMessage)
+    + DatabaseException (userMessage, systemMessage)
+    }
+}
+
+package "persistence" {
+    class AdminMapper{
+    + findDailySales(connectionPool)
+    + calulateDailySales(priceList)
+    + findMostActiveUsers(connectionPool)
+    }
+    class ConnectionPool
+    {
+    - String DEFAULT_USER
+    - String DEFAULT_PASSWORD
+    - String DEFAULT_URL
+    - String DEFAULT_DB
+    - ConnectionPool instance
+    + HikariDataSource ds
+
+    - ConnectionPool()
+    + getInstance()
+    + getInstance(String user, String password, String url, String db)
+    + getConnection()
+    + close()
+    - createHikariConnectionPool(String user, String password, String url, String db)
+    }
+
+    class CupcakeMapper
+    {
+    - ConnectionPool connectionPool
+    - String GET_ALL_BOTTOMS
+    - String GET_ALL_ICINGS
+
+
+    + getALLBottoms(connectionPool)
+    + getAllIcings(connectionPool)
+    + getBottomById(id, connectionPool)
+    + getIcingById(id, connectionPool)
+    + createUserDefinedCupcakes(bottom, icing, connectionPool)
+    + getUserDefinedCupcakeById (id, connectionPool)
+    + saveCupcakeInOrder(order, udcId, amount, connectionPool
+    + getCupcakesInOrder(orderId, connectionPool)
+    }
+
+    class OrderMapper{
+    + createOrder(userId, orderId, discountId)
+    + getAvailableOrderid(connectionPool)
+    + saveOrder(userId, date, orderId, discountId)
+    + findDiscountPercentage (discountCode, connectionPool)
+    + updateOrder (orderId, userid, date, discountId)
+    + getAllOrders(connectionPool)
+    +
+    + getOrdersLastSevenDays()
+
+    }
+
+    class UserMapper
+    {
+     + createUser(email, password)
+     + getUser (id)
+     + updateUser( id,  firstName,  lastName,  zipCode,
+                                  streetName,  houseNumber, floor,
+                                   connectionPool)
+     + deleteUser(id)
+     + login ( email,  password)
+     + checkIfAdmin (user)
+     + insertMoney (email, amount)
+     + getAllUsers (connectionPool)
+    }
+}
+
+package "config" {
+class ThymeleafConfig
+{
+    + TemplateEngine()
+}
+}
+
+class Main
+{
+- String USER
+- String PASSWORD
+- String URL
+- String DB
+- ConnectionPool connectionPool
+
++ Main()
+
+}
+
+' Relationships (assumptions based on naming conventions)
+Main --* "controllers"
+User "1" --> "many" Order
+Order "1" --> "many" CupcakeInOrder
+CupcakeInOrder --> UserDefinedCupcake
+UserDefinedCupcake *-- Bottom
+UserDefinedCupcake *-- Icing
+' CupcakeController --> CupcakeMapper
+' UserController --> UserMapper
+"controllers" ---> "persistence"
+CupcakeMapper --> ConnectionPool
+OrderMapper --> ConnectionPool
+AdminMapper --> ConnectionPool
+UserMapper --> ConnectionPool
+DiscountCode *-- Order
+"persistence" --* "exceptions"
+
+@enduml
