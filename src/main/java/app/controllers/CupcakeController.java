@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CupcakeController {
 
@@ -32,9 +33,21 @@ public class CupcakeController {
         getOrderID(ctx, connectionPool);});
         app.post("/product-page", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/add-to-order", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
+        app.post("/delete_cupcake_in_current_order", ctx -> removeOneCupcakeFromCart(ctx, connectionPool));
 
 //        app.post("/order-confirmation", ctx -> paymentConfirmed(ctx,connectionPool));
 
+    }
+    private static void removeOneCupcakeFromCart(Context ctx, ConnectionPool connectionPool){
+        int cupcakeId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("cupcake_id")));
+        CupcakeInOrder cupcakeInOrder = null;
+        for (CupcakeInOrder cupcakeInOrder1 : cupcakesInOrder) {
+            if(cupcakeInOrder1.getUdc().getId() == cupcakeId){
+                cupcakeInOrder = cupcakeInOrder1;
+            }
+        }
+        cupcakesInOrder.remove(cupcakeInOrder);
+        ctx.render("/cart");
     }
 
     private static void createCupcake(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
@@ -82,11 +95,13 @@ public class CupcakeController {
         int orderId = ctx.sessionAttribute("order_id");
         CupcakeMapper cupcakeMapper = new CupcakeMapper();
         UserDefinedCupcake cupcake = null;
+
         try {
 
-            cupcake = new UserDefinedCupcake(cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
+            cupcake = new UserDefinedCupcake(cupcakesInOrder.size(),cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
 //            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
+
 
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());

@@ -64,6 +64,10 @@
                                 <span th:text="${cupcakeInOrder.amount}"></span>
                         <br/>
                         </span>
+                    <form th:action="@{/delete_order}" method="post" style="display:inline;">
+                        <input type="hidden" name="order_id" th:value="${order.orderId}" />
+                        <button type="submit" class="close-btn" title="X">&#10005;</button>
+                    </form>
                 </li>
             </ul>
         </div>

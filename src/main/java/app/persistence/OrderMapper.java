@@ -122,5 +122,39 @@ public class OrderMapper {
         return orders;
     }
 
+    public void removeOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+
+        try (Connection connection = connectionPool.getConnection()){
+             // 1. Delete cupcake_in_a_order and get the udc_id
+             String deleteCupcakeSql = "DELETE FROM cupcakes_in_a_order WHERE order_id = ? RETURNING udc_id";
+             PreparedStatement psDeleteCupcake = connection.prepareStatement(deleteCupcakeSql);
+             psDeleteCupcake.setInt(1, orderId); // Set this with the correct cupcake_in_a_order row ID
+             ResultSet rs = psDeleteCupcake.executeQuery();
+
+             Integer udcId = null;
+    if (rs.next()) {
+            udcId = rs.getInt("udc_id");
+        }
+
+// 2. Delete from user_defined_cupcakes using udc_id
+        if (udcId != null) {
+            String deleteUdcSql = "DELETE FROM user_defined_cupcakes WHERE udc_id = ?";
+            PreparedStatement psDeleteUdc = connection.prepareStatement(deleteUdcSql);
+            psDeleteUdc.setInt(1, udcId);
+            psDeleteUdc.executeUpdate();
+        }
+
+// 3. Delete from orders (when needed)
+        String deleteOrderSql = "DELETE FROM orders WHERE id = ?";
+        PreparedStatement psDeleteOrder = connection.prepareStatement(deleteOrderSql);
+        psDeleteOrder.setInt(1, orderId); // Set this with the correct order ID
+        psDeleteOrder.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Error removing order", e.getMessage());
+        }
+    }
+
+
+
 }
 

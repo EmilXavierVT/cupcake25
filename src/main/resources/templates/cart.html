@@ -51,6 +51,11 @@
                 <span class="cart_item_name" th:text="${cupcakeInOrder.udc.icing.icingName}">Icing</span>
                 <span class="cart_item_price" th:text="${cupcakeInOrder.udc.icing.icingPrice}">Icing Pris</span>
                 <span class="cart_amount_quantity" th:text="${cupcakeInOrder.amount}">Antal</span>
+                <form th:action="@{/delete_cupcake_in_current_order}" method="post" style="display:inline;">
+                    <input type="hidden" name="cupcake_id" th:value="${cupcakeInOrder.udc.id}" />
+                    <button type="submit" class="close-btn" title="X">&#10005;</button>
+                </form>
+
             </div>
         </div>
 

@@ -45,6 +45,7 @@ public class UserController
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
+        app.post("/delete_order", ctx -> deleteOrder(ctx, connectionPool));
 
 
     }
@@ -240,6 +241,11 @@ public class UserController
             throw new DatabaseException("Error getting all users", e.getMessage());
         }
     }
+private static void deleteOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Integer.parseInt(ctx.formParam("order_id"));
+        new OrderMapper().removeOrder(orderId, connectionPool);
+        ctx.redirect("/admin-order-page");
+}
 
     private static void getAllOrders(Context ctx, ConnectionPool connectionPool){
         try{
