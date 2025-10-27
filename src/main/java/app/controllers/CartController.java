@@ -75,6 +75,7 @@ public class CartController {
 
                 price = (price * discount) / 100;
             }
+
             if (UserMapper.findUserWallet(connectionPool, userId, price)) {
 
 
@@ -91,7 +92,9 @@ public class CartController {
                 ctx.redirect("/order-confirmation");
                 ctx.render("/order-confirmation");
         }
-            System.out.println("error in getting ot wallet ");
+            ctx.redirect("/pay-page");
+            ctx.attribute("message","ikke nok penge på konto, kontakt administrator for at regulere konto");
+
 
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
