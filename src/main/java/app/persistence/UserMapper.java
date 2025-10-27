@@ -168,7 +168,7 @@ public class UserMapper
 
       public static void insertMoney (String email, float amount, ConnectionPool connectionPool) throws DatabaseException
     {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
+
         String sql = "UPDATE users SET wallet = wallet + ? WHERE email = ?";
 
         try (Connection connection = connectionPool.getConnection();

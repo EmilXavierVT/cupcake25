@@ -45,7 +45,11 @@
 <main>
     <section class="admin_section">
         <div class="admin_container">
-            <h1>Hej XXXX<br/>Velkommen til!</h1>
+            <span class="hello_admin">Hej
+            <span th:text="${session.currentUser.firstName}"></span>
+            </span>
+            <h2>Velkommen til!</h2>
+
             <h2>Dagens ord er XXXX</h2>
         </div>
 

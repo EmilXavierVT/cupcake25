@@ -15,6 +15,5 @@ public class AdminController {
 
     public static void addRoutes(Javalin app)
     {
-
     }
 }

@@ -53,11 +53,13 @@ public class UserController
 
     }
 
-    private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
         List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
         allOrders = allOrders.stream()
                 .collect(Collectors
-                        .collectingAndThen(Collectors.toList(),list ->{
+                        .collectingAndThen(Collectors.toList(),list ->
+                        {
                             Collections.reverse(list);
                             return list;
                         }));
@@ -65,7 +67,8 @@ public class UserController
         int userId = user.getId();
         List<Order> userOrders = new ArrayList<>();
         for(Order order : allOrders) {
-            if(order.getUserId() == userId) {
+            if(order.getUserId() == userId)
+            {
                 userOrders.add(order);
             }
             ctx.sessionAttribute("user_orders",userOrders);
@@ -74,19 +77,20 @@ public class UserController
             ));
         }
     }
-//    lets go
 
 
-    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
-
-        try {
+    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try
+        {
             HashMap<Integer,User> topUsers = AdminMapper.findMostActiveUsers(connectionPool);
 
             List<Integer> topUserPurchaseAmounts = new ArrayList<>();
             List<User> topUserObjects = new ArrayList<>();
 
             int i = 0;
-            for (Map.Entry<Integer, User> entry : topUsers.entrySet()) {
+            for (Map.Entry<Integer, User> entry : topUsers.entrySet())
+            {
                 if (i >= 6) break;
                 topUserPurchaseAmounts.add(entry.getKey());
                 topUserObjects.add(entry.getValue());
@@ -94,14 +98,16 @@ public class UserController
                 i++;
             }
             topUserPurchaseAmounts = topUserPurchaseAmounts.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
+                    {
                         Collections.reverse(list);
                         return list;
                     }));
 
 // Reverse topUserObjects
             topUserObjects = topUserObjects.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
+                    {
                         Collections.reverse(list);
                         return list;
                     }));
@@ -119,23 +125,25 @@ public class UserController
     }
 
 
-    private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
-
-        try{
+    private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try
+        {
             int dailysale = AdminMapper.calulateDailySales(AdminMapper.findDailySales(connectionPool));
             ctx.sessionAttribute("today_sales",dailysale);
             ctx.render("adminPages/adminIndex.html", Map.of(
                             "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
                     ));
 
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             throw new DatabaseException("something when getting today sales number" ,e.getMessage());
         }
     }
 
-    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
-
-        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
+    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays(connectionPool);
 
         ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
         ctx.render("adminPages/adminIndex.html", Map.of(
@@ -183,9 +191,6 @@ public class UserController
 
     public static void login(Context ctx)
     {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
-
-
         // Hent form parametre
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
@@ -200,28 +205,31 @@ public class UserController
             {
                 ctx.sessionAttribute("admin", true);
                 ctx.attribute("message", "Du er nu logget ind som admin.");
-                ctx.render("adminPages/adminIndex.html");
+
                 ctx.redirect("/adminIndex");
+                ctx.render("adminPages/adminIndex.html", Map.of("message", "Du er nu logget ind som admin."));
+
 
             }
             else
             {
 
                 ctx.sessionAttribute("admin", false);
-                ctx.attribute("message", "Du er nu logget ind");
-                ctx.render("index.html");
-                ctx.redirect("/");
+                ctx.sessionAttribute("loginMessage", "Du er nu logget ind");
+                ctx.redirect("/profile-page");
+                ctx.render("/profile-page", Map.of("loginMessage", "Du er nu logget ind"));
+
             }
-
             // Hvis ja, send videre til forsiden med login besked
-
         }
         catch (DatabaseException e)
         {
             // Hvis nej, send tilbage til login side med fejl besked
-            ctx.attribute("message", e.getMessage() );
+            ctx.sessionAttribute("errorLogin", "login fejlede!");
             System.out.println("login logs errors");
-            ctx.render("index.html");
+            ctx.redirect("/login");
+            ctx.render("/login",Map.of("errorLogin", "login fejlede!"));
+
         }
 
     }

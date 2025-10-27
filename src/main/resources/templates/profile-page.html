@@ -53,16 +53,17 @@
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M45.885 87.0517C24.7732 86.2046 7.91666 68.8196 7.91666 47.5C7.91666 25.6381 25.6381 7.91666 47.5 7.91666C69.3619 7.91666 87.0833 25.6381 87.0833 47.5C87.0833 69.3619 69.3619 87.0833 47.5 87.0833H46.9577C46.5988 87.0833 46.2412 87.0728 45.885 87.0517ZM22.0994 72.4771C21.8034 71.6272 21.7027 70.7215 21.8046 69.8273C21.9066 68.9332 22.2086 68.0734 22.6883 67.312C23.168 66.5505 23.8131 65.9069 24.5755 65.4288C25.338 64.9507 26.1984 64.6506 27.0928 64.5505C42.5224 62.8425 52.5726 62.9969 67.927 64.5861C68.8226 64.6794 69.685 64.9758 70.4488 65.4528C71.2125 65.9298 71.8573 66.5747 72.3341 67.3386C72.8108 68.1024 73.107 68.965 73.2001 69.8606C73.2931 70.7562 73.1805 71.6612 72.8709 72.5068C79.4519 65.8489 83.1372 56.8614 83.125 47.5C83.125 27.8251 67.1749 11.875 47.5 11.875C27.8251 11.875 11.875 27.8251 11.875 47.5C11.875 57.2296 15.7759 66.0487 22.0994 72.4771Z" fill="black"/>
             </svg>
             <strong>E-mail:</strong><p th:text="${session.currentUser.email}"></p>
-            <strong>Name:</strong><p th:text="${session.currentUser.firstName} && ${session.currentUser.lastName}"></p>
+            <strong>Du er logget ind som:</strong><p th:text="${session.currentUser.firstName}"><span th:text="${session.currentUser.lastName}"></span></p>
         </div>
 
         <div class="profile_page_content">
-            <strong>Wallet:</strong><p th:text="${session.currentUser.wallet}"></p>
+            <strong>Balance:</strong><p th:text="${session.currentUser.wallet}">kr.</p>
         </div>
 
 
         <div class="view_list">
             <ul class="card_list list_rows">
+                <h1 id="title">Dine Ordre:</h1>
                 <li th:each="order : ${user_orders}">
 
                     #<span th:text="${order.orderId}"></span> -
@@ -80,6 +81,14 @@
                         </span>
                 </li>
             </ul>
+        </div>
+
+        <div class="image_cupcake_container">
+            <a th:href="@{/product-page}" class="link_to_shop">
+                <img th:src="@{/images/hugecupcake.png}" alt="cupcake" class="buy_cupcakes">
+                <span class="overlay_buy_cupcake">BUY.<br/>CUPCAKES.<br/>NOW.<br/>please...</span>
+
+            </a>
         </div>
     </div>
 </main>

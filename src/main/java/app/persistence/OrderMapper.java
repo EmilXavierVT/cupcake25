@@ -111,10 +111,10 @@ public class OrderMapper {
         return orders;
     }
 
-    public List<Order> getOrdersLastSevenDays() throws DatabaseException {
+    public List<Order> getOrdersLastSevenDays(ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE date >= CURRENT_DATE - INTERVAL '7 days'";
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
