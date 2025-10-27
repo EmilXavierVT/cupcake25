@@ -1,13 +1,11 @@
 package app.controllers;
 
-import app.entities.CupcakeInOrder;
-import app.entities.DiscountCode;
-import app.entities.User;
-import app.entities.UserDefinedCupcake;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.CupcakeMapper;
 import app.persistence.OrderMapper;
+import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -53,41 +51,56 @@ public class CartController {
 //
 //
 //    }
-    private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-
+    private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
 
 
         try (Connection connection = connectionPool.getConnection()) {
             LocalDate date = LocalDate.now();
 
-            User  user = ctx.sessionAttribute("currentUser");
+            User user = ctx.sessionAttribute("currentUser");
             int userId = user.getId();
             int orderId = ctx.sessionAttribute("order_id");
             ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
+
+            float price = 0;
+            for (CupcakeInOrder c : cupcakesInOrder) {
+                float bottomPrice = c.getUdc().getBottom().getBottomPrice();
+                float icingPrice = c.getUdc().getIcing().getIcingPrice();
+                int amount = c.getAmount();
+                price += (bottomPrice + icingPrice) * amount;
+            }
+            if (ctx.sessionAttribute("discount") != null) {
+                int discount = ctx.sessionAttribute("discount");
+
+                price = (price * discount) / 100;
+            }
+            if (UserMapper.findUserWallet(connectionPool, userId, price)) {
+
+
             CupcakeMapper cupcakeMapper = new CupcakeMapper();
             OrderMapper orderMapper = new OrderMapper();
             UserDefinedCupcake userDefinedCupcake = null;
-            orderMapper.saveOrder(userId,date,orderId,0);
+            orderMapper.saveOrder(userId, date, orderId, 0);
+
             for (CupcakeInOrder cupcakeInOrder : cupcakesInOrder) {
-                 userDefinedCupcake = cupcakeMapper.saveUserDefinedCupcake(cupcakeInOrder.getUdc().getBottom().getBottomId(), cupcakeInOrder.getUdc().getIcing().getIcingId(), connectionPool);
-                 price += cupcakeInOrder.getUdc().getBottom().getBottomPrice() + cupcakeInOrder.getUdc().getIcing().getIcingPrice();
+                userDefinedCupcake = cupcakeMapper.saveUserDefinedCupcake(cupcakeInOrder.getUdc().getBottom().getBottomId(), cupcakeInOrder.getUdc().getIcing().getIcingId(), connectionPool);
                 cupcakeMapper.saveCupcakeInOrder(orderId, userDefinedCupcake.getId(), cupcakeInOrder.getAmount(), connectionPool);
+            }
+            UserMapper.subtractFunds(connectionPool,price,userId);
+                ctx.redirect("/order-confirmation");
+                ctx.render("/order-confirmation");
+        }
+            System.out.println("error in getting ot wallet ");
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
             }
 
-            } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if(ctx.sessionAttribute("discount") != null) {
-            int discount = ctx.sessionAttribute("discount");
-
-                float finalPrice = (price * discount) / 100;
 
 
-        }
-        ctx.redirect("/order-confirmation");
-        ctx.render("/order-confirmation");
-    }
     private static void findDiscountCode(Context ctx, ConnectionPool connectionPool) {
         try (Connection connection = connectionPool.getConnection()) {
             System.out.println("you are now looking for a discount code");

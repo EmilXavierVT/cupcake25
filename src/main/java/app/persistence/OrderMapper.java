@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.entities.CupcakeInOrder;
 import app.entities.Order;
 import app.entities.DiscountCode;
 import app.exceptions.DatabaseException;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class OrderMapper {
+
+
     public void createOrder(int userId, int orderId, int discountId) {
 
     }
@@ -66,7 +69,7 @@ public class OrderMapper {
         }
         return returnDiscountCode;
     }
-    
+
     public void updateOrder(int orderId, int userId, LocalDate date, int discountId) throws DatabaseException {
         String sql = "UPDATE orders SET user_id=?, date=?, applied_discount=? WHERE id=?";
         try (Connection connection = ConnectionPool.getInstance().getConnection();
