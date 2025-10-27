@@ -28,6 +28,10 @@
                 <li><a th:href="@{/about}">Om os</a></li>
                 <li><a th:href="@{/login}" th:if="${session.currentUser == null}">Login</a></li>
                 <li><a th:href="@{/adminIndex}" th:if="${session.admin == true}">Admin</a></li>
+                <li th:if="${session.currentUser != null}"><a th:href="@{/profile-page}"
+                    th:text="${session.currentUser.email !=null ? session.currentUser.email : 'Profil'}"></a>
+                </li>
+                <li><a th:href="@{/logout}" th:if="${session.currentUser != null}">Logout</a></li>
             </ul>
         </nav>
 
@@ -49,6 +53,15 @@
         <img th:src="@{/images/cupcake-hero.png}" alt="cupcake-hero" class="hero_image"/>
     </section>
 
+
+    <!--
+        <section class="content">
+           <div class="green_box"></div>
+     <a th:href="@{about}">
+        <img th:src="@{/images/about-us.png}" alt="Cupcake" class="cupcake_logo">
+        </a>
+        <p>
+    -->
     <section class="content">
         <div class="green_box"></div>
         <p>cupcake propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake

@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Odre Konfirmation</title>
+    <title>Forside</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-
-
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
-
     <div class="nav_container">
+
         <a th:href="@{/}">
             <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.875 26.125V14.1735C6.875 13.8215 6.95383 13.4883 7.1115 13.1739C7.26917 12.8595 7.48642 12.6005 7.76325 12.397L15.1676 6.78975C15.5554 6.49367 15.9981 6.34562 16.4959 6.34562C16.9936 6.34562 17.4391 6.49367 17.8324 6.78975L25.2367 12.3956C25.5145 12.5991 25.7317 12.8585 25.8885 13.1739C26.0462 13.4883 26.125 13.8215 26.125 14.1735V26.125C26.125 26.4935 25.988 26.8148 25.7139 27.0889C25.4398 27.363 25.1185 27.5 24.75 27.5H20.097C19.7817 27.5 19.5177 27.3937 19.305 27.181C19.0923 26.9674 18.986 26.7034 18.986 26.389V19.8316C18.986 19.5172 18.8797 19.2537 18.667 19.041C18.4534 18.8274 18.1894 18.7206 17.875 18.7206H15.125C14.8106 18.7206 14.547 18.8274 14.3344 19.041C14.1208 19.2537 14.014 19.5172 14.014 19.8316V26.3904C14.014 26.7048 13.9077 26.9683 13.695 27.181C13.4823 27.3937 13.2188 27.5 12.9044 27.5H8.25C7.8815 27.5 7.56021 27.363 7.28612 27.0889C7.01204 26.8148 6.875 26.4935 6.875 26.125Z"
@@ -20,16 +18,17 @@
             </svg>
         </a>
 
-        <a th:href="@{/product-page}">
-        <img th:src="@{/images/cupcakes-logo.png}" alt="Cupcake" class="cupcake_logo">
+        <a th:href="@{product-page}">
+            <img th:src="@{/images/cupcakes-logo.png}" alt="Cupcake" class="cupcake_logo">
         </a>
-
         <nav>
             <ul>
                 <li><a th:href="@{/}">Hjem</a></li>
                 <li><a th:href="@{/about}">Om os</a></li>
+                <li><a th:href="@{/login}" th:if="${session.currentUser == null}">Login</a></li>
+                <li><a th:href="@{/adminIndex}" th:if="${session.admin == true}">Admin</a></li>
                 <li th:if="${session.currentUser != null}"><a th:href="@{/profile-page}"
-                    th:text="${session.currentUser.email !=null ? session.currentUser.email : 'Profil'}"></a>
+                                                              th:text="${session.currentUser.email !=null ? session.currentUser.email : 'Profil'}"></a>
                 </li>
                 <li><a th:href="@{/logout}" th:if="${session.currentUser != null}">Logout</a></li>
             </ul>
@@ -46,9 +45,42 @@
 </header>
 
 <main>
-    <div class="order_confirmation">
-        <p>Tak for at bestille hos os. Vi håber at høre fra dig igen.</p>
-        <button th:href="@{/}">Forside</button>
+
+    <div class="profile_container">
+        <div class="profile_content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="95" height="95" viewBox="0 0 95 95" fill="none">
+                <path d="M63.3333 39.5833C63.3333 43.7826 61.6652 47.8099 58.6958 50.7792C55.7265 53.7485 51.6993 55.4167 47.5 55.4167C43.3007 55.4167 39.2735 53.7485 36.3041 50.7792C33.3348 47.8099 31.6667 43.7826 31.6667 39.5833C31.6667 35.3841 33.3348 31.3568 36.3041 28.3875C39.2735 25.4181 43.3007 23.75 47.5 23.75C51.6993 23.75 55.7265 25.4181 58.6958 28.3875C61.6652 31.3568 63.3333 35.3841 63.3333 39.5833Z" fill="black"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M45.885 87.0517C24.7732 86.2046 7.91666 68.8196 7.91666 47.5C7.91666 25.6381 25.6381 7.91666 47.5 7.91666C69.3619 7.91666 87.0833 25.6381 87.0833 47.5C87.0833 69.3619 69.3619 87.0833 47.5 87.0833H46.9577C46.5988 87.0833 46.2412 87.0728 45.885 87.0517ZM22.0994 72.4771C21.8034 71.6272 21.7027 70.7215 21.8046 69.8273C21.9066 68.9332 22.2086 68.0734 22.6883 67.312C23.168 66.5505 23.8131 65.9069 24.5755 65.4288C25.338 64.9507 26.1984 64.6506 27.0928 64.5505C42.5224 62.8425 52.5726 62.9969 67.927 64.5861C68.8226 64.6794 69.685 64.9758 70.4488 65.4528C71.2125 65.9298 71.8573 66.5747 72.3341 67.3386C72.8108 68.1024 73.107 68.965 73.2001 69.8606C73.2931 70.7562 73.1805 71.6612 72.8709 72.5068C79.4519 65.8489 83.1372 56.8614 83.125 47.5C83.125 27.8251 67.1749 11.875 47.5 11.875C27.8251 11.875 11.875 27.8251 11.875 47.5C11.875 57.2296 15.7759 66.0487 22.0994 72.4771Z" fill="black"/>
+            </svg>
+            <strong>E-mail:</strong><p th:text="${session.currentUser.email}"></p>
+            <strong>Name:</strong><p th:text="${session.currentUser.firstName} && ${session.currentUser.lastName}"></p>
+        </div>
+
+        <div class="profile_page_content">
+            <strong>Wallet:</strong><p th:text="${session.currentUser.wallet}"></p>
+        </div>
+
+
+        <div class="view_list">
+            <ul class="card_list list_rows">
+                <li th:each="order : ${user_orders}">
+
+                    #<span th:text="${order.orderId}"></span> -
+                    <span th:text=" ${order.date}"></span>
+                    <span th:text="${order.appliedDiscount}"></span>
+                    <br/>
+                    <span>  -  </span>
+                    <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
+                                <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
+                                <span>  +  </span>
+                                <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
+                                     <span>  Antal:   </span>
+                                <span th:text="${cupcakeInOrder.amount}"></span>
+                        <br/>
+                        </span>
+                </li>
+            </ul>
+        </div>
     </div>
 </main>
 

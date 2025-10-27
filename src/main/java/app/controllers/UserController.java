@@ -8,11 +8,13 @@ import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 import java.util.zip.GZIPOutputStream;
 
 public class UserController
@@ -41,6 +43,7 @@ public class UserController
             ctx.render("adminPages/admin-order-page.html");
             getAllOrders(ctx,connectionPool);
         });
+        app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
@@ -48,6 +51,28 @@ public class UserController
         app.post("/delete_order", ctx -> deleteOrder(ctx, connectionPool));
 
 
+    }
+
+    private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
+        allOrders = allOrders.stream()
+                .collect(Collectors
+                        .collectingAndThen(Collectors.toList(),list ->{
+                            Collections.reverse(list);
+                            return list;
+                        }));
+        User user = ctx.sessionAttribute("currentUser");
+        int userId = user.getId();
+        List<Order> userOrders = new ArrayList<>();
+        for(Order order : allOrders) {
+            if(order.getUserId() == userId) {
+                userOrders.add(order);
+            }
+            ctx.sessionAttribute("user_orders",userOrders);
+            ctx.render("/profile-page", Map.of(
+                    "user_orders", userOrders
+            ));
+        }
     }
 //    lets go
 
@@ -111,6 +136,7 @@ public class UserController
     private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
 
         List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
+
         ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
         ctx.render("adminPages/adminIndex.html", Map.of(
                         "orders_of_seven_days", last7DaysOrder
@@ -221,23 +247,24 @@ public class UserController
 
         String email = ctx.formParam("email");
         float amount = Float.parseFloat(ctx.formParam("amount"));
-        try(Connection connection = connectionPool.getConnection()) {
-            UserMapper.insertMoney(email,amount);
+        try {
+            UserMapper.insertMoney(email,amount, connectionPool);
             ctx.sessionAttribute("message","Du har nu indsat penge på brugers konto !");
             ctx.render("adminPages/adminIndex.html");
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("RegisterInfo error", e.getMessage());
         }
     }
 
     private static void getAllUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        try (Connection connection = connectionPool.getConnection()) {
+        try {
             List<User> users = UserMapper.getAllUsers(connectionPool);
             ctx.sessionAttribute("all_users",users);
             ctx.render("adminPages/admin-customer-page.html", Map.of(
                     "all_users", users
             ));
-        } catch (SQLException e) {
+        } catch (DatabaseException e)
+        {
             throw new DatabaseException("Error getting all users", e.getMessage());
         }
     }
@@ -247,7 +274,7 @@ private static void deleteOrder(Context ctx, ConnectionPool connectionPool) thro
         ctx.redirect("/admin-order-page");
 }
 
-    private static void getAllOrders(Context ctx, ConnectionPool connectionPool){
+    private static void getAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         try{
             List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
             allOrders = allOrders.stream()
@@ -261,7 +288,7 @@ private static void deleteOrder(Context ctx, ConnectionPool connectionPool) thro
                     "all_orders", allOrders
             ));
         } catch (DatabaseException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("GetAllOrders exception", e.getMessage());
         }
     }
 
