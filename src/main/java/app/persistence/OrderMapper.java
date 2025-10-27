@@ -16,7 +16,7 @@ public class OrderMapper {
     public void createOrder(int userId, int orderId, int discountId) {
 
     }
-    public int getAvailableOrderid(ConnectionPool connectionPool) throws SQLException {
+    public int getAvailableOrderid(ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "SELECT nextval('orders_id_seq')";
 
@@ -29,10 +29,13 @@ public class OrderMapper {
             while (rs.next()) {
                 orderId = rs.getInt(1);
             }
-            }
+            } catch (SQLException e) {
+            throw new DatabaseException("getAvailableOrderid OrderMapper", e.getMessage());
+        }
         return orderId;
+
     }
-    public void saveOrder(int userId, LocalDate date, int orderId, int discountId) throws SQLException {
+    public void saveOrder(int userId, LocalDate date, int orderId, int discountId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orders (id, user_id, date, applied_discount) VALUES (?, ?, ?, ?) RETURNING id";
         Order order = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -46,10 +49,12 @@ public class OrderMapper {
                 rs.getInt("id");
                 order =new Order(orderId,userId,date,discountId);
             }
+        } catch (SQLException e) {
+            throw new DatabaseException("SaveOrder Mapper", e.getMessage());
         }
     }
 
-    public DiscountCode findDiscountPercentage(String discountCode, ConnectionPool connectionPool) throws SQLException {
+    public DiscountCode findDiscountPercentage(String discountCode, ConnectionPool connectionPool) throws DatabaseException {
         DiscountCode returnDiscountCode = null;
         String sql ="SELECT discount_id, discount_code,discount FROM discount_code WHERE discount_code = ?";
         try (Connection connection = connectionPool.getConnection();
@@ -63,9 +68,12 @@ public class OrderMapper {
                 int discountRate = rs.getInt("discount");
                 returnDiscountCode = new DiscountCode(discountId,discountCodeString,discountRate);
             }
+        } catch (SQLException e) {
+            throw new DatabaseException("findDiscountPercentage OrderMapper", e.getMessage());
         }
         return returnDiscountCode;
     }
+
     
     public void updateOrder(int orderId, int userId, LocalDate date, int discountId) throws DatabaseException {
         String sql = "UPDATE orders SET user_id=?, date=?, applied_discount=? WHERE id=?";

@@ -25,7 +25,7 @@ public class OrderController {
 
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        try(Connection connection = connectionPool.getConnection()){
+        try{
             System.out.println("you are now in the session");
             Integer orderId = ctx.sessionAttribute("order_id");
 
@@ -36,8 +36,8 @@ public class OrderController {
             }
 
 
-        } catch (SQLException e) {
-            throw new DatabaseException("Something in OrderController", e.getMessage());
+        } catch (DatabaseException e) {
+            throw new DatabaseException("getOrderID in OrderController", e.getMessage());
         }
 
     }

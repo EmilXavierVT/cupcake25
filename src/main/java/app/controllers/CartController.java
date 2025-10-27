@@ -20,7 +20,8 @@ import java.util.List;
 public class CartController {
     static float price =0;
 
-    public static void addRoutes(Javalin app) {
+    public static void addRoutes(Javalin app)
+    {
 
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         app.get("/cart",ctx -> {
@@ -67,7 +68,7 @@ public class CartController {
             CupcakeMapper cupcakeMapper = new CupcakeMapper();
             OrderMapper orderMapper = new OrderMapper();
             UserDefinedCupcake userDefinedCupcake = null;
-            orderMapper.saveOrder(userId,date,orderId,0);
+            orderMapper.saveOrder(userId,date,orderId,0, connectionPool);
             for (CupcakeInOrder cupcakeInOrder : cupcakesInOrder) {
                  userDefinedCupcake = cupcakeMapper.saveUserDefinedCupcake(cupcakeInOrder.getUdc().getBottom().getBottomId(), cupcakeInOrder.getUdc().getIcing().getIcingId(), connectionPool);
                  price += cupcakeInOrder.getUdc().getBottom().getBottomPrice() + cupcakeInOrder.getUdc().getIcing().getIcingPrice();
@@ -75,39 +76,45 @@ public class CartController {
 
             }
 
-            } catch (SQLException e) {
-            throw new RuntimeException(e);
+            } catch (DatabaseException e)
+        {
+            throw new DatabaseException("paymentConfirmed controller",e.getMessage());
         }
-        if(ctx.sessionAttribute("discount") != null) {
+        if(ctx.sessionAttribute("discount") != null)
+        {
             int discount = ctx.sessionAttribute("discount");
 
                 float finalPrice = (price * discount) / 100;
-
-
         }
         ctx.redirect("/order-confirmation");
         ctx.render("/order-confirmation");
     }
-    private static void findDiscountCode(Context ctx, ConnectionPool connectionPool) {
-        try (Connection connection = connectionPool.getConnection()) {
+    private static void findDiscountCode(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try
+        {
             System.out.println("you are now looking for a discount code");
             String discountCode = ctx.formParam("discountCode");
 
             OrderMapper orderMapper = new OrderMapper();
             DiscountCode dc = orderMapper.findDiscountPercentage(discountCode, connectionPool);
 
-            if(dc == null) {
+            if(dc == null)
+            {
              ctx.sessionAttribute("discount", 0);
                 ctx.sessionAttribute("message", "Der blev ikke fundet endiscountCode med det kodeord: " + discountCode);
-                } else {
+                }
+            else
+                {
                 int discount = dc.getDiscountPercentage();
                 ctx.sessionAttribute("discount", discount);
 
                 ctx.render("/cart");
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (DatabaseException e)
+        {
+            throw new DatabaseException("findDiscountCode controller", e.getMessage());
         }
     }
 }

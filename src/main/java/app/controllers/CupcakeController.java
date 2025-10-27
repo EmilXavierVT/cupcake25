@@ -24,10 +24,7 @@ public class CupcakeController {
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
-//
-//        app.post("/create", ctx -> createCupcake(ctx));
-//        app.get("/all", ctx -> getAllCupcakes(ctx));
-//        app.get("/{id}", ctx -> getUDCById(ctx));
+
         app.get("/product-page", ctx -> {getAllBottoms(ctx, connectionPool);
             getAllIcings(ctx, connectionPool);
         getOrderID(ctx, connectionPool);});
@@ -57,21 +54,19 @@ public class CupcakeController {
         int amount = Integer.parseInt(ctx.formParam("amount"));
         System.out.println(amount);
         CupcakeMapper cupcakeMapper = new CupcakeMapper();
-        try(Connection connection = connectionPool.getConnection()) {
+        try {
             UserDefinedCupcake cupcake = cupcakeMapper.saveUserDefinedCupcake(bottomId, icingId, connectionPool);
             ctx.attribute("udc", cupcake.getId());
-            // Add implementation for creating cupcake
             ctx.redirect("/product-page");
+
         } catch (DatabaseException e) {
-            System.out.println("!>" + e.getMessage() + "<!");
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("createCupcake Controller", e.getMessage());
         }
     }
 
-    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException, SQLException {
+    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        try (Connection connection = connectionPool.getConnection()) {
+        try  {
             System.out.println("you are now in the session");
             Integer orderId = ctx.sessionAttribute("order_id");
 
@@ -81,9 +76,8 @@ public class CupcakeController {
                 System.out.println(newOrderId);
             }
 
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (DatabaseException e) {
+            throw new DatabaseException("getOrderID controller", e.getMessage());
         }
     }
 
@@ -103,14 +97,10 @@ public class CupcakeController {
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
 
 
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+        } catch (DatabaseException e) {
+            throw new DatabaseException("CupcakeController.AddtoCupcakeOrderArrayList" + e.getMessage());
         }
         ctx.redirect("/product-page");
-
-        // chokolade + vanilje, 11
-//         banana + is, 1
-//
 
 
         }
@@ -131,7 +121,8 @@ public class CupcakeController {
             ctx.redirect("/");
         }
     }
-    private static void getAllIcings(Context ctx, ConnectionPool connectionPool) {
+    private static void getAllIcings(Context ctx, ConnectionPool connectionPool)
+    {
         List<Icing> allIcings = null;
         try
         {

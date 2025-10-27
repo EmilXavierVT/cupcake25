@@ -113,7 +113,7 @@ public class UserController
             ctx.render("adminPages/adminIndex.html", Map.of("top_user_amount",topUserPurchaseAmounts));
             ctx.render("adminPages/adminIndex.html", Map.of("top_users",topUserObjects));
 
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("something when getting top users" ,e.getMessage());
         }
     }
@@ -128,7 +128,7 @@ public class UserController
                             "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
                     ));
 
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("something when getting today sales number" ,e.getMessage());
         }
     }
