@@ -49,19 +49,34 @@ public class CartController
 
     private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
-        try
-        {
-            if(ctx.sessionAttribute("currentUser") != null)
-            {
-                LocalDate date = LocalDate.now();
-                User user = ctx.sessionAttribute("currentUser");
+        try  {
+            LocalDate date = LocalDate.now();
+
+            User user = ctx.sessionAttribute("currentUser");
+            if (user != null) {
                 int userId = user.getId();
                 int orderId = ctx.sessionAttribute("order_id");
                 ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
-                CupcakeMapper cupcakeMapper = new CupcakeMapper();
-                OrderMapper orderMapper = new OrderMapper();
-                UserDefinedCupcake userDefinedCupcake = null;
-                orderMapper.saveOrder(userId,date,orderId,0, connectionPool);
+
+                float price = 0;
+                for (CupcakeInOrder c : cupcakesInOrder) {
+                    float bottomPrice = c.getUdc().getBottom().getBottomPrice();
+                    float icingPrice = c.getUdc().getIcing().getIcingPrice();
+                    int amount = c.getAmount();
+                    price += (bottomPrice + icingPrice) * amount;
+                }
+                if (ctx.sessionAttribute("discount") != null) {
+                    int discount = ctx.sessionAttribute("discount");
+
+                    price = (price * discount) / 100;
+                }
+                if (UserMapper.findUserWallet(connectionPool, userId, price)) {
+
+
+                    CupcakeMapper cupcakeMapper = new CupcakeMapper();
+                    OrderMapper orderMapper = new OrderMapper();
+                    UserDefinedCupcake userDefinedCupcake = null;
+                    orderMapper.saveOrder(userId, date, orderId, 0, connectionPool);
 
                     for (CupcakeInOrder cupcakeInOrder : cupcakesInOrder) {
                         userDefinedCupcake = cupcakeMapper.saveUserDefinedCupcake(cupcakeInOrder.getUdc().getBottom().getBottomId(), cupcakeInOrder.getUdc().getIcing().getIcingId(), connectionPool);
