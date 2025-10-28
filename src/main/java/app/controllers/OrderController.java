@@ -19,25 +19,26 @@ public class OrderController {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
     app.get("/get_order_id",ctx -> getOrderID(ctx,connectionPool));
         //app.get("/product-page",ctx -> getOrderID(ctx,connectionPool));
-
     }
 
 
-    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-
-        try(Connection connection = connectionPool.getConnection()){
+    private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try{
             System.out.println("you are now in the session");
             Integer orderId = ctx.sessionAttribute("order_id");
 
-            if(orderId == null || orderId == 0){
+            if(orderId == null || orderId == 0)
+            {
                 int newOrderId = new OrderMapper().getAvailableOrderid(connectionPool);
                 ctx.sessionAttribute("order_id", orderId);
                 System.out.println(newOrderId);
             }
 
 
-        } catch (SQLException e) {
-            throw new DatabaseException("Something in OrderController", e.getMessage());
+        } catch (DatabaseException e)
+        {
+            throw new DatabaseException("getOrderID in OrderController", e.getMessage());
         }
 
     }

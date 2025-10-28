@@ -168,9 +168,9 @@ public class UserMapper
         return 0;
     }
 
-      public static void insertMoney (String email, float amount) throws DatabaseException
+      public static void insertMoney (String email, float amount, ConnectionPool connectionPool) throws DatabaseException
     {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
+
         String sql = "UPDATE users SET wallet = wallet + ? WHERE email = ?";
 
         try (Connection connection = connectionPool.getConnection();
@@ -229,7 +229,7 @@ public class UserMapper
 
             while(rs.next()) {
                 int wallet = rs.getInt("wallet");
-                if (wallet > priceToPay) {
+                if (wallet >= priceToPay) {
                     validFunds = true;
                 } else validFunds = false;
             }

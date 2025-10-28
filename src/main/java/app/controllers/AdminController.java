@@ -8,12 +8,12 @@ public class AdminController {
 
     private ConnectionPool connectionPool;
 
-    public AdminController(ConnectionPool connectionPool) {
+    public AdminController(ConnectionPool connectionPool)
+    {
         this.connectionPool = connectionPool;
     }
 
-    public static void addRoutes(Javalin app) {
-
-
+    public static void addRoutes(Javalin app)
+    {
     }
 }

@@ -59,7 +59,7 @@ public class CupcakeMapper {
         return icingList;
     }
 
-    public Bottom getBottomById(int id, ConnectionPool connectionPool) throws SQLException {
+    public Bottom getBottomById(int id, ConnectionPool connectionPool) throws DatabaseException {
         Bottom bottom = null;
         String sql = "SELECT * FROM the_bottoms WHERE bottom_id = ?";
 
@@ -72,11 +72,13 @@ public class CupcakeMapper {
                     float bottomPrice = rs.getFloat("bottom_price");
                     bottom = new Bottom(id, bottomName, bottomPrice);
                 }
-            }
+            } catch (SQLException e) {
+            throw new DatabaseException("CupcakeMapper.getBottomById" + e.getMessage());
+        }
         return bottom;
     }
 
-    public Icing getIcingById(int id, ConnectionPool connectionPool) throws SQLException {
+    public Icing getIcingById(int id, ConnectionPool connectionPool) throws DatabaseException {
         Icing icing = null;
         String sql = "SELECT * FROM icing WHERE icing_id = ?";
 
@@ -89,7 +91,9 @@ public class CupcakeMapper {
                     float icingPrice = rs.getFloat("icing_price");
                     icing = new Icing(id, icingName, icingPrice);
                 }
-            }
+            } catch (SQLException e) {
+            throw new DatabaseException("CupcakeMapper getIcingById" + e.getMessage());
+        }
         return icing;
     }
     public UserDefinedCupcake saveUserDefinedCupcake(int bottom, int icing, ConnectionPool connectionPool) throws DatabaseException {
@@ -111,11 +115,11 @@ public class CupcakeMapper {
                     userDefinedCupcake = new UserDefinedCupcake(id, bottomId, icingId);
                 }
         } catch (SQLException e) {
-            throw new DatabaseException("Something something database",e.getMessage());
+            throw new DatabaseException("SaveUserDefinedCupcales database", e.getMessage());
         }
         return userDefinedCupcake;
     }
-    public UserDefinedCupcake getUserDefinedCupcakeById(int id, ConnectionPool connectionPool) throws DatabaseException, SQLException {
+    public UserDefinedCupcake getUserDefinedCupcakeById(int id, ConnectionPool connectionPool) throws DatabaseException {
         UserDefinedCupcake userDefinedCupcake = null;
         String sql = "SELECT * FROM user_defined_cupcakes WHERE udc_id = ?";
 
@@ -131,7 +135,7 @@ public class CupcakeMapper {
                 userDefinedCupcake = new UserDefinedCupcake(id, bottom, icing);
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Something something database",e.getMessage());
+            throw new DatabaseException("getUserDefinedCupcakes database",e.getMessage());
         }
         return userDefinedCupcake;
     }
@@ -158,7 +162,7 @@ public class CupcakeMapper {
                     System.out.println(cupcakeInOrder);
                 }
         } catch (SQLException e) {
-            throw new DatabaseException("Something something database",e.getMessage());
+            throw new DatabaseException("saveCupcakeInOrder database",e.getMessage());
         }
     }
 
@@ -178,7 +182,7 @@ public class CupcakeMapper {
                 cupcakeInOrderList.add(new CupcakeInOrder(id, userDefinedCupcake, amount));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("getCupcakesInOrder" ,e.getMessage());
         }
 
         return cupcakeInOrderList;

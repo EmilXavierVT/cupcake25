@@ -1,7 +1,6 @@
 package app.persistence;
 
-import app.entities.CupCakePriceCallculator;
-import app.entities.User;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
@@ -13,47 +12,59 @@ public class AdminMapper {
 
 
 
-    public static ArrayList<CupCakePriceCallculator> findDailySales(ConnectionPool connectionPool) throws SQLException {
+    public static ArrayList<CupcakeInOrder> findDailySales(ConnectionPool connectionPool) throws DatabaseException
+    {
         LocalDate date = LocalDate.now();
-        ArrayList<CupCakePriceCallculator> priceList = new ArrayList<CupCakePriceCallculator>();
+        ArrayList<CupcakeInOrder> cupcakeList = new ArrayList<>();
 
-        String sql = "SELECT amount,bottom_price,icing_price FROM orders " +
+        String sql = "SELECT * FROM orders " +
                 "JOIN cupcakes_in_a_order ON id = order_id " +
                 "JOIN user_defined_cupcakes USING(udc_id) " +
                 "JOIN icing on udc_icing = icing_id " +
                 "JOIN the_bottoms on udc_bottom = bottom_id " +
                 "WHERE orders.date = ?";
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql))
+        {
 
         ps.setDate(1, java.sql.Date.valueOf(date));
         ResultSet rs = ps.executeQuery();
         while(rs.next()) {
             int amount = rs.getInt("amount");
+            int orderId = rs.getInt("order_id");
+            int bottomId = rs.getInt("bottom_id");
+            String bottomName = rs.getString("bottom_name");
             int bottomPrice = rs.getInt("bottom_price");
+
+            int icingId = rs.getInt("icing_id");
+            String icingName = rs.getString("icing_name");
             int icingPrice = rs.getInt("icing_price");
 
-            priceList.add(new CupCakePriceCallculator(amount, bottomPrice, icingPrice));
+            UserDefinedCupcake cupcakeHolder = new UserDefinedCupcake(amount, new Bottom(bottomId,bottomName,bottomPrice),new Icing(icingId,icingName,icingPrice));
+            cupcakeList.add(new CupcakeInOrder(orderId,cupcakeHolder,amount));
         }
-        }
-
-
-        return  priceList;
-
+        } catch (SQLException e) {
+            throw new DatabaseException("AdminMapper findDailySales" ,e.getMessage());
         }
 
-        public static int calulateDailySales(ArrayList<CupCakePriceCallculator> priceList){
+
+        return  cupcakeList;
+
+        }
+
+        public static int calulateDailySales(ArrayList<CupcakeInOrder> priceList){
 
         int totalDailySales = 0;
-        for(CupCakePriceCallculator c : priceList){
-            totalDailySales += c.getAmount() * (c.getBottomPrice() + c.getIcingPrice());
+        for(CupcakeInOrder c : priceList){
+            totalDailySales += (int) ((c.getUdc().getBottom().getBottomPrice() +  c.getUdc().getIcing().getIcingPrice()) * c.getAmount());
+
         }
         return totalDailySales;
         }
 
 
 
-        public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws SQLException {
+        public static HashMap<Integer, User> findMostActiveUsers(ConnectionPool connectionPool) throws DatabaseException {
         int count = 6;
         HashMap<Integer, User> mostActiveUsers = new HashMap<>();
         String sql = "SELECT COUNT(users.id) AS Total_orders_by_user, users.id " +
@@ -72,12 +83,10 @@ public class AdminMapper {
                     count--;
                     mostActiveUsers.put(numberOfOrdersByUser,UserMapper.getUser(userId));
                 }
-            } catch (DatabaseException e) {
-                throw new RuntimeException(e);
+
+            } catch (SQLException e) {
+                throw new DatabaseException("AdminMapper findMostActiveUsers" ,e.getMessage());
             }
-            System.out.println(mostActiveUsers.toString());
-
-
             return mostActiveUsers;
         }
 
