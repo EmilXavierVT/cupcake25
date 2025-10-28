@@ -13,6 +13,7 @@ import io.javalin.http.Context;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class CartController {
     static float price =0;
@@ -25,8 +26,10 @@ public class CartController {
             ctx.sessionAttribute("cupcakeInOrder",CupcakeController.getCupcakesInOrder());
             System.out.println(CupcakeController.getCupcakesInOrder());
 //            setDisplayOfOrders(ctx);
+            setAddress(ctx);
+            setOrderAndPickUpDate(ctx);
             ctx.render("cart.html");
-    });
+        });
 
         app.get("/pay-page",ctx -> ctx.render("pay-page.html"));
         app.get("/apply_discount", ctx -> findDiscountCode(ctx, connectionPool));
@@ -37,6 +40,7 @@ public class CartController {
             findDiscountCode(ctx,connectionPool);
         });
         app.get("/order-confirmation", ctx -> ctx.render("order-confirmation.html"));
+
     }
 
     private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool) throws DatabaseException
@@ -109,5 +113,26 @@ public class CartController {
         {
             throw new DatabaseException("findDiscountCode controller", e.getMessage());
         }
+    }
+
+    private static void setOrderAndPickUpDate(Context ctx){
+        LocalDate today = LocalDate.now();
+        LocalDate pickUpDate = today.plusDays(3);
+
+        ctx.sessionAttribute("pickUpDate",pickUpDate);
+        ctx.sessionAttribute("today",today);
+
+        ctx.redirect("/cart");
+        ctx.render("/cart", Map.of("todays_date", today.toString(), "pick_up_date", pickUpDate.toString()));
+    }
+    private static void setAddress(Context ctx){
+        User currentUser = ctx.sessionAttribute("currentUser");
+        String address = currentUser.getStreetName();
+
+        ctx.sessionAttribute("pick_up_address", address);
+
+        ctx.redirect("/cart");
+        ctx.render("/cart", Map.of("pick_up_address", address));
+
     }
 }
