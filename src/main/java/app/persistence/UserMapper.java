@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
+
+
 public class UserMapper
 {
     public static User createUser(String email, String password) throws DatabaseException {
@@ -214,5 +216,43 @@ public class UserMapper
         } catch (SQLException e) {
             throw new DatabaseException("Error retrieving all users", e.getMessage());
         }
+    }
+    public static boolean findUserWallet(ConnectionPool connectionPool, int user_id, float priceToPay)
+    {
+        boolean validFunds = false;
+        String sql = "SELECT wallet FROM public.users " +
+                "where users.id = ? ";
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1,user_id);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                int wallet = rs.getInt("wallet");
+                if (wallet >= priceToPay) {
+                    validFunds = true;
+                } else validFunds = false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return validFunds;
+    }
+
+    public static void subtractFunds(ConnectionPool connectionPool, float price,int userId) {
+        String sql = "UPDATE public.users " +
+                "SET wallet = wallet - ? " +
+                "WHERE users.id = ?";
+
+        try(Connection connection = connectionPool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setFloat(1,price);
+            ps.setFloat(2,userId);
+
+            ps.executeUpdate();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
     }
 }

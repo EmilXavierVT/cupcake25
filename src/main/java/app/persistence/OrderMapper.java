@@ -74,7 +74,7 @@ public class OrderMapper {
         return returnDiscountCode;
     }
 
-    
+
     public void updateOrder(int orderId, int userId, LocalDate date, int discountId) throws DatabaseException {
         String sql = "UPDATE orders SET user_id=?, date=?, applied_discount=? WHERE id=?";
         try (Connection connection = ConnectionPool.getInstance().getConnection();
