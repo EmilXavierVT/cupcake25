@@ -47,6 +47,7 @@ public class UserController
         app.get("logout", ctx -> logout(ctx));
         app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
         app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
+        app.get("/about", ctx -> ctx.render("about.html"));
 
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
@@ -291,7 +292,7 @@ public class UserController
                 .filter(order ->
                 {
                     assert search != null;
-                    return order.getUser().getFullName().contains(search);
+                    return order.getUser().getEmail().contains(search);
                 })
                 .toList();
 
@@ -305,8 +306,9 @@ private static void deleteOrder(Context ctx, ConnectionPool connectionPool) thro
 {
         int orderId = Integer.parseInt(ctx.formParam("order_id"));
         new OrderMapper().removeOrder(orderId, connectionPool);
-
-        ctx.redirect("/admin-order-page");
+         List<Order> updatedOrders = getAllOrders(ctx,connectionPool);
+         ctx.redirect("/admin-order-page");
+        ctx.render("adminPages/admin-order-page.html",Map.of("all_orders",updatedOrders));
 }
 
     private static List<Order> getAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
