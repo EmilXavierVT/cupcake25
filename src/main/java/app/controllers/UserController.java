@@ -130,6 +130,7 @@ public class UserController
         try
         {
             int dailysale = AdminMapper.calulateDailySales(AdminMapper.findDailySales(connectionPool));
+
             ctx.sessionAttribute("today_sales",dailysale);
             ctx.render("adminPages/adminIndex.html", Map.of(
                             "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
