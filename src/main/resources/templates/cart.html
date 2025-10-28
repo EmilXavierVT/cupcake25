@@ -19,12 +19,19 @@
                       fill="#5B405F"/>
             </svg>
         </a>
+
+        <a th:href="@{/product-page}">
         <img th:src="@{/images/cupcakes-logo.png}" alt="Cupcake" class="cupcake_logo">
+        </a>
 
         <nav>
             <ul>
                 <li><a th:href="@{/}">Hjem</a></li>
                 <li><a th:href="@{/about}">Om os</a></li>
+                <li th:if="${session.currentUser != null}"><a th:href="@{/profile-page}"
+                    th:text="${session.currentUser.email !=null ? session.currentUser.email : 'Profil'}"></a>
+                </li>
+                <li><a th:href="@{/logout}" th:if="${session.currentUser != null}">Logout</a></li>
             </ul>
         </nav>
 
@@ -46,11 +53,16 @@
 
         <div class="cart_container">
             <div th:each="cupcakeInOrder : ${session.cupcakeInOrder}" class="cart_item">
-                <span class="cart_item_name" th:text="${cupcakeInOrder.udc.bottom.bottomName}">Bund</span>
-                <span class="cart_item_price" th:text="${cupcakeInOrder.udc.bottom.bottomPrice}">Bund Pris</span>
-                <span class="cart_item_name" th:text="${cupcakeInOrder.udc.icing.icingName}">Icing</span>
-                <span class="cart_item_price" th:text="${cupcakeInOrder.udc.icing.icingPrice}">Icing Pris</span>
-                <span class="cart_amount_quantity" th:text="${cupcakeInOrder.amount}">Antal</span>
+                 <span class="cart_item_name">Cupcake:<span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span></span><br/>
+                <span class="cart_item_price">Pris: <span th:text="${cupcakeInOrder.udc.bottom.bottomPrice}"></span></span><br/>
+                <span class="cart_item_name">Topping:<span th:text="${cupcakeInOrder.udc.icing.icingName}"></span></span><br/>
+                <span class="cart_item_price">Pris:<span th:text="${cupcakeInOrder.udc.icing.icingPrice}"></span></span><br/>
+                <span class="cart_amount_quantity">Antal: <span th:text="${cupcakeInOrder.amount}"></span></span>
+                <form th:action="@{/delete_cupcake_in_current_order}" method="post" style="display:inline;">
+                    <input type="hidden" name="cupcake_id" th:value="${cupcakeInOrder.udc.id}" />
+                    <button type="submit" class="close-btn" title="X">&#10005;</button>
+                </form>
+
             </div>
         </div>
 

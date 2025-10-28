@@ -106,7 +106,7 @@ public class ConnectionPool
         config.setJdbcUrl(String.format(url, db));
         config.setUsername(user);
         config.setPassword(password);
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(5);
         config.setPoolName("Postgresql Pool");
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");

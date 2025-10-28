@@ -8,11 +8,13 @@ import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
 import java.util.zip.GZIPOutputStream;
 
 public class UserController
@@ -41,26 +43,54 @@ public class UserController
             ctx.render("adminPages/admin-order-page.html");
             getAllOrders(ctx,connectionPool);
         });
+        app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
         app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
+        app.post("/delete_order", ctx -> deleteOrder(ctx, connectionPool));
 
 
     }
-//    lets go
+
+    private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
+        allOrders = allOrders.stream()
+                .collect(Collectors
+                        .collectingAndThen(Collectors.toList(),list ->
+                        {
+                            Collections.reverse(list);
+                            return list;
+                        }));
+        User user = ctx.sessionAttribute("currentUser");
+        int userId = user.getId();
+        List<Order> userOrders = new ArrayList<>();
+        for(Order order : allOrders) {
+            if(order.getUserId() == userId)
+            {
+                userOrders.add(order);
+            }
+            ctx.sessionAttribute("user_orders",userOrders);
+            ctx.render("/profile-page", Map.of(
+                    "user_orders", userOrders
+            ));
+        }
+    }
 
 
-    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
-
-        try {
+    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try
+        {
             HashMap<Integer,User> topUsers = AdminMapper.findMostActiveUsers(connectionPool);
 
             List<Integer> topUserPurchaseAmounts = new ArrayList<>();
             List<User> topUserObjects = new ArrayList<>();
 
             int i = 0;
-            for (Map.Entry<Integer, User> entry : topUsers.entrySet()) {
+            for (Map.Entry<Integer, User> entry : topUsers.entrySet())
+            {
                 if (i >= 6) break;
                 topUserPurchaseAmounts.add(entry.getKey());
                 topUserObjects.add(entry.getValue());
@@ -68,14 +98,16 @@ public class UserController
                 i++;
             }
             topUserPurchaseAmounts = topUserPurchaseAmounts.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
+                    {
                         Collections.reverse(list);
                         return list;
                     }));
 
 // Reverse topUserObjects
             topUserObjects = topUserObjects.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
+                    {
                         Collections.reverse(list);
                         return list;
                     }));
@@ -87,29 +119,32 @@ public class UserController
             ctx.render("adminPages/adminIndex.html", Map.of("top_user_amount",topUserPurchaseAmounts));
             ctx.render("adminPages/adminIndex.html", Map.of("top_users",topUserObjects));
 
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("something when getting top users" ,e.getMessage());
         }
     }
 
 
-    private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
-
-        try{
+    private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        try
+        {
             int dailysale = AdminMapper.calulateDailySales(AdminMapper.findDailySales(connectionPool));
             ctx.sessionAttribute("today_sales",dailysale);
             ctx.render("adminPages/adminIndex.html", Map.of(
                             "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
                     ));
 
-        } catch (SQLException e) {
+        } catch (DatabaseException e)
+        {
             throw new DatabaseException("something when getting today sales number" ,e.getMessage());
         }
     }
 
-    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException{
+    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    {
+        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays(connectionPool);
 
-        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays();
         ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
         ctx.render("adminPages/adminIndex.html", Map.of(
                         "orders_of_seven_days", last7DaysOrder
@@ -156,9 +191,6 @@ public class UserController
 
     public static void login(Context ctx)
     {
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
-
-
         // Hent form parametre
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
@@ -173,28 +205,31 @@ public class UserController
             {
                 ctx.sessionAttribute("admin", true);
                 ctx.attribute("message", "Du er nu logget ind som admin.");
-                ctx.render("adminPages/adminIndex.html");
+
                 ctx.redirect("/adminIndex");
+                ctx.render("adminPages/adminIndex.html", Map.of("message", "Du er nu logget ind som admin."));
+
 
             }
             else
             {
 
                 ctx.sessionAttribute("admin", false);
-                ctx.attribute("message", "Du er nu logget ind");
-                ctx.render("index.html");
-                ctx.redirect("/");
+                ctx.sessionAttribute("loginMessage", "Du er nu logget ind");
+                ctx.redirect("/profile-page");
+                ctx.render("/profile-page", Map.of("loginMessage", "Du er nu logget ind"));
+
             }
-
             // Hvis ja, send videre til forsiden med login besked
-
         }
         catch (DatabaseException e)
         {
             // Hvis nej, send tilbage til login side med fejl besked
-            ctx.attribute("message", e.getMessage() );
+            ctx.sessionAttribute("errorLogin", "login fejlede!");
             System.out.println("login logs errors");
-            ctx.render("index.html");
+            ctx.redirect("/login");
+            ctx.render("/login",Map.of("errorLogin", "login fejlede!"));
+
         }
 
     }
@@ -220,28 +255,34 @@ public class UserController
 
         String email = ctx.formParam("email");
         float amount = Float.parseFloat(ctx.formParam("amount"));
-        try(Connection connection = connectionPool.getConnection()) {
-            UserMapper.insertMoney(email,amount);
+        try {
+            UserMapper.insertMoney(email,amount, connectionPool);
             ctx.sessionAttribute("message","Du har nu indsat penge på brugers konto !");
             ctx.render("adminPages/adminIndex.html");
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
             throw new DatabaseException("RegisterInfo error", e.getMessage());
         }
     }
 
     private static void getAllUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        try (Connection connection = connectionPool.getConnection()) {
+        try {
             List<User> users = UserMapper.getAllUsers(connectionPool);
             ctx.sessionAttribute("all_users",users);
             ctx.render("adminPages/admin-customer-page.html", Map.of(
                     "all_users", users
             ));
-        } catch (SQLException e) {
+        } catch (DatabaseException e)
+        {
             throw new DatabaseException("Error getting all users", e.getMessage());
         }
     }
+private static void deleteOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderId = Integer.parseInt(ctx.formParam("order_id"));
+        new OrderMapper().removeOrder(orderId, connectionPool);
+        ctx.redirect("/admin-order-page");
+}
 
-    private static void getAllOrders(Context ctx, ConnectionPool connectionPool){
+    private static void getAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         try{
             List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
             allOrders = allOrders.stream()
@@ -255,7 +296,7 @@ public class UserController
                     "all_orders", allOrders
             ));
         } catch (DatabaseException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("GetAllOrders exception", e.getMessage());
         }
     }
 

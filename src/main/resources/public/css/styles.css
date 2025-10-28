@@ -43,6 +43,7 @@ nav a {
     text-decoration: none;
     color: #5B405F;
     font-size: 12px;
+    cursor: pointer;
 }
 
 .cupcake_logo {
@@ -138,6 +139,7 @@ a svg:hover {
     border-radius: 10px;
     flex-shrink: 0;
     transition: 2s;
+    cursor: pointer;
 }
 
 .green_box:hover {
@@ -339,30 +341,45 @@ button:hover {
     align-items: start;
     /*justify-content: center;*/
     /*min-height: 80vh;*/
-    padding: 32px 16px;
-    gap: 16px;
+    padding: 48px 32px;
+    gap: 24px;
     margin-top: 20px;
-}
-
-.cart_container span {
-
 }
 
 .cart_item_name {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
+    border: 1px solid #4a324a;
+    border-radius: 10px;
+}
+
+.cart_item_price {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    border: 1px solid #4a324a;
+    border-radius: 10px;
+}
+
+.cart_item_amount {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    border: 1px solid #4a324a;
+    border-radius: 10px;
 }
 
 .cart_item {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #F7B9B9;
+    font-size: 18px;
     margin-bottom: 1px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 20px 28px;
+    border-radius: 12px;
     transition: all 1s;
 }
 
@@ -373,7 +390,7 @@ button:hover {
 }
 
 .cart_item span {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .cart_container_right {
@@ -467,13 +484,14 @@ button:hover {
 
 /* admin_section: padding: 7px 7px; Til media Query*/
 
-.admin_container h1 {
-    margin-top: 10%;
-}
+/*.admin_container h1 {*/
+/*    margin-top: 10%;*/
+/*}*/
 
-.admin_container h2 {
-    margin-bottom: 10%;
-}
+/*.admin_container h2 {*/
+/*    margin-bottom: 10%;*/
+/*}*/
+
 
 .admin_container {
     width: 401px;
@@ -485,6 +503,8 @@ button:hover {
     flex-wrap: wrap;
     gap: 16px;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 /*DASHBOARD GRID*/
@@ -620,6 +640,7 @@ button:hover {
     color: #5B405F;
     font-weight: 600;
     width: 8rem;
+    cursor: pointer;
 }
 
 .gift_card {
@@ -661,6 +682,7 @@ button:hover {
     color: #5B405F;
     font-weight: 600;
     width: 150px;
+    cursor: pointer;
 }
 
 .send_gift:hover {
@@ -731,10 +753,102 @@ button:hover {
     color: #5B405F;
     font-weight: 700;
     font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .see_order_button:hover {
     background-color: #F7B9B9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #c00;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+.close-btn:hover {
+    color: #800;
+}
+
+/*PROFILE PAGE*/
+
+.profile_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 52px);
+    padding: 40px 30px 30px;
+    box-sizing: border-box;
+    gap: 18px;
+}
+
+.profile_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #F7B9B9;
+    width: 300px;
+    height: 200px;
+    border-radius: 40%;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.profile_content p {
+    margin: 6px 0;
+    text-align: center;
+}
+
+.profile_page_content {
+    text-align: center;
+    width: 100%;
+    max-width: 220px;
+}
+
+.hello_admin {
+    color: #5B405F;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.image_cupcake_container {
+    position: relative;
+    display: inline-block;
+}
+
+.buy_cupcakes {
+    display: block;
+    width: 50%;
+    cursor: pointer;
+}
+
+.link_to_shop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.overlay_buy_cupcake {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.image_cupcake_container:hover .overlay_buy_cupcake {
+    filter: brightness(70%);
+    transition: 1s ease;
 }

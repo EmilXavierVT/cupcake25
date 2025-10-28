@@ -37,5 +37,9 @@ function addToOrder() {
         });
 }
 
+ function loginSuccess(){
+    alert("Login successful!");
+ }
+
 // this makes us call the function at the event click
 document.getElementById("activate-session-btn").addEventListener("click", addToOrder);

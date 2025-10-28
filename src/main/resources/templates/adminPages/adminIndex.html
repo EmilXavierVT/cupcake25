@@ -26,6 +26,10 @@
                 <li><a th:href="@{/}">Hjem</a></li>
                 <li><a th:href="@{/about}">Om os</a></li>
                 <li th:if="${admin == true }"><a th:href="@{/adminIndex}">Admin</a></li>
+                <li th:if="${session.currentUser != null}"><a th:href="@{/profile-page}"
+                    th:text="${session.currentUser.email !=null ? session.currentUser.email : 'Profil'}"></a>
+                </li>
+                <li th:if="${session.currentUser != null}"><a th:href="@{/logout}">Logout</a></li>
             </ul>
         </nav>
 
@@ -41,7 +45,11 @@
 <main>
     <section class="admin_section">
         <div class="admin_container">
-            <h1>Hej XXXX<br/>Velkommen til!</h1>
+            <span class="hello_admin">Hej
+            <span th:text="${session.currentUser.firstName}"></span>
+            </span>
+            <h2>Velkommen til!</h2>
+
             <h2>Dagens ord er XXXX</h2>
         </div>
 
