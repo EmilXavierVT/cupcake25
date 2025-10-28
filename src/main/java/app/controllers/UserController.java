@@ -19,6 +19,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class UserController
 {
+
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -36,8 +37,8 @@ public class UserController
         });
         app.get("/admin-customer-page", ctx ->
         {
+            ctx.sessionAttribute("all_users", UserMapper.getAllUsers(connectionPool));
             ctx.render("adminPages/admin-customer-page.html");
-            getAllUsers(ctx, connectionPool);
         });
         app.get("/admin-order-page", ctx -> {
             ctx.render("adminPages/admin-order-page.html");
@@ -49,9 +50,10 @@ public class UserController
         app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
         app.post("/delete_order", ctx -> deleteOrder(ctx, connectionPool));
-
-
+        app.post("/search_customer", ctx -> inSearchCustomer(ctx));
+        
     }
+
 
     private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
@@ -265,18 +267,41 @@ public class UserController
         }
     }
 
-    private static void getAllUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        try {
-            List<User> users = UserMapper.getAllUsers(connectionPool);
-            ctx.sessionAttribute("all_users",users);
+//    private static void getAllUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+//        try {
+//                List<User> users = UserMapper.getAllUsers(connectionPool);
+//                ctx.sessionAttribute("all_users", users);
+//                ctx.redirect("/admin-customer-page");
+//                ctx.render("adminPages/admin-customer-page.html", Map.of(
+//                        "all_users", users
+//                ));
+//
+//        } catch (DatabaseException e)
+//        {
+//            throw new DatabaseException("Error getting all users", e.getMessage());
+//        }
+//    }
+
+    private static void inSearchCustomer(Context ctx) {
+        List<User> users = ctx.sessionAttribute("all_users");
+        List<User> userInSearch;
+        String search = ctx.formParam("search_text");
+
+            userInSearch = users.stream()
+                    .filter(user -> {
+                        assert search != null;
+                        return user.getEmail().contains(search);
+                    })
+                    .toList();
+
+            ctx.sessionAttribute("users_in_search", userInSearch);
+            ctx.redirect("/admin-customer-page");
             ctx.render("adminPages/admin-customer-page.html", Map.of(
-                    "all_users", users
-            ));
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("Error getting all users", e.getMessage());
-        }
+                    "users_in_search", userInSearch));
+
     }
+
+
 private static void deleteOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         int orderId = Integer.parseInt(ctx.formParam("order_id"));
         new OrderMapper().removeOrder(orderId, connectionPool);

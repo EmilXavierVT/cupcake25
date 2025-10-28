@@ -66,9 +66,11 @@
             </div>
         </div>
 
-            <p>Leveringsdato: 20/11/2025</p>
-            <p>Fakturerings adresse: Pederskervejen 17, 3730 Nexø</p>
-            <p>Afhentningstidspunkt: 14:00 - 16:00</p>
+            <h2>Afhentningsinformation:</h2>
+            <p>Ordre Dato: <span th:text="${session.todays_date}"></span></p>
+            <p>Fakturerings adresse: <span th:text="${session.pick_up_address}"></span></p>
+            <p>Afhentnings Dato: <span th:text="${session.pick_up_date}"></span></p>
+
 </div>
 <!--        <table>-->
 <!--                <tr th:each="cupcakeInOrder : ${cupcakeInOrders}">-->
@@ -83,6 +85,11 @@
 <!--                    <td class="cart_amount_quantity" th:value="${cupcakeInOrder.getAmount}"></td>-->
 <!--                </tr>-->
 <!--        </table>-->
+
+
+
+
+
     <!--        <div class="cart_items">-->
 <!--            <div class="cart_item">-->
 <!--                <div class="cart_item_details">-->
