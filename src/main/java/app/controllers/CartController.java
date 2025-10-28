@@ -13,6 +13,7 @@ import io.javalin.http.Context;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class CartController {
     static float price =0;
@@ -64,8 +65,10 @@ public class CartController {
                 }
             }else
             {
+                ctx.sessionAttribute("errorLogin","Du skal være logget ind for at betale");
                 ctx.redirect("/login");
-                ctx.render("/login");
+                ctx.render("/login", Map.of("errorLogin","Du skal være logget ind for at betale"));
+
                 return;
             }
             } catch (DatabaseException e)
@@ -86,7 +89,6 @@ public class CartController {
     {
         try
         {
-            System.out.println("you are now looking for a discount code");
             String discountCode = ctx.formParam("discountCode");
 
             OrderMapper orderMapper = new OrderMapper();
