@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class CartController
 {
-    static float price =0;
 
     public static void addRoutes(Javalin app)
     {
@@ -47,7 +46,7 @@ public class CartController
 
     }
 
-    private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+    private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool)
     {
         try  {
             LocalDate date = LocalDate.now();
