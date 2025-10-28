@@ -28,7 +28,7 @@ public class CartController {
 //            setDisplayOfOrders(ctx);
             setAddress(ctx);
             setOrderAndPickUpDate(ctx);
-            ctx.render("cart.html");
+//            ctx.render("cart.html");
         });
 
         app.get("/pay-page",ctx -> ctx.render("pay-page.html"));
@@ -120,20 +120,23 @@ public class CartController {
         LocalDate today = LocalDate.now();
         LocalDate pickUpDate = today.plusDays(3);
 
-        ctx.sessionAttribute("pickUpDate",pickUpDate);
-        ctx.sessionAttribute("today",today);
+        ctx.sessionAttribute("pick_up_date",pickUpDate);
+        ctx.sessionAttribute("todays_date",today);
 
-        ctx.redirect("/cart");
+//        ctx.redirect("/cart");
         ctx.render("/cart", Map.of("todays_date", today.toString(), "pick_up_date", pickUpDate.toString()));
     }
     private static void setAddress(Context ctx){
         User currentUser = ctx.sessionAttribute("currentUser");
-        String address = currentUser.getStreetName();
+        if(currentUser != null) {
+            String address = currentUser.getStreetName();
 
-        ctx.sessionAttribute("pick_up_address", address);
+            ctx.sessionAttribute("pick_up_address", address);
 
-        ctx.redirect("/cart");
-        ctx.render("/cart", Map.of("pick_up_address", address));
 
+
+            ctx.render("/cart", Map.of("pick_up_address", address));
+        }
+        ctx.render("/cart");
     }
 }
