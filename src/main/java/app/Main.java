@@ -1,15 +1,16 @@
  package app;
 
 import app.config.ThymeleafConfig;
-import app.controllers.*;
+import app.controllers.CartController;
+import app.controllers.CupcakeController;
+import app.controllers.OrderController;
+import app.controllers.UserController;
 import app.entities.User;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
-import java.sql.SQLException;
-
- public class Main
+    public class Main
     {
         private static final String USER = "postgres";
         private static final String PASSWORD = "postgres";
@@ -19,7 +20,8 @@ import java.sql.SQLException;
         private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
 
-        public static void main(String[] args) throws SQLException {
+        public static void main(String[] args)
+        {
             // Initializing Javalin and Jetty webserver
             Javalin app = Javalin.create(config -> {
                 config.staticFiles.add("/public");
@@ -41,9 +43,6 @@ import java.sql.SQLException;
             CupcakeController.addRoutes(app);
             OrderController.addRoutes(app);
             CartController.addRoutes(app);
-
-
-
 
         }
     }
