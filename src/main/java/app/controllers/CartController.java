@@ -15,7 +15,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class CartController {
+public class CartController
+{
     static float price =0;
 
     public static void addRoutes(Javalin app)
@@ -47,7 +48,6 @@ public class CartController {
     {
         try
         {
-
             if(ctx.sessionAttribute("currentUser") != null)
             {
                 LocalDate date = LocalDate.now();
@@ -81,7 +81,6 @@ public class CartController {
             if(ctx.sessionAttribute("discount") != null)
             {
                 int discount = ctx.sessionAttribute("discount");
-
                 float finalPrice = (price * discount) / 100;
             }
             ctx.redirect("/order-confirmation");
@@ -93,7 +92,6 @@ public class CartController {
         try
         {
             String discountCode = ctx.formParam("discountCode");
-
             OrderMapper orderMapper = new OrderMapper();
             DiscountCode dc = orderMapper.findDiscountPercentage(discountCode, connectionPool);
 
@@ -106,7 +104,6 @@ public class CartController {
                 {
                 int discount = dc.getDiscountPercentage();
                 ctx.sessionAttribute("discount", discount);
-
                 ctx.render("/cart");
             }
 
@@ -116,25 +113,23 @@ public class CartController {
         }
     }
 
-    private static void setOrderAndPickUpDate(Context ctx){
+    private static void setOrderAndPickUpDate(Context ctx)
+    {
         LocalDate today = LocalDate.now();
         LocalDate pickUpDate = today.plusDays(3);
-
         ctx.sessionAttribute("pick_up_date",pickUpDate);
         ctx.sessionAttribute("todays_date",today);
-
 //        ctx.redirect("/cart");
         ctx.render("/cart", Map.of("todays_date", today.toString(), "pick_up_date", pickUpDate.toString()));
     }
-    private static void setAddress(Context ctx){
+    private static void setAddress(Context ctx)
+    {
         User currentUser = ctx.sessionAttribute("currentUser");
-        if(currentUser != null) {
+
+        if(currentUser != null)
+        {
             String address = currentUser.getStreetName();
-
             ctx.sessionAttribute("pick_up_address", address);
-
-
-
             ctx.render("/cart", Map.of("pick_up_address", address));
         }
         ctx.render("/cart");

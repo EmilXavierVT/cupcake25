@@ -47,11 +47,14 @@
         <div class="header_box">
             <h1 id="title_admin_page">VIS ORDRE</h1>
         </div>
-        <input class="search_input customer_search" type="text" placeholder="Søg Kunde"/>
+        <form class="search_input_form" th:action="@{/search_orders}" method="post">
+        <input class="search_input customer_search" type="text" name="search_text" placeholder="Søg Kunde"/>
+            <button type="submit">Søg</button>
+        </form>
 
         <div class="view_list">
             <ul class="card_list list_rows">
-                <li th:each="order : ${all_orders}">
+                <li th:each="order : ${session.orders_in_search !=null ? session.orders_in_search : session.all_orders}">
 
                     #<span th:text="${order.orderId}"></span> -
                     <span th:text=" ${order.date}"></span>

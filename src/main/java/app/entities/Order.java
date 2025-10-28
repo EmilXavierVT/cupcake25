@@ -37,19 +37,23 @@ public class Order
         setUser(userId);
         setCupcakesInOrder();
     }
-    private void setUser(int userId){
+    private void setUser(int userId)
+    {
         try {
             this.user = UserMapper.getUser(userId);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             throw new RuntimeException(e);
         }
     }
     private void setCupcakesInOrder(){
         CupcakeMapper cupcakeMapper = new CupcakeMapper();
-        try {
+        try
+        {
             ConnectionPool connectionPool = ConnectionPool.getInstance();
             this.cupcakesInOrder = cupcakeMapper.getCupcakesInOrder(this.orderId, connectionPool);
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             throw new RuntimeException(e);
         }
     }

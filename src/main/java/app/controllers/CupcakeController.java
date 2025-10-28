@@ -8,6 +8,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.CupcakeMapper;
 import app.persistence.OrderMapper;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -17,7 +18,6 @@ import java.util.Objects;
 
 public class CupcakeController
 {
-
     static ArrayList<CupcakeInOrder> cupcakesInOrder = new ArrayList<>();
 
     public static void addRoutes(Javalin app)
@@ -30,7 +30,6 @@ public class CupcakeController
         app.post("/product-page", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/add-to-order", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/delete_cupcake_in_current_order", ctx -> removeOneCupcakeFromCart(ctx));
-
 //        app.post("/order-confirmation", ctx -> paymentConfirmed(ctx,connectionPool));
     }
 
@@ -102,7 +101,6 @@ public class CupcakeController
 //            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
 
-
         } catch (DatabaseException e)
         {
             throw new DatabaseException("CupcakeController.AddtoCupcakeOrderArrayList" + e.getMessage());
@@ -112,10 +110,10 @@ public class CupcakeController
 
         }
 
-
     private static void getAllBottoms(Context ctx, ConnectionPool connectionPool)
     {
         List<Bottom> allBottoms = null;
+
         try
         {
             CupcakeMapper cupcakeMapper = new CupcakeMapper();
@@ -130,9 +128,11 @@ public class CupcakeController
             ctx.redirect("/");
         }
     }
+
     private static void getAllIcings(Context ctx, ConnectionPool connectionPool)
     {
         List<Icing> allIcings = null;
+
         try
         {
             CupcakeMapper cupcakeMapper = new CupcakeMapper();
@@ -146,11 +146,6 @@ public class CupcakeController
             System.out.println(e.getMessage());
             ctx.redirect("/");
         }
-    }
-
-    private static void putCupcakeInAnOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        createCupcake(ctx, connectionPool);
     }
 
     public static ArrayList<CupcakeInOrder> getCupcakesInOrder()

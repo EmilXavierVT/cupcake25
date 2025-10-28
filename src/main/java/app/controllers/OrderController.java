@@ -7,14 +7,14 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 
-public class OrderController {
+public class OrderController
+{
     public static void addRoutes(Javalin app)
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
     app.get("/get_order_id",ctx -> getOrderID(ctx,connectionPool));
         //app.get("/product-page",ctx -> getOrderID(ctx,connectionPool));
     }
-
 
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
@@ -34,10 +34,7 @@ public class OrderController {
         {
             throw new DatabaseException("getOrderID in OrderController", e.getMessage());
         }
-
     }
-
-
 
     private static void setOrderIdToZero(Context ctx)
     {

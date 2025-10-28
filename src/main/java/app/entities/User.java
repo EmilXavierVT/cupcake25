@@ -74,6 +74,10 @@ public class User
     {
         return email;
     }
+    public String getFullName()
+    {
+        return firstName + " " + lastName;
+    }
 
     public String getPassword()
     {
