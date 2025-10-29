@@ -84,12 +84,14 @@ public class CartController
                     UserMapper.subtractFunds(connectionPool, price, userId);
                     ctx.redirect("/order-confirmation");
                     ctx.render("/order-confirmation");
-                }
-                System.out.println("error in getting ot wallet ");
+                }else { System.out.println("error in getting ot wallet ");}
+
+            }else if (user == null){
+                ctx.sessionAttribute("errorLogin", "Du skal være logget ind for at betale!");
+                ctx.redirect("/login");
+                ctx.render("/login",Map.of("errorLogin","Du skal være logget ind for at betale!"));
             }
-            ctx.sessionAttribute("errorLogin", "Du skal være logget ind for at betale!");
-            ctx.redirect("/login");
-            ctx.render("/login",Map.of("errorLogin","Du skal være logget ind for at betale!"));
+
 
         } catch (DatabaseException e) {
             System.out.println("paymentConfirmed, CartController: " + e.getMessage());
