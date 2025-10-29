@@ -62,8 +62,10 @@
 <!--        </section>-->
 
     <section class="content">
-        <div class="green_box">
-
+        <div class="green_box index">
+            <a th:href="@{/product-page}" class="index_green_box">
+            <img th:src="@{/images/orderCupcake.png}" alt="Bestil cupcakes her!" class="order_cupcake_image">
+            </a>
         </div>
         <p><strong> Smag vores cupcakes!</strong>
             Bestil dem her! Vi har længe brugt det meste af vores dage på at perfektioner de mest fantastiske cupcakes.
@@ -73,9 +75,20 @@
     </section>
 
     <section class="content">
-        <div class="green_box"></div>
-        <p>cupcake propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake
-            propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake propaganda cupcake </p>
+        <div class="green_box index">
+            <a th:href="@{/registerPassword}" class="index_green_box">
+            <img th:src="@{/images/createUserCupcake.png}" alt="Opret dig her!" class="create_account_here_image">
+            </a>
+        </div>
+        <p><strong>Opret dig her!</strong>
+            Det tager kun et øjeblik at komme i gang, og så er du klar til at udforske et univers fyldt med farver, smag og kreativitet.
+            Når du opretter dig, får du adgang til alle de lækre cupcakes og de mange muligheder for at tilpasse dem helt efter din egen stil.
+            <strong>Se alle de forskellige cupcakes!</strong>
+            Uanset om du elsker klassiske chokoladecupcakes, friske frugtvarianter eller vilde farvekombinationer, finder du noget for enhver smag.
+            Gennemse det store udvalg og lad dig inspirere af de mange designs, smage og toppings, du kan vælge imellem.
+            <strong>Skab din egen personlige cupcake!</strong>
+            Slip fantasien løs og lav din helt unikke cupcake, der afspejler din personlighed. Vælg farver, pynt og smag,
+            og vis dit mesterværk frem til dine venner og familie – måske bliver du den næste cupcake-kreatør i vennekredsen!</p>
     </section>
 
     <section class="content" th:action="@{/about}">

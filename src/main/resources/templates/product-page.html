@@ -48,7 +48,7 @@
     <form class="save_cupcake_form" th:action="@{/product-page}" method="POST">
     <section class="product_content">
         <div class="green_box">
-            <img src="" id="bottomImage" alt="Bund" class="product_img" />
+            <img th:src="@{/images/chocolateBottom.png}" id="bottomImage" alt="Bund" class="product_img" />
         </div>
         <select class="dropdown_menu" name="bottom_id" required>
             <option disabled selected value>Vælg Bund</option>
@@ -62,7 +62,7 @@
 
     <section class="product_content">
         <div class="green_box">
-            <img src="" id="icingImage" alt="Icing" class="product_img"/>
+            <img th:src="@{/images/vanillaIcing.png}" id="icingImage" alt="Icing" class="product_img"/>
         </div>
         <select class="dropdown_menu" name="icing_id" required>
             <option disabled selected value>Vælg Icing</option>
