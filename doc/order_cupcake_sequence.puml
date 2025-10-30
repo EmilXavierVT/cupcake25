@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant Index
+participant product_page
+participant cart
+participant Context
+participant Controller
+participant Mapper
+database database
+
+
+Index -> Controller: /product_page
+Controller -> Context: render()
+Context -> product_page:
+product_page -> Controller: /product_page(post)
+Controller -> Controller: addToCupcakeOrderArrayList()
+Controller -> Mapper: getBottomById()
+Controller -> Mapper: getIcingById()
+Mapper -> database: PreparedStatement
+database -> Mapper: ResultSet
+Mapper -> Controller: bottom
+Mapper -> Controller: icing
+Controller -> Controller: cupcakesInOrder.add()
+Controller -> Context: ctx.render(Map.of(cupcakesInOrder))
+Context -> product_page
+
+@enduml

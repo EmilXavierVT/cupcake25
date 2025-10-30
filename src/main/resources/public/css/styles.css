@@ -4,12 +4,34 @@
     padding: 0;
     box-sizing: border-box;
 }
+:root {
+    --primary-color: #F7B9B9;
+    --secondary-color: #A3D9A5;
+    --accent-color: #5B405F;
+    --background-color: #FDECEC;
+    --secondary-shade-color: #C6E3BE;
+    --hover-color: #8f628f;
+}
+
+[data-theme="dark"] {
+    --primary-color: #F2A77E;          /* warm coral-peach, not too saturated */
+    --secondary-color: #8DCB90;        /* calm mint green */
+    --accent-color: #C7A4CC;           /* lavender accent */
+    --background-color: #2D2428;       /* medium warm dark */
+    --secondary-shade-color: #3B3136;  /* surface/card background */
+    --hover-color: #D39BD3;            /* soft purple-pink hover tone */
+    --text-color: #F8F5F6;             /* soft white */
+    --muted-text-color: #CFC7CA;       /* muted gray-pink for secondary text */
+    --border-color: #4C4045;
+}
+
+
 
 /*HTML AND BODY*/
 html, body {
     height: 100%;
-    background: #FDECEC;
-    color: #5B405F;
+    background: var(--background-color);
+    color: var(--accent-color);
     font-family: 'Inter', sans-serif;
 }
 
@@ -26,7 +48,7 @@ main {
 .nav_container {
     width: 100%;
     height: 52px;
-    background: #F7B9B9;
+    background: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -49,7 +71,7 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: #5B405F;
+    color: var(--accent-color);
     font-size: 20px;
     font-weight: 700;
     cursor: pointer;
@@ -58,7 +80,7 @@ nav a {
 
 nav a:hover {
     transition: 0.5s ease;
-    color: #8f628f;
+    color: var(--hover-color);
 }
 
 li.list_of_nav {
@@ -103,7 +125,7 @@ a svg:hover {
 .hero_image {
     width: 277px;
     height: 264px;
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     /*background-image: url("../images/cupcake-hero.png");*/
     background-size: 80%;
     background-position: center;
@@ -117,7 +139,7 @@ a svg:hover {
 .about_image {
     width: 277px;
     height: 264px;
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     /*background-image: url("../images/about-us.png");*/
     background-size: 90%;
     background-position: center;
@@ -156,7 +178,7 @@ a svg:hover {
     justify-content: center;
     width: 161px;
     height: 127px;
-    background: #A3D9A5;
+    background: var(--secondary-color);
     border-radius: 10px;
     flex-shrink: 0;
     transition: 2s;
@@ -174,7 +196,7 @@ a svg:hover {
     justify-content: center;
     width: 161px;
     height: 127px;
-    background: #A3D9A5;
+    background: var(--secondary-color);
     border-radius: 10px;
     flex-shrink: 0;
 }
@@ -185,7 +207,7 @@ a svg:hover {
     justify-content: center;
     width: 220px;
     height: 55px;
-    background: #A3D9A5;
+    background: var(--secondary-color);
     border-radius: 10px;
     flex-shrink: 0;
     margin: 15% auto;
@@ -202,8 +224,8 @@ p {
     height: 40px;
     border-radius: 10px;
     text-align: center;
-    color: #5B405F;
-    background: #C6E3BE url("data:image/svg+xml;utf8, <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'> <path d='M12 14.975C11.8667 14.975 11.7417 14.9543 11.625 14.913C11.5083 14.8717 11.4 14.8007 11.3 14.7L6.69999 10.1C6.51665 9.91665 6.42499 9.68332 6.42499 9.39999C6.42499 9.11665 6.51665 8.88332 6.69999 8.69999C6.88332 8.51665 7.11665 8.42499 7.39999 8.42499C7.68332 8.42499 7.91665 8.51665 8.09999 8.69999L12 12.6L15.9 8.69999C16.0833 8.51665 16.3167 8.42499 16.6 8.42499C16.8833 8.42499 17.1167 8.51665 17.3 8.69999C17.4833 8.88332 17.575 9.11665 17.575 9.39999C17.575 9.68332 17.4833 9.91665 17.3 10.1L12.7 14.7C12.6 14.8 12.4917 14.871 12.375 14.913C12.2583 14.955 12.1333 14.9757 12 14.975Z' fill='black'/></svg>") no-repeat right 10px;
+    color: var(--accent-color);
+    background: var(--secondary-shade-color) url("data:image/svg+xml;utf8, <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'> <path d='M12 14.975C11.8667 14.975 11.7417 14.9543 11.625 14.913C11.5083 14.8717 11.4 14.8007 11.3 14.7L6.69999 10.1C6.51665 9.91665 6.42499 9.68332 6.42499 9.39999C6.42499 9.11665 6.51665 8.88332 6.69999 8.69999C6.88332 8.51665 7.11665 8.42499 7.39999 8.42499C7.68332 8.42499 7.91665 8.51665 8.09999 8.69999L12 12.6L15.9 8.69999C16.0833 8.51665 16.3167 8.42499 16.6 8.42499C16.8833 8.42499 17.1167 8.51665 17.3 8.69999C17.4833 8.88332 17.575 9.11665 17.575 9.39999C17.575 9.68332 17.4833 9.91665 17.3 10.1L12.7 14.7C12.6 14.8 12.4917 14.871 12.375 14.913C12.2583 14.955 12.1333 14.9757 12 14.975Z' fill='black'/></svg>") no-repeat right 10px;
     padding-right: 25px;
     padding-left: 10px;
     border: none;
@@ -215,21 +237,15 @@ p {
 }
 
 .dropdown_menu:focus {
-    outline: 2px solid #5B405F;
+    outline: 2px solid var(--accent-color);
 }
 
-/*.dropdown_menu option { ved ikke om den virker, bruger mac
-    background-color: #FDECEC;
-    color: #5B405F;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    border-radius: 15px;
-}*/
+
 
 footer {
-    background: #F7B9B9;
+    background: var(--primary-color);
     padding: 16px 80px;
-    color: #5B405F;
+    color: var(--accent-color);
     font-size: 8px;
     justify-content: center;
     align-items: center;
@@ -274,7 +290,7 @@ form.login_form {
     top: -0.1%;
     left: 50%;
     transform: translateX(-50%);
-    background: #F7B9B9;
+    background: var(--primary-color);
     padding: 0 8px;
     font-weight: bold;
     font-size: 14px;
@@ -296,12 +312,12 @@ input {
     border-radius: 5px;
     padding: 0 8px;
     font-size: 14px;
-    background-color: #C6E3BE;
+    background-color: var(--secondary-shade-color);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 input:focus {
-    outline: 2px solid #5B405F;
+    outline: 2px solid var(--accent-color);
 }
 
 button {
@@ -309,7 +325,7 @@ button {
     height: 40px;
     border: none;
     border-radius: 10px;
-    background: #5B405F;
+    background: var(--accent-color);
     color: #FFFFFF;
     font-size: 14px;
     cursor: pointer;
@@ -318,7 +334,7 @@ button {
 }
 
 button:hover {
-    background-color: #4a324a;
+    background-color: var(--accent-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.1);
 }
@@ -328,7 +344,7 @@ button:hover {
     height: 30px;
     border: none;
     border-radius: 20px;
-    background: #5B405F;
+    background: var(--accent-color);
     color: #FFFFFF;
     font-size: 16px;
     font-weight: bold;
@@ -399,7 +415,7 @@ button:hover {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
-    border: 1px solid #4a324a;
+    border: 1px solid var(--accent-color);
     border-radius: 10px;
 }
 
@@ -407,7 +423,7 @@ button:hover {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
-    border: 1px solid #4a324a;
+    border: 1px solid var(--accent-color);
     border-radius: 10px;
 }
 
@@ -415,7 +431,7 @@ button:hover {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
-    border: 1px solid #4a324a;
+    border: 1px solid var(--accent-color);
     border-radius: 10px;
 }
 
@@ -424,7 +440,7 @@ button:hover {
     display: inline-grid;
     justify-content: space-between;
     align-items: center;
-    background: #F7B9B9;
+    background: var(--primary-color);
     font-size: 18px;
     margin-bottom: 1px;
     padding: 20px 28px;
@@ -476,7 +492,7 @@ button:hover {
     height: 30px;
     border: none;
     border-radius: 10px;
-    background: #5B405F;
+    background: var(--accent-color);
     font-weight: normal;
     color: white;
     font-size: 12px;
@@ -487,7 +503,7 @@ button:hover {
 }
 
 .update_info_button:hover {
-    background-color: #4a324a;
+    background-color: var(--hover-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
@@ -502,7 +518,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     border-radius: 10px;
 }
 
@@ -514,7 +530,7 @@ button:hover {
     height: 40px;
     border: none;
     border-radius: 10px;
-    background: #5B405F;
+    background: var(--accent-color);
     color: #FFFFFF;
     font-size: 14px;
     cursor: pointer;
@@ -524,7 +540,7 @@ button:hover {
 }
 
 .checkout_button:hover {
-    background-color: #4a324a;
+    background-color: var(--accent-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
@@ -556,7 +572,7 @@ button:hover {
 .admin_container {
     width: 401px;
     height: 211px;
-    background: #F7B9B9;
+    background: var(--primary-color);
     border-radius: 10px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0 , 0.3);
     display: flex;
@@ -597,8 +613,8 @@ button:hover {
 /*CARD STYLES*/
 
 .sales_today {
-    background: #C6E3BE;
-    border: 3px solid #5B405F;
+    background: var(--secondary-shade-color);
+    border: 3px solid var(--accent-color);
     border-radius: 10px 0 0 0;
     display: flex;
     flex-direction: column;
@@ -611,8 +627,8 @@ button:hover {
 }
 
 .upcoming_orders{
-    background: #C6E3BE;
-    border: 3px solid #5B405F;
+    background: var(--secondary-shade-color);
+    border: 3px solid var(--accent-color);
     border-radius: 0 10px 0 0;
     padding: 16px;
     display: flex;
@@ -627,8 +643,8 @@ button:hover {
 }
 
 .top_customers {
-    background: #C6E3BE;
-    border: 3px solid #5B405F;
+    background: var(--secondary-shade-color);
+    border: 3px solid var(--accent-color);
     border-radius: 0 0 0 10px;
     padding: 16px;
     display: flex;
@@ -642,8 +658,8 @@ button:hover {
 }
 
 .sales_period {
-    background: #C6E3BE;
-    border: 3px solid #5B405F;
+    background: var(--secondary-shade-color);
+    border: 3px solid var(--accent-color);
     border-radius: 0 0 10px 0;
     padding: 16px;
     display: flex;
@@ -686,7 +702,7 @@ button:hover {
 }
 
 .card_list li {
-    background: #F7B9B9;
+    background: var(--primary-color);
     margin: 4px 0;
     padding: 1px 8px;
     border-radius: 8px;
@@ -700,16 +716,16 @@ button:hover {
 }
 
 .dashboard_buttons button {
-    background: #F7B9B9;
-    color: #5B405F;
+    background:var(--primary-color);
+    color: var(--accent-color);
     font-weight: 600;
     width: 8rem;
     cursor: pointer;
 }
 
 .gift_card {
-    background: #C6E3BE;
-    border: 3px solid #5B405F;
+    background: var(--secondary-color);
+    border: 3px solid var(--accent-color);
     border-radius: 10px;
     padding: 16px;
     margin-top: 32px;
@@ -729,7 +745,7 @@ form.gift_card_container {
 }
 
 input#amount, input#email_gift_card {
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     margin-bottom: 12px;
 }
 
@@ -749,20 +765,20 @@ input#amount, input#email_gift_card {
     padding: 8px;
     border-radius: 8px;
     border: none;
-    background: #F7B9B9;
+    background: var(--primary-color);
     font-size: 14px;
 }
 
 .send_gift {
-    background: #F7B9B9;
-    color: #5B405F;
+    background: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 600;
     width: 150px;
     cursor: pointer;
 }
 
 .send_gift:hover {
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
@@ -782,7 +798,7 @@ input#amount, input#email_gift_card {
     width: 100%;
     max-width: 600px;
     height: 538px;
-    background-color: #C6E3BE;
+    background-color: var(--secondary-shade-color);
     border-radius: 10px;
 }
 
@@ -800,7 +816,7 @@ input#amount, input#email_gift_card {
 .header_box {
     width: 100%;
     max-width: 600px;
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     border-radius: 10px;
 }
 
@@ -815,7 +831,7 @@ input#amount, input#email_gift_card {
     padding: 8px;
     border-radius: 8px;
     border: none;
-    background: #F7B9B9;
+    background: var(--primary-color);
     font-size: 14px;
     width: 100%;
     max-width: 300px;
@@ -825,15 +841,15 @@ input#amount, input#email_gift_card {
     width: 120%;
     max-width: 200px;
     margin-bottom: 4%;
-    background-color: #F7B9B9;
-    color: #5B405F;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 700;
     font-size: 1.2rem;
     cursor: pointer;
 }
 
 .see_order_button:hover {
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
@@ -869,7 +885,7 @@ input#amount, input#email_gift_card {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #F7B9B9;
+    background-color: var(--primary-color);
     width: 300px;
     height: 200px;
     border-radius: 40%;
@@ -888,7 +904,7 @@ input#amount, input#email_gift_card {
 }
 
 .hello_admin {
-    color: #5B405F;
+    color: var(--accent-color);
     font-size: 1.8rem;
     font-weight: 800;
     line-height: 1.2;
@@ -954,8 +970,71 @@ input#amount, input#email_gift_card {
 .profile_information {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #5B405F;
+    color: var(--accent-color);
     }
+
+
+/*DARKMODE BUTTON*/
+
+.darkmode-btn {
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+    outline: none;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 20;
+}
+
+.darkmode-btn:active {
+    transform: scale(0.92);
+}
+
+.darkmode-btn .moon {
+    color: var(--accent-color, #231821);
+    transition: color 0.3s;
+}
+
+/*PREVIEW CUPCAKE*/
+
+.product_form {
+    flex: 1;
+}
+
+.product_preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+}
+
+.cupcake_preview {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.cupcake_preview img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+img#preview_bottom {
+    top: 20%;
+    filter: drop-shadow(5px 2px 1px black);
+}
+
 
 /*MEDIA QUERIES*/
 

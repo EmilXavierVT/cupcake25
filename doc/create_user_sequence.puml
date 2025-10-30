@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant Index
+participant login
+participant registerInfo
+participant Context
+
+participant UserController
+participant UserMapper
+database database
+autonumber
+'FRom index to order confirmation
+Index -> UserController: /login
+UserController -> Context : render()
+Context -> login:
+
+login -> UserController: /registerPassword get & post
+
+UserController -> UserController :registerInfo()
+UserController -> UserMapper: -> createUser()
+UserMapper -> database :prepareStatement
+database -> UserMapper: ResultSet
+UserMapper -> UserController : (user)
+UserController -> Context :sessionAttribute(user)
+UserController -> Context : render()
+Context -> registerInfo
+registerInfo ->UserController: /registerInfo
+UserController -> UserMapper: updateUSer()
+UserMapper -> database: prepareStatement
+database -> UserMapper: ResultSet
+UserMapper -> UserController: (updatedUser)
+UserController -> Context: sessionAttribute(updatedUser)
+UserController -> Context: render()
+Context -> Index
+
+@enduml
