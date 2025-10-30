@@ -1,5 +1,8 @@
-<head th:replace="fragments :: head(admin-order-page)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(adminOrderPage)}">
+    <title>Admin - Ordre</title>
+</head>
+<header th:replace="~{fragments :: header}"></header>
+
 <body>
 <main>
     <div class="page_body">
@@ -7,29 +10,28 @@
             <h1 id="title_admin_page">VIS ORDRE</h1>
         </div>
         <form class="search_input_form" th:action="@{/search_orders}" method="post">
-        <input class="search_input customer_search" type="text" name="search_text" placeholder="Søg Kunde"/>
+            <input class="search_input customer_search" type="text" name="search_text" placeholder="Søg Kunde" />
             <button type="submit">Søg</button>
         </form>
-
         <div class="view_list">
             <ul class="card_list list_rows">
-                <li th:each="order : ${session.orders_in_search !=null ? session.orders_in_search : session.all_orders}">
-
+                <li
+                    th:each="order : ${session.orders_in_search !=null ? session.orders_in_search : session.all_orders}">
                     #<span th:text="${order.orderId}"></span> -
                     <span th:text=" ${order.date}"></span>
                     <span th:text="${order.appliedDiscount}"></span>
                     <span> E-mail: </span>
                     <span th:text=" ${order.user.email } "></span>
-                    <br/>
-                    <span>  -  </span>
+                    <br />
+                    <span> - </span>
                     <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
-                                <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
-                                <span>  +  </span>
-                                <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
-                                     <span>  Antal:   </span>
-                                <span th:text="${cupcakeInOrder.amount}"></span>
-                        <br/>
-                        </span>
+                            <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
+                            <span> + </span>
+                            <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
+                            <span> Antal: </span>
+                            <span th:text="${cupcakeInOrder.amount}"></span>
+                            <br />
+                    </span>
                     <form th:action="@{/delete_order}" method="post" style="display:inline;">
                         <input type="hidden" name="order_id" th:value="${order.orderId}" />
                         <button type="submit" class="close-btn" title="X">&#10005;</button>
@@ -37,11 +39,10 @@
                 </li>
             </ul>
         </div>
-
         <a th:href="@{/admin-customer-page}">
             <button class="see_order_button">Vis Kunder</button>
         </a>
     </div>
 </main>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>

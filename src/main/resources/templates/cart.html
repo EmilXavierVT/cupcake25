@@ -1,54 +1,49 @@
-<head th:replace="fragments :: head(cart)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(cart)}">
+    <title>Indkøbskurv</title>
+</head>
+<header th:replace="~{fragments :: header}"></header>
+
+<body>
 <main>
     <div class="cart_container_left">
         <h1 id="cart_title">Din Kurv</h1>
-
         <div class="cart_container">
             <div th:each="cupcakeInOrder : ${session.cupcakeInOrder}" class="cart_item">
-                 <span class="cart_item_name"> <span th:text="'Bund:  ' + ${cupcakeInOrder.udc.bottom.bottomName}"></span></span><br/>
-                <span class="cart_item_price"> <span th:text="'Pris:  ' + ${cupcakeInOrder.udc.bottom.bottomPrice}"></span></span><br/>
-                <span class="cart_item_name"> <span th:text="'Topping:  ' + ${cupcakeInOrder.udc.icing.icingName}"></span></span><br/>
-                <span class="cart_item_price"> <span th:text="'Pris:  ' + ${cupcakeInOrder.udc.icing.icingPrice}"></span></span><br/>
-                <span class="cart_amount_quantity"> <span th:text="'Antal:  ' + ${cupcakeInOrder.amount}"></span></span>
+                    <span class="cart_item_name"> <span
+                            th:text="'Bund:  ' + ${cupcakeInOrder.udc.bottom.bottomName}"></span></span><br />
+                <span class="cart_item_price"> <span
+                        th:text="'Pris:  ' + ${cupcakeInOrder.udc.bottom.bottomPrice}"></span></span><br />
+                <span class="cart_item_name"> <span
+                        th:text="'Topping:  ' + ${cupcakeInOrder.udc.icing.icingName}"></span></span><br />
+                <span class="cart_item_price"> <span
+                        th:text="'Pris:  ' + ${cupcakeInOrder.udc.icing.icingPrice}"></span></span><br />
+                <span class="cart_amount_quantity"> <span
+                        th:text="'Antal:  ' + ${cupcakeInOrder.amount}"></span></span>
                 <form th:action="@{/delete_cupcake_in_current_order}" method="post" style="display:inline;">
                     <input type="hidden" name="cupcake_id" th:value="${cupcakeInOrder.udc.id}" />
                     <button type="submit" class="close-btn" title="X">&#10005;</button>
                 </form>
-
             </div>
         </div>
-
-</div>
-
+    </div>
     <div class="cart_container_right">
-
         <h2>Afhentningsinformation:</h2>
         <p>Ordre Dato: <span th:text="${session.todays_date}"></span></p>
         <p>Fakturerings adresse: <span th:text="${session.pick_up_address}"></span></p>
         <p>Afhentnings Dato: <span th:text="${session.pick_up_date}"></span></p>
-
-        <br/>
-
+        <br />
         <h2>Ordre Oversigt</h2>
-        <h3>Subtotal:  <span th:text="${session.orderPrice} + ' dkk'"></span> </h3>
-
-
-
+        <h3>Subtotal: <span th:text="${session.orderPrice} + ' dkk'"></span> </h3>
         <a th:href="@{/pay-page}" class="checkout_button">Gå til Betaling</a>
         <a th:href="@{/registerInfo}" class="update_info_button">Opdater Info</a>
     </div>
-
     <div>
         <form class="discount_form" th:action="@{/apply_discount}" method="post">
             <label for="discount">Discount:</label>
             <input type="text" id="discount" name="discountCode" placeholder="Discount Code">
             <button type="submit">Apply</button>
         </form>
-
     </div>
 </main>
-
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
-</html>

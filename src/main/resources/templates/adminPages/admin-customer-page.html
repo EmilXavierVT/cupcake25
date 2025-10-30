@@ -1,5 +1,8 @@
-<head th:replace="fragments :: head(Forside)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(adminCustomerPage)}">
+    <title>Admin - Kunder</title>
+</head>
+<header th:replace="~{fragments :: header}"></header>
+
 <body>
 <main>
     <div class="page_body">
@@ -7,26 +10,25 @@
             <h1 id="title_admin_page">VIS KUNDER</h1>
         </div>
         <form class="search_input_form" th:action="@{/search_customer}" method="post">
-        <input class="search_input customer_search" type="text" name="search_text" placeholder="Søg Kunde"/>
+            <input class="search_input customer_search" type="text" name="search_text" placeholder="Søg Kunde" />
             <button type="submit">Søg</button>
         </form>
-
         <div class="view_list">
-            <ul class="card_list list_rows" >
-                <li th:each="user : ${session.users_in_search !=null ? session.users_in_search : session.all_users}">
-                Navn : <span th:text="${user.firstName + '  ' + user.lastName}"></span>
-                    <br/>
+            <ul class="card_list list_rows">
+                <li
+                    th:each="user : ${session.users_in_search !=null ? session.users_in_search : session.all_users}">
+                    Navn : <span th:text="${user.firstName + '  ' + user.lastName}"></span>
+                    <br />
                     E-mail : <span th:text="${user.email+' - '}"></span>
-                    <br/>
+                    <br />
                     Balance : <span th:text="${user.wallet}"></span>
                 </li>
             </ul>
         </div>
         <a th:href="@{/admin-order-page}">
-        <button class="see_order_button">Vis Ordrer</button>
+            <button class="see_order_button">Vis Ordrer</button>
         </a>
-
     </div>
 </main>
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>

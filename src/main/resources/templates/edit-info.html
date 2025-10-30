@@ -1,42 +1,34 @@
-<head th:replace="fragments :: head(edit-info)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(editInfo)}">
+    <title>Opdater Information</title>
+</head>
+<header th:replace="~{fragments :: header}"></header>
 
+<body>
 <main>
     <section class="editInfo_section">
         <h1 id="title">Ændre Information</h1>
         <div class="edit_container"><span class="edit-container_text">Indtast Ændringer</span>
             <form class="editInfo_form" th:action="@{/edit-info}" method="POST">
-
                 <label for="first_name">Indtast Fornavn:</label>
-                <input type="text" id="first_name" name="first_name"/>
-
+                <input type="text" id="first_name" name="first_name" />
                 <label for="last_name">Indtast Efternavn:</label>
-                <input type="text" id="last_name" name="last_name"/>
-
+                <input type="text" id="last_name" name="last_name" />
                 <label for="postcode">Indtast Postnummer:</label>
-                <input type="text" id="postcode" name="postcode"/>
-
+                <input type="text" id="postcode" name="postcode" />
                 <label for="street_name">Vejnavn:</label>
-                <input type="text" id="street_name" name="street_number"/>
-
+                <input type="text" id="street_name" name="street_number" />
                 <label for="street_number">Vejnummer:</label>
-                <input type="text" id="street_number" name="street_number"/>
-
+                <input type="text" id="street_number" name="street_number" />
                 <label for="floor">Etage:</label>
-                <input type="text" id="floor" name="floor"/>
-
+                <input type="text" id="floor" name="floor" />
                 <label for="side">Side:</label>
-                <input type="text" id="side" name="side"/>
-
+                <input type="text" id="side" name="side" />
                 <label for="e-mail">E-mail:</label>
-                <input type="text" id="e-mail" name="e-mail"/>
-
+                <input type="text" id="e-mail" name="e-mail" />
                 <button type="submit">Bekræft</button>
             </form>
         </div>
     </section>
 </main>
-
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
-</html>

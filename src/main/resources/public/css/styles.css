@@ -201,16 +201,26 @@ a svg:hover {
     flex-shrink: 0;
 }
 
+input#counter_number {
+    text-align: center;
+}
+
 .green_box_counter{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 220px;
+    width: 150px;
     height: 55px;
     background: var(--secondary-color);
     border-radius: 10px;
     flex-shrink: 0;
     margin: 15% auto;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 p {
@@ -220,7 +230,7 @@ p {
 }
 
 .dropdown_menu {
-    width: 145px;
+    width: 210px;
     height: 40px;
     border-radius: 10px;
     text-align: center;
@@ -1051,6 +1061,22 @@ img#preview_bottom {
     .content:nth-child(odd) {
         flex-direction: row-reverse;
     }
+
+    .nav_container {
+        padding: 0;
+    }
+
+    .product_content {
+        flex-direction: column;
+    }
+
+    .save_cupcake_form {
+        padding: 0;
+    }
+
+    .product_preview {
+        margin-bottom: 5%;
+    }
 }
 
 @media (max-width: 1500px) {
@@ -1068,6 +1094,13 @@ img#preview_bottom {
     }
     .content:nth-child(odd) {
         flex-direction: row-reverse;
+    }
+    nav ul {
+        gap: 11px;
+    }
+
+    nav a {
+        font-size: 10px;
     }
 }
 
@@ -1094,3 +1127,4 @@ img#preview_bottom {
 
     }
 }
+

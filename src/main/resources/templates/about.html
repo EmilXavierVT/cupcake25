@@ -1,36 +1,32 @@
-<head th:replace="fragments :: head(about)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(aboutUs)}">
+    <title>Om os</title>
+</head>
+<header th:replace="~{fragments :: header}"></header>
 
+<body>
 <main>
     <section class="hero">
         <div class="hero_text">
             <h2>Hvem er vi?</h2>
         </div>
-        <img th:src="@{/images/about-us.png}" alt="about-us" class="about_image"/>
+        <img th:src="@{/images/about-us.png}" alt="about-us" class="about_image" />
     </section>
-
     <section class="content">
         <div class="green_box_about"></div>
         <p>Emil</p>
     </section>
-
     <section class="content">
         <div class="green_box_about"></div>
         <p>Frederik</p>
-
     </section>
-
     <section class="content">
         <div class="green_box_about"></div>
         <p>Luke</p>
     </section>
-
     <section class="content">
         <div class="green_box_about"></div>
         <p>Daniel</p>
     </section>
 </main>
-
-<footer th:replace="fragments :: footer"></footer>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
-</html>

@@ -1,94 +1,77 @@
-<head th:replace="fragments :: head(adminindex)"></head>
-<header th:replace="fragments :: header"></header>
+<head th:replace="~{fragments :: head(adminIndex)}"><title>Admin</title></head>
+<header th:replace="~{fragments :: header}"></header>
 <body>
-<main>
-    <section class="admin_section">
-        <div class="admin_container">
-            <span class="hello_admin">Hej
-            <span th:text="${session.currentUser.firstName}"></span>
-            </span>
-            <h2>Velkommen til!</h2>
-            <h2>Dagens ord er Cupcake!</h2>
-        </div>
-
-        <div class="dashboard_grid">
-            <div class="dashboard_row">
-                <div class="dashboard_card sales_today">
-                    <p>Dagens salgstal ! <br/> <span class="dashboard_numbers_admin" th:text="${today_sales}+' DKK'">0</span></p>
-                </div>
-                <div class="dashboard_card upcoming_orders">
-                    <div class="card_header">Kommende Ordrer</div>
-                    <ul class="card_list">
-                        <li th:each="order: ${session.orders_of_seven_days}">
-<!--                            th:if="${iterStat.index} < 10">-->
-                            #<span th:text="${order.orderId}"></span> -
-                            <span th:text="${order.date}"></span>
-                            <span th:text="${order.appliedDiscount}"></span>
-                            <span> :    </span>
-                            <span th:text="${order.user.email }"></span>
-                            <span>  -  </span>
-                            <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
-                                <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
-                                <span>  +  </span>
-                                <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
-                                     <span>  Antal:   </span>
-                                <span th:text="${cupcakeInOrder.amount}"></span>
-                            </span>
-
-                        </li>
-                    </ul>
-                </div>
-
+    <main>
+        <section class="admin_section">
+            <div class="admin_container">
+                <span class="hello_admin">Hej
+                <span th:text="${session.currentUser.firstName}"></span>
+                </span>
+                <h2>Velkommen til!</h2>
+                <h2>Dagens ord er Cupcake!</h2>
             </div>
-
-            <div class="dashboard_row1">
-                <div class="dashboard_card top_customers">
-                    <div class="card_header">Kunder med flest ordrer</div>
-                    <ul class="card_list">
-                        <li th:each="user, iterStat : ${session.top_users}">
-                            <!-- Display user info here -->
-                            Navn:  <span th:text="    ${user.firstName}"></span> <span th:text="    ${user.lastName}"></span>
-                            <br/>
-                            <!-- Get the amount from top_users_amount at the same index -->
-                            Antal: <span th:text="    ${session.top_user_amount[iterStat.index]}"></span>
-                        </li>
-
-                    </ul>
-                </div>
-
-
-                <div class="dashboard_card sales_period">
-                    <p><strong>Periodens</strong><br/>Salgstal <br/><span class="dashboard_numbers_admin" th:text="${total_sales} +' DKK'"></span></p>
-                </div>
+            <div class="dashboard_grid">
+                <div class="dashboard_row">
+                    <div class="dashboard_card sales_today">
+                        <p>Dagens salgstal ! <br/> <span class="dashboard_numbers_admin" th:text="${today_sales}+' DKK'">0</span></p>
+                    </div>
+                    <div class="dashboard_card upcoming_orders">
+                        <div class="card_header">Kommende Ordrer</div>
+                            <ul class="card_list">
+                                <li th:each="order: ${session.orders_of_seven_days}">
+                                    #<span th:text="${order.orderId}"></span> -
+                                    <span th:text="${order.date}"></span>
+                                    <span th:text="${order.appliedDiscount}"></span>
+                                    <span> :    </span>
+                                    <span th:text="${order.user.email }"></span>
+                                    <span>  -  </span>
+                                    <span th:each="cupcakeInOrder : ${order.cupcakesInOrder}">
+                                    <span th:text="${cupcakeInOrder.udc.bottom.bottomName}"></span>
+                                    <span>  +  </span>
+                                    <span th:text="${cupcakeInOrder.udc.icing.icingName}"></span>
+                                    <span>  Antal:   </span>
+                                    <span th:text="${cupcakeInOrder.amount}"></span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="dashboard_row1">
+                        <div class="dashboard_card top_customers">
+                            <div class="card_header">Kunder med flest ordrer</div>
+                            <ul class="card_list">
+                                <li th:each="user, iterStat : ${session.top_users}">
+                                        Navn:  <span th:text="    ${user.firstName}"></span> <span th:text="    ${user.lastName}"></span>
+                                    <br/>
+                                        Antal: <span th:text="    ${session.top_user_amount[iterStat.index]}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="dashboard_card sales_period">
+                            <p><strong>Periodens</strong><br/>Salgstal <br/><span class="dashboard_numbers_admin" th:text="${total_sales} +' DKK'"></span></p>
+                        </div>
+                    </div>
             </div>
-        </div>
-
-
-        <div class="dashboard_buttons">
-            <a th:href="@{/admin-customer-page}">
-            <button>Se Kunder</button>
-            </a>
-
-            <a th:href="@{/admin-order-page}">
-            <button>Se Ordrer</button>
-            </a>
-        </div>
-
-        <div class="gift_card">
-            <p><strong>Giv et Gavekort!</strong></p>
-
-
-            <form class="gift_card_container" th:action="@{/insertMoney}" method="POST">
-                <label for="amount">amount:</label>
-                <input type="amount" id="amount" name="amount" value="200" required/>
-
-                <label for="email_gift_card">email:</label>
-                <input type="email" id="email_gift_card" name="email" value="ex@tv.dk" required/>
-                <p th:if="${session.gift_card_message != null}" th:text="${session.gift_card_message}"></p>
-                <button class="send_gift">Send Gavekort</button>
-            </form>
-        </div>
-    </section>
-</main>
-<footer th:replace="fragments :: footer"></footer>
+            <div class="dashboard_buttons">
+               <a th:href="@{/admin-customer-page}">
+                   <button>Se Kunder</button>
+               </a>
+               <a th:href="@{/admin-order-page}">
+                   <button>Se Ordrer</button>
+               </a>
+            </div>
+            <div class="gift_card">
+                <p><strong>Giv et Gavekort!</strong></p>
+                <form class="gift_card_container" th:action="@{/insertMoney}" method="POST">
+                    <label for="amount">amount:</label>
+                    <input type="amount" id="amount" name="amount" value="200" required/>
+                    <label for="email_gift_card">email:</label>
+                    <input type="email" id="email_gift_card" name="email" value="ex@tv.dk" required/>
+                    <p th:if="${session.gift_card_message != null}" th:text="${session.gift_card_message}"></p>
+                    <button class="send_gift">Send Gavekort</button>
+                </form>
+            </div>
+        </section>
+   </main>
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
