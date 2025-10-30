@@ -116,6 +116,7 @@ public class CartController
             {
              ctx.sessionAttribute("discount", 0);
                 ctx.sessionAttribute("discountMessage", "Der blev ikke fundet et discount kode med det kodeord: " + discountCode);
+                ctx.render("/cart");
                 }
             else
                 {

@@ -169,10 +169,11 @@ public class UserController
         {
             try
             {
-                UserMapper.createUser(email, password);
+                User user = UserMapper.createUser(email, password);
+                ctx.sessionAttribute("currentUser", user);
                 ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
                         ". Nu skal du logge på.");
-                ctx.render("registerInfo.html");
+                ctx.render("registerInfo.html", Map.of("currentUSer", user));
             }
 
             catch (DatabaseException e)
@@ -205,6 +206,7 @@ public class UserController
             User user = UserMapper.login(email, password);
             ctx.sessionAttribute("currentUser", user);
             ctx.attribute("currentUser", user);
+
            if(UserMapper.checkIfAdmin(user) == 1)
             {
                 ctx.sessionAttribute("admin", true);
@@ -238,7 +240,8 @@ public class UserController
         String floor = ctx.formParam("floor");
         int zipCode = Integer.parseInt(ctx.formParam("post_code"));
         int streetNumber = Integer.parseInt(ctx.formParam("street_number"));
-        int userId = ctx.sessionAttribute("user");
+        User user = ctx.sessionAttribute("currentUser");
+        int userId = user.getId();
 
         UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor,connectionPool);
 
@@ -258,7 +261,8 @@ public class UserController
             ctx.render("adminPages/adminIndex.html");
         } catch (DatabaseException e)
         {
-            throw new DatabaseException("RegisterInfo error", e.getMessage());
+            ctx.render("adminPages/adminIndex");
+//            throw new DatabaseException("RegisterInfo error", e.getMessage());
         }
     }
 

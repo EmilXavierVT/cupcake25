@@ -83,6 +83,7 @@ public class UserMapper
             ps.setString(4, streetName);
             ps.setObject(5, houseNumber);
             ps.setString(6, floor);
+            ps.setInt(7, id);
 
 
             int rowsAffected = ps.executeUpdate();

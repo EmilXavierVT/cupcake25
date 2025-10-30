@@ -370,7 +370,7 @@ button:hover {
     border-radius: 10px;
 }
 
-.cart_item_amount {
+.cart_amount_quantity {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -890,6 +890,18 @@ input#amount, input#email_gift_card {
     max-height: 100%;
     object-fit: contain;
 }
+
+.search_input_form {
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+.profile_information {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #5B405F;
+    }
 
 
 
