@@ -24,25 +24,7 @@ public class UserController
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-        app.get("/adminIndex", ctx ->
-        {
-            ctx.render("adminPages/adminIndex.html");
-            getTodaySalesNumber(ctx,connectionPool);
-            getLastSevenDaysOrders(ctx,connectionPool);
-            getTopUsers(ctx,connectionPool);
-            getTotalSales(ctx,connectionPool);
-        });
-        app.get("/admin-order-page", ctx -> {
-            ctx.sessionAttribute("all_orders", getAllOrders(ctx,connectionPool));
-            ctx.render("adminPages/admin-order-page.html", Map.of("all_orders",getAllOrders(ctx,connectionPool)));
-//            getAllOrders(ctx,connectionPool);
-        });
-        app.get("/admin-customer-page", ctx ->
-        {
-            ctx.sessionAttribute("all_users", UserMapper.getAllUsers(connectionPool));
-            ctx.render("adminPages/admin-customer-page.html", Map.of("all_users", UserMapper.getAllUsers(connectionPool)));
-        });
-        app.get("/login",ctx -> ctx.render("login.html"));
+        app.get("/login", ctx -> ctx.render("login.html"));
         app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
         app.get("logout", ctx -> logout(ctx));
         app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
@@ -243,127 +225,11 @@ public class UserController
         User user = ctx.sessionAttribute("currentUser");
         int userId = user.getId();
 
-        UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor,connectionPool);
+        user = UserMapper.updateUser(userId,firstName,lastName,zipCode,streetName,streetNumber,floor,connectionPool);
 
+        ctx.sessionAttribute("currentUser",user);
         ctx.sessionAttribute("message","Du har opdateret din profil !");
         ctx.render("index.html");
     }
-
-    public static void insertMoney(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        String email = ctx.formParam("email");
-        float amount = Float.parseFloat(ctx.formParam("amount"));
-
-        try
-        {
-            UserMapper.insertMoney(email,amount, connectionPool);
-            ctx.sessionAttribute("message","Du har nu indsat penge på brugers konto !");
-            ctx.render("adminPages/adminIndex.html");
-        } catch (DatabaseException e)
-        {
-            ctx.render("adminPages/adminIndex");
-//            throw new DatabaseException("RegisterInfo error", e.getMessage());
-        }
-    }
-
-    private static void inSearchCustomer(Context ctx)
-    {
-        List<User> users = ctx.sessionAttribute("all_users");
-        List<User> userInSearch;
-        String search = ctx.formParam("search_text");
-
-        userInSearch = users.stream()
-                    .filter(user ->
-                    {
-                        assert search != null;
-                        return user.getEmail().contains(search);
-                    })
-                    .toList();
-
-            ctx.sessionAttribute("users_in_search", userInSearch);
-            ctx.redirect("/admin-customer-page");
-            ctx.render("adminPages/admin-customer-page.html", Map.of(
-                    "users_in_search", userInSearch));
-    }
-
-    private static void inSearchOrders(Context ctx)
-    {
-        List<Order> orders = ctx.sessionAttribute("all_orders");
-        List<Order> orderInSearch;
-        String search = ctx.formParam("search_text");
-
-        orderInSearch = orders.stream()
-                .filter(order ->
-                {
-                    assert search != null;
-                    return order.getUser().getEmail().contains(search);
-                })
-                .toList();
-
-        ctx.sessionAttribute("orders_in_search", orderInSearch);
-        ctx.redirect("/admin-order-page");
-        ctx.render("adminPages/admin-order-page.html", Map.of(
-                "orders_in_search", orderInSearch));
-    }
-
-private static void deleteOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-{
-        int orderId = Integer.parseInt(ctx.formParam("order_id"));
-        new OrderMapper().removeOrder(orderId, connectionPool);
-         List<Order> updatedOrders = getAllOrders(ctx,connectionPool);
-         ctx.redirect("/admin-order-page");
-        ctx.render("adminPages/admin-order-page.html",Map.of("all_orders",updatedOrders));
-}
-
-    private static List<Order> getAllOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        try
-        {
-            List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
-
-            allOrders = allOrders.stream()
-                    .collect(Collectors
-                            .collectingAndThen(Collectors.toList(),list ->{
-                                Collections.reverse(list);
-                                return list;
-                            }));
-
-            return allOrders;
-//            ctx.sessionAttribute("all_orders",allOrders);
-//            ctx.render("adminPages/admin-order-page.html", Map.of(
-//                    "all_orders", allOrders
-//            ));
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("GetAllOrders exception", e.getMessage());
-        }
-    }
-
-    private static void getTotalSales(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        float totalSales = 0;
-
-        try
-        {
-            List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
-
-        for(Order order : allOrders)
-        {
-            for(CupcakeInOrder cupcake :order.getCupcakesInOrder())
-            {
-                totalSales +=(cupcake.getUdc().getBottom().getBottomPrice() +
-                        cupcake.getUdc().getIcing().getIcingPrice()*cupcake.getAmount());
-            }
-        }
-
-        ctx.sessionAttribute("total_sales",totalSales);
-        ctx.render("adminPages/adminIndex.html", Map.of(
-                "total_sales", Objects.requireNonNull(ctx.sessionAttribute("total_sales"))
-        ));
-
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("something in all orders"+ e.getMessage());
-        }
-    }
+    
 }

@@ -31,7 +31,7 @@ public class CartController
 //            setDisplayOfOrders(ctx);
             setAddress(ctx);
             setOrderAndPickUpDate(ctx);
-//            ctx.render("cart.html");
+            ctx.render("cart.html");
         });
 
         app.get("/pay-page",ctx -> ctx.render("pay-page.html"));
@@ -52,19 +52,24 @@ public class CartController
             LocalDate date = LocalDate.now();
 
             User user = ctx.sessionAttribute("currentUser");
-            if (user != null) {
+            ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
+
+            if (user != null && !cupcakesInOrder.isEmpty())
+            {
                 int userId = user.getId();
                 int orderId = ctx.sessionAttribute("order_id");
-                ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
-
                 float price = 0;
-                for (CupcakeInOrder c : cupcakesInOrder) {
+
+                for (CupcakeInOrder c : cupcakesInOrder )
+                {
                     float bottomPrice = c.getUdc().getBottom().getBottomPrice();
                     float icingPrice = c.getUdc().getIcing().getIcingPrice();
                     int amount = c.getAmount();
                     price += (bottomPrice + icingPrice) * amount;
                 }
-                if (ctx.sessionAttribute("discount") != null) {
+
+                if (ctx.sessionAttribute("discount") != null )
+                {
                     int discount = ctx.sessionAttribute("discount");
 
                     price = (price * discount) / 100;

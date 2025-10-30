@@ -55,9 +55,10 @@
         <div class="view_list">
             <ul class="card_list list_rows" >
                 <li th:each="user : ${session.users_in_search !=null ? session.users_in_search : session.all_users}">
-                Navn : <span th:text="${user.firstName}"></span>
-                    Efternavn : <span th:text="${user.lastName}"></span>
-                    E-mail : <span th:text="${user.email}"></span>
+                Navn : <span th:text="${user.firstName + '  ' + user.lastName}"></span>
+                    <br/>
+                    E-mail : <span th:text="${user.email+' - '}"></span>
+                    <br/>
                     Balance : <span th:text="${user.wallet}"></span>
                 </li>
             </ul>

@@ -14,6 +14,7 @@ import io.javalin.http.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CupcakeController
@@ -35,37 +36,43 @@ public class CupcakeController
 
     private static void removeOneCupcakeFromCart(Context ctx)
     {
+        int newPrice = 0;
         int cupcakeId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("cupcake_id")));
         CupcakeInOrder cupcakeInOrder = null;
         for (CupcakeInOrder cupcakeInOrder1 : cupcakesInOrder)
-        {
+        { newPrice += (int) ((cupcakeInOrder1.getUdc().getBottom().getBottomPrice() + cupcakeInOrder1.getUdc().getIcing().getIcingPrice()) * cupcakeInOrder1.getAmount());
+
             if(cupcakeInOrder1.getUdc().getId() == cupcakeId)
             {
                 cupcakeInOrder = cupcakeInOrder1;
+                newPrice-= (int) ((cupcakeInOrder1.getUdc().getBottom().getBottomPrice() + cupcakeInOrder1.getUdc().getIcing().getIcingPrice()) * cupcakeInOrder1.getAmount());
             }
         }
         cupcakesInOrder.remove(cupcakeInOrder);
-        ctx.render("/cart");
+        ctx.sessionAttribute("orderPrice",newPrice);
+        ctx.render("/cart", Map.of("cupcakesInOrder", cupcakesInOrder));
+        ctx.render("/cart", Map.of("orderPrice", newPrice));
     }
 
-    private static void createCupcake(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
-        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
-        int amount = Integer.parseInt(ctx.formParam("amount"));
-        System.out.println(amount);
-        CupcakeMapper cupcakeMapper = new CupcakeMapper();
-        try
-        {
-            UserDefinedCupcake cupcake = cupcakeMapper.saveUserDefinedCupcake(bottomId, icingId, connectionPool);
-            ctx.attribute("udc", cupcake.getId());
-            ctx.redirect("/product-page");
 
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("createCupcake Controller", e.getMessage());
-        }
-    }
+//    private static void createCupcake(Context ctx, ConnectionPool connectionPool) throws DatabaseException
+//    {
+//        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
+//        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
+//        int amount = Integer.parseInt(ctx.formParam("amount"));
+//        CupcakeMapper cupcakeMapper = new CupcakeMapper();
+//
+//        try
+//        {
+//            UserDefinedCupcake cupcake = cupcakeMapper.saveUserDefinedCupcake(bottomId, icingId, connectionPool);
+//            ctx.attribute("udc", cupcake.getId());
+//            ctx.redirect("/product-page");
+//
+//        } catch (DatabaseException e)
+//        {
+//            throw new DatabaseException("createCupcake Controller", e.getMessage());
+//        }
+//    }
 
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
@@ -100,15 +107,17 @@ public class CupcakeController
             cupcake = new UserDefinedCupcake(cupcakesInOrder.size(),cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
 //            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
-
+            String msg = "Du har bestilt en " + cupcake.getBottom().getBottomName() +" cupcake med " + cupcake.getIcing().getIcingName() + " icing og du skal da ha' " + amount + " stk.";
+            ctx.sessionAttribute("add_to_cart_message", msg);
+            ctx.redirect("/product-page");
+            ctx.render("product-page.html", Map.of("add_to_cart_message",msg));
         } catch (DatabaseException e)
         {
-            throw new DatabaseException("CupcakeController.AddtoCupcakeOrderArrayList" + e.getMessage());
+           ctx.redirect("/product-page");
+           ctx.sessionAttribute("add_to_cart_message", "Der kan ikke bestilles cupcakes nu, kontakt venligst ejeren");
+           ctx.render("product-page.html", Map.of("add_to_cart", "Der kan ikke bestilles cupcakes nu, kontakt venligst ejeren"));
         }
-        ctx.redirect("/product-page");
-
-
-        }
+    }
 
     private static void getAllBottoms(Context ctx, ConnectionPool connectionPool)
     {

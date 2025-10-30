@@ -67,7 +67,7 @@ public class UserMapper
         }
     }
 
-    public static void updateUser(int id, String firstName, String lastName, int zipCode,
+    public static User updateUser(int id, String firstName, String lastName, int zipCode,
                                   String streetName, Integer houseNumber, String floor,
                                   ConnectionPool connectionPool) throws DatabaseException
     {
@@ -91,6 +91,7 @@ public class UserMapper
             {
                 throw new DatabaseException("Failed to update user with ID: " + id);
             }
+            return getUser(id);
         } catch (SQLException e)
         {
             throw new DatabaseException("Error updating user", e.getMessage());
