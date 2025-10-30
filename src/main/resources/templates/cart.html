@@ -46,10 +46,7 @@
 </header>
 <main>
     <div class="cart_container_left">
-        <h1 id="cart_title">Din Kurv
-            <a th:href="@{/registerInfo}" class="update_info_button">Opdater Info</a>
-        </h1>
-
+        <h1 id="cart_title">Din Kurv</h1>
 
         <div class="cart_container">
             <div th:each="cupcakeInOrder : ${session.cupcakeInOrder}" class="cart_item">
@@ -66,59 +63,28 @@
             </div>
         </div>
 
-            <h2>Afhentningsinformation:</h2>
-            <p>Ordre Dato: <span th:text="${session.todays_date}"></span></p>
-            <p>Fakturerings adresse: <span th:text="${session.pick_up_address}"></span></p>
-            <p>Afhentnings Dato: <span th:text="${session.pick_up_date}"></span></p>
-
 </div>
-<!--        <table>-->
-<!--                <tr th:each="cupcakeInOrder : ${cupcakeInOrders}">-->
-<!--                    <td class="cart_item_name" th:text="${cupcakeInOrder.getUdc().getBottom().bottomName}"></td>-->
-<!--                    <td class="cart_item_price" th:text="${cupcakeInOrder.getUdc().getBottom().bottomPrice}"></td>-->
-<!--                </tr>-->
-<!--                    <tr th:each="cupcakeInOrder : ${cupcakeInOrders}">-->
-<!--                    <td class="cart_item_name" th:text="${cupcakeInOrder.getUdc().getIcing().icingName}"></td>-->
-<!--                    <td class="cart_item_price" th:text="${cupcakeInOrder.getUdc().getIcing().icingPrice}"></td>-->
-<!--                    </tr>-->
-<!--                <tr>-->
-<!--                    <td class="cart_amount_quantity" th:value="${cupcakeInOrder.getAmount}"></td>-->
-<!--                </tr>-->
-<!--        </table>-->
-
-
-
-
-
-    <!--        <div class="cart_items">-->
-<!--            <div class="cart_item">-->
-<!--                <div class="cart_item_details">-->
-<!--                    <h2 class="cart_item_name">Chokolade Cupcake</h2>-->
-<!--                    <p class="cart_item_quantity">Antal: 2</p>-->
-<!--                    <p class="cart_item_price">Pris: 50 DKK</p>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            -->
-<!--            <div class="cart_item">-->
-<!--                <div class="cart_item_details">-->
-<!--                    <h2 class="cart_item_name">Vanilje Cupcake</h2>-->
-<!--                    <p class="cart_item_quantity">Antal: 1</p>-->
-<!--                    <p class="cart_item_price">Pris: 30 DKK</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
 
     <div class="cart_container_right">
+
+        <h2>Afhentningsinformation:</h2>
+        <p>Ordre Dato: <span th:text="${session.todays_date}"></span></p>
+        <p>Fakturerings adresse: <span th:text="${session.pick_up_address}"></span></p>
+        <p>Afhentnings Dato: <span th:text="${session.pick_up_date}"></span></p>
+
+        <br/>
+
         <h2>Ordre Oversigt</h2>
         <p>Subtotal: 130 DKK</p>
         <p>Forsendelse: 20 DKK</p>
         <h3>Total: 150 DKK</h3>
 
         <a th:href="@{/pay-page}" class="checkout_button">Gå til Betaling</a>
+        <a th:href="@{/registerInfo}" class="update_info_button">Opdater Info</a>
     </div>
+
     <div>
-        <form th:action="@{/apply_discount}" method="post">
+        <form class="discount_form" th:action="@{/apply_discount}" method="post">
             <label for="discount">Discount:</label>
             <input type="text" id="discount" name="discountCode" placeholder="Discount Code">
             <button type="submit">Apply</button>
