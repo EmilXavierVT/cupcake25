@@ -33,19 +33,39 @@ main {
     padding: 0 32px;
 }
 
-nav ul {
-    list-style: none;
+nav {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style: none;
     gap: 32px;
 }
 
 nav a {
     text-decoration: none;
     color: #5B405F;
-    font-size: 12px;
+    font-size: 20px;
+    font-weight: 700;
     cursor: pointer;
+    transition: color 0.7s ease;
 }
 
+nav a:hover {
+    transition: 0.5s ease;
+    color: #8f628f;
+}
+
+li.list_of_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .cupcake_logo {
     height: 48px;
     display: block;
@@ -129,9 +149,6 @@ a svg:hover {
     padding: 48px 80px;
     flex-direction: row-reverse;
 }
-/*.product_content:nth-child(odd) {*/
-/*    flex-direction: row-reverse;*/
-/*}*/
 
 .green_box {
     display: flex;
@@ -939,8 +956,6 @@ input#amount, input#email_gift_card {
     font-weight: 600;
     color: #5B405F;
     }
-
-
 
 /*MEDIA QUERIES*/
 

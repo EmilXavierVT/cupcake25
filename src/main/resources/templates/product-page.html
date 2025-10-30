@@ -54,7 +54,7 @@
             <option disabled selected value>Vælg Bund</option>
             <option th:each="bottom : ${bottom_options}"
                     th:value="${bottom.bottomId}"
-                    th:text="${bottom.bottomName}">
+                    th:text="${bottom.bottomName + ' ' + bottom.bottomPrice} + ' DKK'">
 
             </option>
         </select>
@@ -66,7 +66,9 @@
         </div>
         <select class="dropdown_menu" name="icing_id" required>
             <option disabled selected value>Vælg Icing</option>
-            <option th:each="icing : ${icing_options}" th:value="${icing.icingId}" th:text="${icing.icingName}">Ris</option>
+            <option th:each="icing : ${icing_options}"
+                    th:value="${icing.icingId}"
+                    th:text="${icing.icingName + ' ' + icing.icingPrice} + ' DKK'"></option>
         </select>
     </section>
 
@@ -82,6 +84,7 @@
         </button>
         </a>
         </div>
+        <p th:if="${session.add_to_cart_message}" th:text="${session.add_to_cart_message}"></p>
 
     <form class="cupcake_amount" method="post">
         <section class="product_content-counter">
@@ -95,11 +98,7 @@
     </form>
 </main>
 
-<footer>
-    <p>&copy; 2025 Icy Cupcakes <br/>
-        Bornholm Pederskervejen 17 ???? Nexø <br/>
-        Telefon: +45 18131123</p>
-</footer>
+<footer th:replace="fragments :: footer"></footer>
 <script src="/js/script.js"></script>
 </body>
 </html>

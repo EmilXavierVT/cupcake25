@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forside</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+<head th:replace="fragments :: head(Forside)"></head>
+<header th:replace="fragments :: header"></header>
 <body>
 <main>
     <section class="hero">
         <div class="hero_text">
             <h2>Bæredygtige.<br/>Dejlige.<br/>Fra Bornholm.</h2>
         </div>
+        <a th:href="@{/product-page}">
         <img th:src="@{/images/cupcake-hero.png}" alt="cupcake-hero" class="hero_image"/>
+        </a>
     </section>
-
-<!--        <section class="content">-->
-<!--           <div class="green_box"></div>-->
-<!--     <a th:href="@{about}">-->
-<!--        <img th:src="@{/images/about-us.png}" alt="Cupcake" class="cupcake_logo">-->
-<!--        </a>-->
-<!--        <p>-->
-<!--        </section>-->
 
     <section class="content">
         <div class="green_box index">
@@ -72,11 +59,5 @@
             Sammen fejrer vi kreativitet, hygge og alt det, der gør cupcakes til noget helt særligt. <a th:href="@{/about}"> Tryk her for at læse mere om os</a></p></p>
     </section>
 </main>
-
-<footer>
-    <p>&copy; 2025 Icy Cupcakes <br/>
-        Bornholm Pederskervejen 17 ???? Nexø <br/>
-        Telefon: +45 18131123</p>
-</footer>
+<footer th:replace="fragments :: footer"></footer>
 </body>
-</html>
