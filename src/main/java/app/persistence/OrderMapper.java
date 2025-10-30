@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class OrderMapper {
-    public void createOrder(int userId, int orderId, int discountId) {
+    // public void createOrder(int userId, int orderId, int discountId) {}
 
-    }
+
     public int getAvailableOrderid(ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "SELECT nextval('orders_id_seq')";
@@ -74,23 +74,6 @@ public class OrderMapper {
         return returnDiscountCode;
     }
 
-
-    public void updateOrder(int orderId, int userId, LocalDate date, int discountId) throws DatabaseException {
-        String sql = "UPDATE orders SET user_id=?, date=?, applied_discount=? WHERE id=?";
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql))
-        {
-            ps.setInt(1, userId);
-            ps.setDate(2, java.sql.Date.valueOf(date));
-            ps.setInt(3, discountId);
-            ps.setInt(4, orderId);
-            int rowsAffected = ps.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            throw new DatabaseException("Error updating order", e.getMessage());
-        }
-    }
 
     public List<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
         List<Order> orders = new ArrayList<>();
