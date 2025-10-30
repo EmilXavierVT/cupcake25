@@ -12,8 +12,6 @@ import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
@@ -27,13 +25,13 @@ public class CartController
         app.get("/cart",ctx ->
         {
             ctx.sessionAttribute("cupcakeInOrder",CupcakeController.getCupcakesInOrder());
+            ctx.sessionAttribute("orderPrice",getPriceForOrder(ctx));
+            ctx.sessionAttribute("pickupDate",getPickupDate());
             System.out.println(CupcakeController.getCupcakesInOrder());
-//            setDisplayOfOrders(ctx);
             setAddress(ctx);
             setOrderAndPickUpDate(ctx);
             ctx.render("cart.html");
         });
-
         app.get("/pay-page",ctx -> ctx.render("pay-page.html"));
         app.get("/apply_discount", ctx -> findDiscountCode(ctx, connectionPool));
         app.post("/apply_discount", ctx -> findDiscountCode(ctx, connectionPool));
@@ -43,14 +41,32 @@ public class CartController
             findDiscountCode(ctx,connectionPool);
         });
         app.get("/order-confirmation", ctx -> ctx.render("order-confirmation.html"));
-
     }
+
+
+    private static LocalDate getPickupDate()
+    {
+        LocalDate date = LocalDate.now();
+        return date.plusDays(2);
+    }
+
+
+    private static int getPriceForOrder(Context ctx)
+    {
+        ArrayList<CupcakeInOrder> allCupcakes = ctx.sessionAttribute("cupcakeInOrder");
+        int price = 0;
+        for (CupcakeInOrder c : allCupcakes)
+        {
+            price += (c.getUdc().getBottom().getBottomPrice() + c.getUdc().getIcing().getIcingPrice()) * c.getAmount();
+        }
+        return price;
+    }
+
 
     private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool)
     {
         try  {
             LocalDate date = LocalDate.now();
-
             User user = ctx.sessionAttribute("currentUser");
             ArrayList<CupcakeInOrder> cupcakesInOrder = CupcakeController.getCupcakesInOrder();
 
@@ -71,41 +87,44 @@ public class CartController
                 if (ctx.sessionAttribute("discount") != null )
                 {
                     int discount = ctx.sessionAttribute("discount");
-
                     price = (price * discount) / 100;
                 }
-                if (UserMapper.findUserWallet(connectionPool, userId, price)) {
 
-
+                if (UserMapper.findUserWallet(connectionPool, userId, price))
+                {
                     CupcakeMapper cupcakeMapper = new CupcakeMapper();
                     OrderMapper orderMapper = new OrderMapper();
                     UserDefinedCupcake userDefinedCupcake = null;
                     orderMapper.saveOrder(userId, date, orderId, 0, connectionPool);
 
-                    for (CupcakeInOrder cupcakeInOrder : cupcakesInOrder) {
+                    for (CupcakeInOrder cupcakeInOrder : cupcakesInOrder)
+                    {
                         userDefinedCupcake = cupcakeMapper.saveUserDefinedCupcake(cupcakeInOrder.getUdc().getBottom().getBottomId(), cupcakeInOrder.getUdc().getIcing().getIcingId(), connectionPool);
                         cupcakeMapper.saveCupcakeInOrder(orderId, userDefinedCupcake.getId(), cupcakeInOrder.getAmount(), connectionPool);
                     }
+
                     UserMapper.subtractFunds(connectionPool, price, userId);
                     ctx.redirect("/order-confirmation");
                     ctx.render("/order-confirmation");
-                }else { System.out.println("error in getting ot wallet ");}
+                }else
+                {
+                    System.out.println("error in getting ot wallet ");
+                }
 
-            }else if (user == null){
+            }else if (user == null)
+            {
                 ctx.sessionAttribute("errorLogin", "Du skal være logget ind for at betale!");
                 ctx.redirect("/login");
                 ctx.render("/login",Map.of("errorLogin","Du skal være logget ind for at betale!"));
             }
 
-
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             System.out.println("paymentConfirmed, CartController: " + e.getMessage());
             ctx.redirect("/login");
-
-
         }
-
     }
+
 
     private static void findDiscountCode(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
@@ -113,7 +132,6 @@ public class CartController
         {
             System.out.println("you are now looking for a discount code");
             String discountCode = ctx.formParam("discountCode");
-
             OrderMapper orderMapper = new OrderMapper();
             DiscountCode dc = orderMapper.findDiscountPercentage(discountCode, connectionPool);
 
@@ -137,15 +155,17 @@ public class CartController
         }
     }
 
+
     private static void setOrderAndPickUpDate(Context ctx)
     {
         LocalDate today = LocalDate.now();
         LocalDate pickUpDate = today.plusDays(3);
         ctx.sessionAttribute("pick_up_date",pickUpDate);
         ctx.sessionAttribute("todays_date",today);
-//        ctx.redirect("/cart");
         ctx.render("/cart", Map.of("todays_date", today.toString(), "pick_up_date", pickUpDate.toString()));
     }
+
+
     private static void setAddress(Context ctx)
     {
         User currentUser = ctx.sessionAttribute("currentUser");

@@ -20,8 +20,7 @@ import java.util.zip.GZIPOutputStream;
 public class UserController
 {
 
-    public static void addRoutes(Javalin app)
-    {
+    public static void addRoutes(Javalin app) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
 
         app.get("/login", ctx -> ctx.render("login.html"));
@@ -30,16 +29,11 @@ public class UserController
         app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
         app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
         app.get("/about", ctx -> ctx.render("about.html"));
-
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
-        app.post("/insertMoney", ctx -> {insertMoney(ctx, connectionPool); });
         app.post("/login", ctx -> login(ctx));
-        app.post("/delete_order", ctx -> deleteOrder(ctx, connectionPool));
-        app.post("/search_customer", ctx -> inSearchCustomer(ctx));
-        app.post("/search_orders", ctx -> inSearchOrders(ctx));
-    }
 
+    }
 
     private static void getUserOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
@@ -67,77 +61,6 @@ public class UserController
                     "user_orders", userOrders
             ));
         }
-    }
-
-    private static void getTopUsers(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        try
-        {
-            HashMap<Integer,User> topUsers = AdminMapper.findMostActiveUsers(connectionPool);
-            List<Integer> topUserPurchaseAmounts = new ArrayList<>();
-            List<User> topUserObjects = new ArrayList<>();
-            int i = 0;
-
-            for (Map.Entry<Integer, User> entry : topUsers.entrySet())
-            {
-                if (i >= 6) break;
-                topUserPurchaseAmounts.add(entry.getKey());
-                topUserObjects.add(entry.getValue());
-                i++;
-            }
-
-            topUserPurchaseAmounts = topUserPurchaseAmounts.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
-                    {
-                        Collections.reverse(list);
-                        return list;
-                    }));
-
-            topUserObjects = topUserObjects.stream()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), list ->
-                    {
-                        Collections.reverse(list);
-                        return list;
-                    }));
-
-            // Example: pass lists to session attributes or use as needed
-            ctx.sessionAttribute("top_user_amount", topUserPurchaseAmounts);
-            ctx.sessionAttribute("top_users", topUserObjects);
-            ctx.render("adminPages/adminIndex.html", Map.of("top_user_amount",topUserPurchaseAmounts));
-            ctx.render("adminPages/adminIndex.html", Map.of("top_users",topUserObjects));
-
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("something when getting top users" ,e.getMessage());
-        }
-    }
-
-
-    private static void getTodaySalesNumber(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        try
-        {
-            int dailysale = AdminMapper.calulateDailySales(AdminMapper.findDailySales(connectionPool));
-
-            ctx.sessionAttribute("today_sales",dailysale);
-            ctx.render("adminPages/adminIndex.html", Map.of(
-                            "today_sales", Objects.requireNonNull(ctx.sessionAttribute("today_sales"))
-                    ));
-
-        } catch (DatabaseException e)
-        {
-            throw new DatabaseException("something when getting today sales number" ,e.getMessage());
-        }
-    }
-
-    private static void getLastSevenDaysOrders(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-    {
-        List<Order> last7DaysOrder = new OrderMapper().getOrdersLastSevenDays(connectionPool);
-
-        ctx.sessionAttribute("orders_of_seven_days",last7DaysOrder);
-        ctx.render("adminPages/adminIndex.html", Map.of(
-                        "orders_of_seven_days", last7DaysOrder
-                ));
     }
 
 
@@ -170,6 +93,7 @@ public class UserController
         }
 
     }
+
 
     private static void logout(Context ctx)
     {
@@ -213,6 +137,7 @@ public class UserController
             ctx.render("/login",Map.of("errorLogin", "login fejlede!"));
         }
     }
+
 
     public static void registerInfo(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {

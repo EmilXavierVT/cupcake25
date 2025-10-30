@@ -16,6 +16,7 @@ public class OrderController
         //app.get("/product-page",ctx -> getOrderID(ctx,connectionPool));
     }
 
+
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
         try{
@@ -28,16 +29,15 @@ public class OrderController
                 ctx.sessionAttribute("order_id", orderId);
                 System.out.println(newOrderId);
             }
-
-
         } catch (DatabaseException e)
         {
             throw new DatabaseException("getOrderID in OrderController", e.getMessage());
         }
     }
 
-    private static void setOrderIdToZero(Context ctx)
-    {
-        ctx.sessionAttribute("order_id", 0);
-    }
+
+    // private static void setOrderIdToZero(Context ctx)
+    //{
+    //  ctx.sessionAttribute("order_id", 0);
+    //}
 }

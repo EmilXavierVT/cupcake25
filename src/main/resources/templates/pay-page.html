@@ -42,7 +42,7 @@
 
 <main>
     <section class="pay_section">
-        <h1 id="title">Du har handlet for xxx</h1>
+        <h1 id="title">Du har handlet for <span th:text="${session.orderPrice} + ' dkk'"></span></h1>
         <div class="input_container">
             <form class="pay_form" th:action="@{/order-confirmation}" method="POST">
 

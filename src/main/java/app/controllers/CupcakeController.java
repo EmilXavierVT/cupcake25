@@ -34,11 +34,13 @@ public class CupcakeController
 //        app.post("/order-confirmation", ctx -> paymentConfirmed(ctx,connectionPool));
     }
 
+
     private static void removeOneCupcakeFromCart(Context ctx)
     {
         int newPrice = 0;
         int cupcakeId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("cupcake_id")));
         CupcakeInOrder cupcakeInOrder = null;
+
         for (CupcakeInOrder cupcakeInOrder1 : cupcakesInOrder)
         { newPrice += (int) ((cupcakeInOrder1.getUdc().getBottom().getBottomPrice() + cupcakeInOrder1.getUdc().getIcing().getIcingPrice()) * cupcakeInOrder1.getAmount());
 
@@ -74,6 +76,7 @@ public class CupcakeController
 //        }
 //    }
 
+
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
         try  {
@@ -93,15 +96,16 @@ public class CupcakeController
         }
     }
 
+
     private static void addToCupcakeOrderArrayList(Context ctx, ConnectionPool connectionPool) throws DatabaseException
     {
-        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
-        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
-        int amount = Integer.parseInt(ctx.formParam("amount"));
         int orderId = ctx.sessionAttribute("order_id");
+        int amount = Integer.parseInt(ctx.formParam("amount"));
+        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
+        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
+
         CupcakeMapper cupcakeMapper = new CupcakeMapper();
         UserDefinedCupcake cupcake = null;
-
         try
         {
             cupcake = new UserDefinedCupcake(cupcakesInOrder.size(),cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
@@ -118,6 +122,7 @@ public class CupcakeController
            ctx.render("product-page.html", Map.of("add_to_cart", "Der kan ikke bestilles cupcakes nu, kontakt venligst ejeren"));
         }
     }
+
 
     private static void getAllBottoms(Context ctx, ConnectionPool connectionPool)
     {
@@ -138,6 +143,7 @@ public class CupcakeController
         }
     }
 
+
     private static void getAllIcings(Context ctx, ConnectionPool connectionPool)
     {
         List<Icing> allIcings = null;
@@ -156,6 +162,7 @@ public class CupcakeController
             ctx.redirect("/");
         }
     }
+
 
     public static ArrayList<CupcakeInOrder> getCupcakesInOrder()
     {

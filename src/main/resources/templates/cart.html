@@ -75,9 +75,9 @@
         <br/>
 
         <h2>Ordre Oversigt</h2>
-        <p>Subtotal: 130 DKK</p>
-        <p>Forsendelse: 20 DKK</p>
-        <h3>Total: 150 DKK</h3>
+        <h3>Subtotal:  <span th:text="${session.orderPrice} + ' dkk'"></span> </h3>
+
+
 
         <a th:href="@{/pay-page}" class="checkout_button">Gå til Betaling</a>
         <a th:href="@{/registerInfo}" class="update_info_button">Opdater Info</a>
