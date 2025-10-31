@@ -32,8 +32,8 @@ A visual overview of the project can be found in the [final_class_diagram.puml](
 ## Installation
 1. **Clone the Repository:**
 ``` sh
-    git clone https://github.com/YOUR_GITHUB_USERNAME/cupcake-system.git
-    cd cupcake-system
+    git clone https://github.com/EmilXavierVT/cupcake25.git
+    cd cupcake25
 ```
 1. **Set up Environment:**
     - Make sure you have Java 17 installed.
@@ -43,7 +43,7 @@ A visual overview of the project can be found in the [final_class_diagram.puml](
 ## Usage
 ### if using duckduckGO take in count that the html and Javalin compiling causes error in the rendering through the ContextResolver a fixx is to remove all ".html" from the render() calls in the controllers
 
-- Access the application in your browser at: `http://localhost:7000`
+- Access the application in your browser at: `http://localhost:7070`
 - Register as a user, log in, create cupcake orders, manage your cart, and check your order status.
 - Admin users can view sales analytics and manage the system.
 
