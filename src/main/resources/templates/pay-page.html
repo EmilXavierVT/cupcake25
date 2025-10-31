@@ -19,6 +19,7 @@
             </form>
         </div>
     </section>
+    <p th:if="${session.insufficient_funds_message != null} " th:text="${session.insufficient_funds_message}"></p>
 </main>
 <footer th:replace="~{fragments :: footer}"></footer>
 </body>

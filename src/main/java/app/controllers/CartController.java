@@ -116,7 +116,6 @@ public class CartController
 
                     UserMapper.subtractFunds(connectionPool, price, userId);
                     cupcakesInOrder.clear();
-                    ctx.sessionAttribute("order_id", 0);
                     ctx.redirect("/order-confirmation");
                     ctx.render("/order-confirmation");
                 }else
