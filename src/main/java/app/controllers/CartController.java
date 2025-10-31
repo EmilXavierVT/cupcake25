@@ -34,27 +34,27 @@ public class CartController
         });
         app.get("/pay-page",ctx -> ctx.render("pay-page.html"));
         app.get("/apply_discount", ctx -> findDiscountCode(ctx, connectionPool));
+        app.get("/order-confirmation", ctx -> ctx.render("order-confirmation.html"));
         app.post("/apply_discount", ctx -> findDiscountCode(ctx, connectionPool));
         app.post("/order-confirmation", ctx ->
         {
             paymentConfirmed(ctx,connectionPool);
             findDiscountCode(ctx,connectionPool);
         });
-        app.get("/order-confirmation", ctx -> ctx.render("order-confirmation.html"));
     }
 
 
     private static LocalDate getPickupDate()
     {
-        LocalDate date = LocalDate.now();
-        return date.plusDays(2);
+        return LocalDate.now().plusDays(2);
     }
 
 
     private static float getPriceForOrder(Context ctx)
     {
         ArrayList<CupcakeInOrder> allCupcakes = ctx.sessionAttribute("cupcakeInOrder");
-        int price = 0;
+        float price = 0;
+
         for (CupcakeInOrder c : allCupcakes)
         {
             price += (c.getUdc().getBottom().getBottomPrice() + c.getUdc().getIcing().getIcingPrice()) * c.getAmount();
@@ -73,7 +73,7 @@ public class CartController
         }
 
         return price;
-    }
+                            }
 
 
     private static void paymentConfirmed(Context ctx, ConnectionPool connectionPool)

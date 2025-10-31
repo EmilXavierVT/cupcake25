@@ -25,21 +25,20 @@ public class CupcakeController
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-        app.get("/product-page", ctx -> {getAllBottoms(ctx, connectionPool);
-            getAllIcings(ctx, connectionPool);
-        getOrderID(ctx, connectionPool);});
         app.post("/product-page", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/add-to-order", ctx -> addToCupcakeOrderArrayList(ctx, connectionPool));
         app.post("/delete_cupcake_in_current_order", ctx -> removeOneCupcakeFromCart(ctx));
-//        app.post("/order-confirmation", ctx -> paymentConfirmed(ctx,connectionPool));
+        app.get("/product-page", ctx -> {getAllBottoms(ctx, connectionPool);
+            getAllIcings(ctx, connectionPool);
+            getOrderID(ctx, connectionPool);});
     }
 
 
     private static void removeOneCupcakeFromCart(Context ctx)
     {
         int newPrice = 0;
-        int cupcakeId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("cupcake_id")));
         CupcakeInOrder cupcakeInOrder = null;
+        int cupcakeId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("cupcake_id")));
 
         for (CupcakeInOrder cupcakeInOrder1 : cupcakesInOrder)
         { newPrice += (int) ((cupcakeInOrder1.getUdc().getBottom().getBottomPrice() + cupcakeInOrder1.getUdc().getIcing().getIcingPrice()) * cupcakeInOrder1.getAmount());
@@ -55,26 +54,6 @@ public class CupcakeController
         ctx.render("/cart", Map.of("cupcakesInOrder", cupcakesInOrder));
         ctx.render("/cart", Map.of("orderPrice", newPrice));
     }
-
-
-//    private static void createCupcake(Context ctx, ConnectionPool connectionPool) throws DatabaseException
-//    {
-//        int bottomId = Integer.parseInt(ctx.formParam("bottom_id"));
-//        int icingId = Integer.parseInt(ctx.formParam("icing_id"));
-//        int amount = Integer.parseInt(ctx.formParam("amount"));
-//        CupcakeMapper cupcakeMapper = new CupcakeMapper();
-//
-//        try
-//        {
-//            UserDefinedCupcake cupcake = cupcakeMapper.saveUserDefinedCupcake(bottomId, icingId, connectionPool);
-//            ctx.attribute("udc", cupcake.getId());
-//            ctx.redirect("/product-page");
-//
-//        } catch (DatabaseException e)
-//        {
-//            throw new DatabaseException("createCupcake Controller", e.getMessage());
-//        }
-//    }
 
 
     private static void getOrderID(Context ctx, ConnectionPool connectionPool) throws DatabaseException
@@ -109,7 +88,6 @@ public class CupcakeController
         try
         {
             cupcake = new UserDefinedCupcake(cupcakesInOrder.size(),cupcakeMapper.getBottomById(bottomId,connectionPool),cupcakeMapper.getIcingById(icingId,connectionPool));
-//            CupcakeInOrder cupcakeInOrder = new CupcakeInOrder(orderId,cupcake,amount);
             cupcakesInOrder.add(new CupcakeInOrder(orderId, cupcake, amount));
             String msg = "Du har bestilt en " + cupcake.getBottom().getBottomName() +" cupcake med " + cupcake.getIcing().getIcingName() + " icing og du skal da ha' " + amount + " stk.";
             ctx.sessionAttribute("add_to_cart_message", msg);

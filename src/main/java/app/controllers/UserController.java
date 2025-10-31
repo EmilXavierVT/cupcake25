@@ -23,15 +23,15 @@ public class UserController
     public static void addRoutes(Javalin app) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-        app.get("/login", ctx -> ctx.render("login.html"));
-        app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
         app.get("logout", ctx -> logout(ctx));
-        app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
-        app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
+        app.get("/login", ctx -> ctx.render("login.html"));
         app.get("/about", ctx -> ctx.render("about.html"));
+        app.get("/profile-page", ctx -> getUserOrders(ctx, connectionPool));
+        app.get("/registerInfo", ctx -> ctx.render("registerInfo.html"));
+        app.get("/registerPassword", ctx -> ctx.render("registerPassword.html"));
+        app.post("/login", ctx -> login(ctx));
         app.post("/registerPassword", ctx -> createUser(ctx));
         app.post("/registerInfo", ctx -> registerInfo(ctx, connectionPool));
-        app.post("/login", ctx -> login(ctx));
 
     }
 
@@ -40,9 +40,10 @@ public class UserController
         List<Order> allOrders = new OrderMapper().getAllOrders(connectionPool);
         allOrders = allOrders.stream()
                 .collect(Collectors
-                        .collectingAndThen(Collectors.toList(),list ->
-                        {
-                            Collections.reverse(list);
+                .collectingAndThen(Collectors
+                .toList(),list ->
+                {
+                      Collections.reverse(list);
                             return list;
                         }));
 
@@ -76,8 +77,7 @@ public class UserController
             {
                 User user = UserMapper.createUser(email, password);
                 ctx.sessionAttribute("currentUser", user);
-                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
-                        ". Nu skal du logge på.");
+                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email + ". Nu skal du logge på.");
                 ctx.render("registerInfo.html", Map.of("currentUSer", user));
             }
 

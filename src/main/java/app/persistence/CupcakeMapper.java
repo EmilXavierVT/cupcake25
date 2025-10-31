@@ -192,9 +192,9 @@ public class CupcakeMapper
                     Icing icingId = getUserDefinedCupcakeById(udcId,connectionPool).getIcing();
 
                     cupcakeInOrder = new CupcakeInOrder(order, new UserDefinedCupcake(id, bottomId, icingId), amount);
-                    
                 }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DatabaseException("saveCupcakeInOrder database",e.getMessage());
         }
     }
@@ -207,6 +207,7 @@ public class CupcakeMapper
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 int id = rs.getInt("order_id");
                 int udcId = rs.getInt("udc_id");
@@ -214,7 +215,8 @@ public class CupcakeMapper
                 UserDefinedCupcake userDefinedCupcake = getUserDefinedCupcakeById(udcId,connectionPool);
                 cupcakeInOrderList.add(new CupcakeInOrder(id, userDefinedCupcake, amount));
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DatabaseException("getCupcakesInOrder" ,e.getMessage());
         }
 

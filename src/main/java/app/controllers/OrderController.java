@@ -13,7 +13,6 @@ public class OrderController
     {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
     app.get("/get_order_id",ctx -> getOrderID(ctx,connectionPool));
-        //app.get("/product-page",ctx -> getOrderID(ctx,connectionPool));
     }
 
 
@@ -34,10 +33,4 @@ public class OrderController
             throw new DatabaseException("getOrderID in OrderController", e.getMessage());
         }
     }
-
-
-    // private static void setOrderIdToZero(Context ctx)
-    //{
-    //  ctx.sessionAttribute("order_id", 0);
-    //}
 }
