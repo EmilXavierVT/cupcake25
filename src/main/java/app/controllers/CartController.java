@@ -62,9 +62,6 @@ public class CartController
         }
         if(ctx.sessionAttribute("discount") != null){
             float discount = ctx.sessionAttribute("discount");
-            // float discou
-//            float discountFloat = Float.parseFloat(String.valueOf(discount));
-
             float discountedPrice = (price * discount) / 100;
             float actualPrice = price - discountedPrice;
             ctx.sessionAttribute("orderPrice", actualPrice);
