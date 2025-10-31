@@ -23,7 +23,7 @@ A robust, feature-rich web application to manage cupcake orders, inventory, user
 ## Architecture
 The system is designed according to MVC principles, split into the following layers:
 - **Controllers:** Business logic for users, orders, cupcakes, cart, and admin functionality.
-- **Entities:** Core data models such as `User`, , `CupcakeInOrder`, `UserDefinedCupcake`, etc. 
+- **Entities:** Core data models such as `User`, `CupcakeInOrder`, `UserDefinedCupcake`, etc. 
 - **Persistence:** Data access and mapping logic, including mappers and the connection pool.
 - **Config:** Application configuration (e.g., Thymeleaf templating).
 - **Exception Handling:** Centralized custom exceptions for robust error reporting.
