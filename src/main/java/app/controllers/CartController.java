@@ -136,8 +136,6 @@ public class CartController
                         ctx.render("/pay-page", Map.of("insufficient_funds_message", "you dont have enough funds to pay for this order, please try again later or contact the store owner if you think this is an error"));
                     }
 
-
-
             }else if (user == null)
             {
                 ctx.sessionAttribute("errorLogin", "Du skal være logget ind for at betale!");
