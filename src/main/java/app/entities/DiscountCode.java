@@ -2,12 +2,12 @@ package app.entities;
 
 public class DiscountCode
 {
-    private int discountId;
+    private float discountId;
     private String discountCode;
-    private int discount;
+    private float discount;
 
 
-    public DiscountCode(int discountId, String discountCode, int discount)
+    public DiscountCode(float discountId, String discountCode, float discount)
     {
         this.discountId = discountId;
         this.discountCode = discountCode;
@@ -19,17 +19,17 @@ public class DiscountCode
         this.discountCode = discountCode;
     }
 
-    public int convertToId(){
+    public float convertToId(){
     return discountId;
     }
 
-    public int getDiscountPercentage()
+    public float getDiscountPercentage()
     {
         return discount;
     }
 
 
-    public int getDiscountId()
+    public float  getDiscountId()
     {
         return discountId;
     }
@@ -44,7 +44,7 @@ public class DiscountCode
         this.discountCode = discountCode;
     }
 
-    public int getDiscount()
+    public float getDiscount()
     {
         return discount;
     }
