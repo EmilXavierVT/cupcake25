@@ -61,5 +61,5 @@ Feel free to submit issues or pull requests for improvements. All contributions 
 - Luke Persson
 
 ## License
-Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+Distributed under the WTFPL License. See https://en.wikipedia.org/wiki/WTFPL for details.
 
