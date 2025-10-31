@@ -118,10 +118,25 @@ public class CartController
                     cupcakesInOrder.clear();
                     ctx.redirect("/order-confirmation");
                     ctx.render("/order-confirmation");
-                }else
-                {
-                    System.out.println("error in getting ot wallet ");
+                    ctx.sessionAttribute("order_id", null);
+                    ctx.sessionAttribute("cupcakeInOrder", null);
+                    ctx.sessionAttribute("orderPrice", null);
+                    ctx.sessionAttribute("discount", null);
+                    ctx.sessionAttribute("discountMessage", null);
+                    ctx.sessionAttribute("insufficient_funds_message", null);
+                    ctx.sessionAttribute("pick_up_date", null);
+                    ctx.sessionAttribute("errorLogin", null);
+                    ctx.sessionAttribute("add_to_cart_message",null);
                 }
+                    else
+                    {
+
+                        ctx.sessionAttribute("insufficient_funds_message", "you dont have enough funds to pay for this order, please try again later or contact the store owner if you think this is an error");
+                        ctx.redirect("/pay-page");
+                        ctx.render("/pay-page", Map.of("insufficient_funds_message", "you dont have enough funds to pay for this order, please try again later or contact the store owner if you think this is an error"));
+                    }
+
+
 
             }else if (user == null)
             {
