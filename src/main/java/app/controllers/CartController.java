@@ -51,14 +51,27 @@ public class CartController
     }
 
 
-    private static int getPriceForOrder(Context ctx)
+    private static float getPriceForOrder(Context ctx)
     {
         ArrayList<CupcakeInOrder> allCupcakes = ctx.sessionAttribute("cupcakeInOrder");
         int price = 0;
         for (CupcakeInOrder c : allCupcakes)
         {
             price += (c.getUdc().getBottom().getBottomPrice() + c.getUdc().getIcing().getIcingPrice()) * c.getAmount();
+
         }
+        if(ctx.sessionAttribute("discount") != null){
+            float discount = ctx.sessionAttribute("discount");
+            // float discou
+//            float discountFloat = Float.parseFloat(String.valueOf(discount));
+
+            float discountedPrice = (price * discount) / 100;
+            float actualPrice = price - discountedPrice;
+            ctx.sessionAttribute("orderPrice", actualPrice);
+            return actualPrice;
+
+        }
+
         return price;
     }
 
@@ -86,8 +99,9 @@ public class CartController
 
                 if (ctx.sessionAttribute("discount") != null )
                 {
-                    int discount = ctx.sessionAttribute("discount");
+                    float discount =  ctx.sessionAttribute("discount");
                     price = (price * discount) / 100;
+
                 }
 
                 if (UserMapper.findUserWallet(connectionPool, userId, price))
@@ -139,16 +153,18 @@ public class CartController
 
             if(dc == null)
             {
-             ctx.sessionAttribute("discount", 0);
+                float zero = 0.0f;
+             ctx.sessionAttribute("discount", zero);
                 ctx.sessionAttribute("discountMessage", "Der blev ikke fundet et discount kode med det kodeord: " + discountCode);
                 ctx.render("/cart");
                 }
             else
                 {
-                int discount = dc.getDiscountPercentage();
+                float discount =  dc.getDiscountPercentage();
                 ctx.sessionAttribute("discount", discount);
 
-                ctx.render("/cart");
+                ctx.render("/cart", Map.of("discount",discount));
+                ctx.redirect("/cart");
             }
 
         } catch (DatabaseException e)
