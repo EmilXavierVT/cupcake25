@@ -98,6 +98,7 @@ public class UserController
     private static void logout(Context ctx)
     {
         ctx.req().getSession().invalidate();
+
         ctx.redirect("/");
     }
 
