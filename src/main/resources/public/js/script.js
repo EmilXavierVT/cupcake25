@@ -81,4 +81,3 @@ function toggleDarkMode() {
 
 
 }
-// Example: Attach to a button click

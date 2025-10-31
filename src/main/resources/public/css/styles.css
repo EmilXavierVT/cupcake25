@@ -1,4 +1,6 @@
+/*****/
 /*ALL*/
+/*****/
 * {
     margin: 0;
     padding: 0;
@@ -26,8 +28,9 @@
 }
 
 
-
+/***************/
 /*HTML AND BODY*/
+/***************/
 html, body {
     height: 100%;
     background: var(--background-color);
@@ -44,7 +47,9 @@ main {
     flex: 1;
 }
 
+/****************/
 /*NAVIGATION BAR*/
+/****************/
 .nav_container {
     width: 100%;
     height: 52px;
@@ -106,7 +111,9 @@ a svg:hover {
     transform: scale(1.1);
 }
 
+/*********/
 /*CONTENT*/
+/*********/
 .hero {
     display: flex;
     justify-content: space-between;
@@ -126,7 +133,6 @@ a svg:hover {
     width: 277px;
     height: 264px;
     background-color: var(--primary-color);
-    /*background-image: url("../images/cupcake-hero.png");*/
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
@@ -140,7 +146,6 @@ a svg:hover {
     width: 277px;
     height: 264px;
     background-color: var(--primary-color);
-    /*background-image: url("../images/about-us.png");*/
     background-size: 90%;
     background-position: center;
     background-repeat: no-repeat;
@@ -150,8 +155,9 @@ a svg:hover {
     box-shadow: inset -2.5px -4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/**************/
 /*MAIN CONTENT*/
-
+/**************/
 .content {
     display: flex;
     align-items: center;
@@ -183,7 +189,6 @@ a svg:hover {
     flex-shrink: 0;
     transition: 2s;
     cursor: pointer;
-
 }
 
 .green_box:hover {
@@ -250,8 +255,6 @@ p {
     outline: 2px solid var(--accent-color);
 }
 
-
-
 footer {
     background: var(--primary-color);
     padding: 16px 80px;
@@ -261,8 +264,9 @@ footer {
     align-items: center;
 }
 
+/*******************************/
 /*INPUT SECTION/PAGE/CONTAINERS*/
-
+/*******************************/
 #title {
     text-align: center;
     margin-top: 50px;
@@ -283,7 +287,10 @@ footer {
 form.login_form {
     display: contents;
 }
+
+/*****************************************/
 /*SAME AS INPUT-CONTAINER (FOR EDIT PAGE)*/
+/*****************************************/
 .edit_container {
     position: relative;
     display: flex;
@@ -405,7 +412,9 @@ button:hover {
     margin-left: 36px;
 }
 
+/**************/
 /*CART SECTION*/
+/**************/
 .cart_container {
     display: flex;
     flex-direction: row;
@@ -489,7 +498,9 @@ button:hover {
     padding: 1px 5px;
 }
 
+/********************************/
 /*BUTTONS SPECIFIC FOR cart.html*/
+/********************************/
 .update_info_button {
     display: flex;
     justify-content: center;
@@ -555,7 +566,9 @@ button:hover {
     transform: scale(1.05);
 }
 
+/************/
 /*ADMIN PAGE*/
+/************/
 .admin_section {
     display: flex;
     flex-direction: column;
@@ -567,17 +580,6 @@ button:hover {
     margin-top: 16px;
     margin-bottom: 16px;
 }
-
-/* admin_section: padding: 7px 7px; Til media Query*/
-
-/*.admin_container h1 {*/
-/*    margin-top: 10%;*/
-/*}*/
-
-/*.admin_container h2 {*/
-/*    margin-bottom: 10%;*/
-/*}*/
-
 
 .admin_container {
     width: 401px;
@@ -597,7 +599,10 @@ button:hover {
     font-weight: 800;
     font-size: 2.5rem;
 }
+
+/****************/
 /*DASHBOARD GRID*/
+/****************/
 .dashboard_grid {
     display: flex;
     flex-direction: column;
@@ -620,8 +625,9 @@ button:hover {
 
 }
 
+/*************/
 /*CARD STYLES*/
-
+/*************/
 .sales_today {
     background: var(--secondary-shade-color);
     border: 3px solid var(--accent-color);
@@ -690,24 +696,19 @@ button:hover {
 }
 
 .card_header {
-
     font-weight: 800;
     font-size: 20px;
     margin-bottom: 8px;
-
-
 }
 
 .card_list {
-
     list-style: none;
     width: 100%;
     padding-left: 0;
     height: 100%;
-    max-height: 80%;  /* Change to fit your design */
-    overflow-y: auto;   /* Makes the list scrollable vertically */
-    overflow-x: hidden; /* Prevents horizontal scrolling */
-
+    max-height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
 }
 
@@ -793,8 +794,9 @@ input#amount, input#email_gift_card {
     transform: scale(1.05);
 }
 
+/***************/
 /*CUSTOMER PAGE*/
-
+/***************/
 #title_admin_page {
     text-align: center;
     font-size: 36px;
@@ -872,12 +874,14 @@ input#amount, input#email_gift_card {
     cursor: pointer;
     margin-left: 8px;
 }
+
 .close-btn:hover {
     color: #800;
 }
 
+/**************/
 /*PROFILE PAGE*/
-
+/**************/
 .profile_container {
     display: flex;
     flex-direction: column;
@@ -955,8 +959,9 @@ input#amount, input#email_gift_card {
     transition: 1s ease;
 }
 
+/**************/
 /*INDEX IMAGES*/
-
+/**************/
 .index_green_box {
     display: flex;
     justify-content: center;
@@ -983,9 +988,9 @@ input#amount, input#email_gift_card {
     color: var(--accent-color);
     }
 
-
+/*****************/
 /*DARKMODE BUTTON*/
-
+/*****************/
 .darkmode-btn {
     cursor: pointer;
     width: 48px;
@@ -1010,8 +1015,9 @@ input#amount, input#email_gift_card {
     transition: color 0.3s;
 }
 
+/*****************/
 /*PREVIEW CUPCAKE*/
-
+/*****************/
 .product_form {
     flex: 1;
 }
@@ -1045,9 +1051,9 @@ img#preview_bottom {
     filter: drop-shadow(5px 2px 1px black);
 }
 
-
+/***************/
 /*MEDIA QUERIES*/
-
+/***************/
 @media (max-width: 430px) {
     .content {
         padding: 40px 16px;
@@ -1127,4 +1133,3 @@ img#preview_bottom {
 
     }
 }
-
