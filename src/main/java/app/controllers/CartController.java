@@ -93,14 +93,14 @@ public class CartController
                     int amount = c.getAmount();
                     price += (bottomPrice + icingPrice) * amount;
                 }
+                if(ctx.sessionAttribute("discount") != null) {
+                    float discount = ctx.sessionAttribute("discount");
+                    if (discount != 0 || discount != 0.0f) {
 
-                if (ctx.sessionAttribute("discount") != null )
-                {
-                    float discount =  ctx.sessionAttribute("discount");
-                    price = (price * discount) / 100;
+                        price = (price * discount) / 100;
 
+                    }
                 }
-
                 if (UserMapper.findUserWallet(connectionPool, userId, price))
                 {
                     CupcakeMapper cupcakeMapper = new CupcakeMapper();
@@ -134,6 +134,9 @@ public class CartController
                         ctx.sessionAttribute("insufficient_funds_message", "you dont have enough funds to pay for this order, please try again later or contact the store owner if you think this is an error");
                         ctx.redirect("/pay-page");
                         ctx.render("/pay-page", Map.of("insufficient_funds_message", "you dont have enough funds to pay for this order, please try again later or contact the store owner if you think this is an error"));
+
+                        ctx.sessionAttribute("discount", null);
+                        ctx.sessionAttribute("discountMessage", null);
                     }
 
             }else if (user == null)
